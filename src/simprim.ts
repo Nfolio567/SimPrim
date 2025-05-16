@@ -299,3 +299,9 @@ class SimPrim {
         if (exportImgObject) exportImgElement.src = exportImgObject;
     }
 }
+
+if (typeof window !== "undefined") {
+    (window as any).SimPrim = SimPrim;
+}
+
+export default SimPrim;
