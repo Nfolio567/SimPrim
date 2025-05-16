@@ -1,4 +1,4 @@
-export declare class SimPrim {
+declare class SimPrim {
     cvs: HTMLCanvasElement;
     img: HTMLImageElement | undefined;
     ctx: CanvasRenderingContext2D | null;
@@ -25,3 +25,4 @@ export declare class SimPrim {
     previewImg(previewCvs: HTMLCanvasElement): void;
     exportImg(exportCvs: HTMLCanvasElement): void;
 }
+export { SimPrim };
