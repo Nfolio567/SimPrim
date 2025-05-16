@@ -5,6 +5,7 @@ export default {
     output: {
         file: "dist/simprim.min.js",
         format: "umd",
+        name: "SimPrim"
     },
     plugins: [typescript()]
 }
