@@ -1,5 +1,5 @@
 "use strict";
-class EditThumbnail {
+class SimPrim {
     constructor(cvs) {
         this.cx = 0;
         this.cy = 0;
@@ -292,3 +292,4 @@ class EditThumbnail {
             exportImgElement.src = exportImgObject;
     }
 }
+//# sourceMappingURL=simprim.js.map

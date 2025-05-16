@@ -1,4 +1,4 @@
-class EditThumbnail {
+class SimPrim {
     cvs: HTMLCanvasElement;
     img: HTMLImageElement | undefined;
     ctx: CanvasRenderingContext2D | null;

@@ -1,0 +1,25 @@
+{
+  "name": "simprim",
+  "version": "1.0.0",
+  "description": "Simple Trimming",
+  "main": "dist/simprim.js",
+  "types": "dist/simprim.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nfolio567/SimPrim.git"
+  },
+  "keywords": [
+    "simprim"
+  ],
+  "author": "Nfolio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nfolio567/SimPrim/issues"
+  },
+  "homepage": "https://github.com/Nfolio567/SimPrim#readme"
+}
