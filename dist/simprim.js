@@ -23,7 +23,7 @@
             this.cvs = cvs;
             this.ctx = this.cvs.getContext("2d");
         }
-        init(img, previewCvs) {
+        init(img, previewCvs, trimmingPath) {
             var _a;
             this.img = img;
             let drawWidth = 0;
@@ -56,7 +56,7 @@
                     (_a = this.ctx) === null || _a === void 0 ? void 0 : _a.drawImage(this.trimming, 0, 0, trimming.width, trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                 }
             };
-            this.trimming.src = "http://127.0.0.1:8888/static/pictures/trimming.png";
+            this.trimming.src = trimmingPath;
             this.previewImg(previewCvs);
             this.cvs.addEventListener("mousemove", () => {
                 if (this.defaultCursor) {

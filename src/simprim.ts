@@ -23,7 +23,7 @@ class SimPrim {
         this.ctx = this.cvs.getContext("2d");
     }
 
-    init(img: HTMLImageElement, previewCvs: HTMLCanvasElement) {
+    init(img: HTMLImageElement, previewCvs: HTMLCanvasElement, trimmingPath: string) {
         this.img = img;
         let drawWidth = 0;
         let drawHeight = 0;
@@ -57,7 +57,7 @@ class SimPrim {
                 this.ctx?.drawImage(this.trimming, 0, 0, trimming.width, trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
             }
         };
-        this.trimming.src = "http://127.0.0.1:8888/static/pictures/trimming.png";
+        this.trimming.src = trimmingPath;
 
         this.previewImg(previewCvs);
 

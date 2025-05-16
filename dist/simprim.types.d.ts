@@ -19,7 +19,7 @@ declare class SimPrim {
     drawTrimmingWidth: number;
     drawTrimmingHeight: number;
     constructor(cvs: HTMLCanvasElement);
-    init(img: HTMLImageElement, previewCvs: HTMLCanvasElement): void;
+    init(img: HTMLImageElement, previewCvs: HTMLCanvasElement, trimmingPath: string): void;
     dragDetection(): void;
     sizeChange(): void;
     previewImg(previewCvs: HTMLCanvasElement): void;
