@@ -1,9 +1,9 @@
 {
-  "name": "simprim",
-  "version": "1.0.1",
+  "name": "simprim-test",
+  "version": "1.0.0",
   "description": "Simple Trimming",
   "main": "dist/simprim.js",
-  "types": "dist/simprim.d.ts",
+  "types": "dist/simprim.types.d.ts",
   "devDependencies": {
     "@types/node": "^22.15.18",
     "rollup": "^4.40.2",
