@@ -1,3 +1,4 @@
+import { SourceMap } from "module";
 import typescript from "rollup-plugin-typescript2";
 
 export default {
@@ -6,7 +7,8 @@ export default {
         file: "dist/simprim.min.js",
         format: "umd",
         name: "SimPrim",
-        globals: {}
+        globals: {},
+        sourceMap: true,
     },
     plugins: [typescript()]
 }

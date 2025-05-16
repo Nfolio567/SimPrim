@@ -1,4 +1,4 @@
-class SimPrim {
+export class SimPrim {
     cvs: HTMLCanvasElement;
     img: HTMLImageElement | undefined;
     ctx: CanvasRenderingContext2D | null;
@@ -300,7 +300,7 @@ class SimPrim {
     }
 }
 
-if (typeof window !== "undefined") {
+if ("object" === typeof module&&"object" === typeof module.exports) {
     (window as any).SimPrim = SimPrim;
 }
 
