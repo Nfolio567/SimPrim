@@ -25,4 +25,3 @@ export declare class SimPrim {
     previewImg(previewCvs: HTMLCanvasElement): void;
     exportImg(exportCvs: HTMLCanvasElement): void;
 }
-export default SimPrim;

@@ -1,4 +1,3 @@
-import { SourceMap } from "module";
 import typescript from "rollup-plugin-typescript2";
 
 export default {

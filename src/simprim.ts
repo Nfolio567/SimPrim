@@ -303,5 +303,3 @@ export class SimPrim {
 if ("object" === typeof module&&"object" === typeof module.exports) {
     (window as any).SimPrim = SimPrim;
 }
-
-export default SimPrim;
