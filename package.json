@@ -1,6 +1,6 @@
 {
   "name": "simprim-test",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple Trimming",
   "main": "dist/simprim.js",
   "types": "dist/simprim.types.d.ts",
@@ -12,7 +12,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c rollup.config.mjs",
+    "build": "rollup -c rollup.config.mjs && npm run rename",
+    "rename": "mv dist/simprim.d.ts dist/simprim.types.d.ts",
     "prepare": "npm run build"
   },
   "repository": {
