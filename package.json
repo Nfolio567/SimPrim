@@ -1,6 +1,6 @@
 {
   "name": "simprim",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple Trimming",
   "main": "dist/simprim.js",
   "types": "dist/simprim.d.ts",
@@ -26,5 +26,6 @@
   "bugs": {
     "url": "https://github.com/Nfolio567/SimPrim/issues"
   },
-  "homepage": "https://github.com/Nfolio567/SimPrim#readme"
+  "homepage": "https://github.com/Nfolio567/SimPrim#readme",
+  "type": "commonjs"
 }
