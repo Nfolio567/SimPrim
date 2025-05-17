@@ -147,7 +147,7 @@ class SimPrim {
                     if (!this.isAnimating) {
                         this.isAnimating = true;
                         this.draggingFrame = requestAnimationFrame(() => {
-                            if (this.img && this.trimming && this.beforeDx && this.beforeDy && this.dx && this.dy) {
+                            if (this.img && this.trimming && this.beforeDx && this.beforeDy && this.dx !== undefined && this.dy !== undefined) {
                                 this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
                                 this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                             }
