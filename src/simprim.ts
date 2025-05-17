@@ -8,8 +8,8 @@ class SimPrim {
     private cy: number | undefined; // トリミング領域の中心Y座標
     private dx: number | undefined; // トリミング画像の描画位置（X軸）
     private dy: number | undefined; // トリミング画像の描画位置（Y軸）
-    private beforeDx: number | undefined; // 前フレームのX座標
-    private beforeDy: number | undefined; // 前フレームのY座標
+    private beforeDx = 0; // 前フレームのX座標
+    private beforeDy = 0; // 前フレームのY座標
     private scaleWidth = 0; // キャンバス幅とクライアント幅の比率
     private scaleHeight = 0; // キャンバス高さとクライアント高さの比率
     private resizing = false; // サイズ変更中かどうか
@@ -43,8 +43,6 @@ class SimPrim {
         this.cy = 0;
         this.dx = 0;
         this.dy = 0;
-        this.beforeDx = 0;
-        this.beforeDy = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -74,7 +72,7 @@ class SimPrim {
             this.drawTrimmingHeight = this.drawTrimmingWidth;
         }
         this.trimming.onload = () => {
-            if (this.trimming && this.dx && this.dy) {
+            if (this.trimming && this.dx !== undefined && this.dy !== undefined) {
                 this.inputCtx?.drawImage(this.trimming, 0, 0, trimming.width, trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                 console.log("#####################");
             }
@@ -121,9 +119,9 @@ class SimPrim {
 
             this.scaleWidth = this.inputCvs.width / this.inputCvs.clientWidth; // 比率計算
             this.scaleHeight = this.inputCvs.height / this.inputCvs.clientHeight; // 同じく
-            if (this.dx) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // 中心座標計算
-            if (this.dy) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // 同じく
-            if (this.cx && this.cy) {
+            if (this.dx !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // 中心座標計算
+            if (this.dy !== undefined) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // 同じく
+            if (this.cx !== undefined && this.cy !== undefined) {
                 if (e.offsetX >= this.cx - 10 && e.offsetX <= this.cx + 10 && e.offsetY >= this.cy - 10 && e.offsetY <= this.cy + 10) {
                     this.inputCvs.style.cursor = "move"; //　マウスを十字キーに
                     this.defaultCursor = false;
@@ -137,8 +135,8 @@ class SimPrim {
 
             if (this.dragging) {
                 this.inputCvs.style.cursor = "move"; //　上の指定範囲から出てもドラッグ中は十字キーにするようにする
-                this.beforeDx = this.dx;
-                this.beforeDy = this.dy;
+                if (this.dx) this.beforeDx = this.dx;
+                if (this.dy) this.beforeDy = this.dy;
 
                 // マウスドラッグによるトリミング領域の移動
                 this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
@@ -178,7 +176,7 @@ class SimPrim {
         // サイズ変更可能エリアのマウスオーバー判定
         this.inputCvs.addEventListener("mousemove", (e) => {
             // 左側のサイズ変更エリア
-            if (this.dx && this.dy) {    
+            if (this.dx && this.dy) {
                 if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
                     // 左上
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
@@ -233,7 +231,6 @@ class SimPrim {
                 } else {
                     this.defaultCursor = true;
                 }
-            
 
                 // トリミング領域のサイズ変更処理
                 if (this.resizing) {
