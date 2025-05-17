@@ -143,15 +143,14 @@ class SimPrim {
 
                     if (!this.isAnimating) {
                         this.isAnimating = true;
-
                         this.draggingFrame = requestAnimationFrame(() => {
                             if (this.img && this.trimming) {
                                 this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
                                 this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                             }
                             if (previewCvs) this.previewImg(previewCvs); // フレームが生成された時にプレビューキャンバスにトリミング範囲を描画
-                            this.isAnimating = false;
                         });
+                        this.isAnimating = false;
                     }
                 }
             }

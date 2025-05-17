@@ -138,8 +138,8 @@ class SimPrim {
                             }
                             if (previewCvs)
                                 this.previewImg(previewCvs); // フレームが生成された時にプレビューキャンバスにトリミング範囲を描画
-                            this.isAnimating = false;
                         });
+                        this.isAnimating = false;
                     }
                 }
             }
