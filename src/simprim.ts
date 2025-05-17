@@ -76,6 +76,7 @@ class SimPrim {
         this.trimming.onload = () => {
             if (this.trimming && this.dx && this.dy) {
                 this.inputCtx?.drawImage(this.trimming, 0, 0, trimming.width, trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+                console.log("#####################");
             }
         };
         this.trimming.src = trimmingPath;
