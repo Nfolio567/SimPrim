@@ -125,9 +125,9 @@
                 }
                 if (this.dragging) {
                     this.inputCvs.style.cursor = "move"; //　上の指定範囲から出てもドラッグ中は十字キーにするようにする
-                    if (this.dx)
+                    if (this.dx !== undefined)
                         this.beforeDx = this.dx;
-                    if (this.dy)
+                    if (this.dy !== undefined)
                         this.beforeDy = this.dy;
                     // マウスドラッグによるトリミング領域の移動
                     this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
@@ -170,7 +170,7 @@
             this.inputCvs.addEventListener("mousemove", (e) => {
                 var _a, _b, _c, _d, _e;
                 // 左側のサイズ変更エリア
-                if (this.dx && this.dy) {
+                if (this.dx !== undefined && this.dy !== undefined) {
                     if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
                         // 左上
                         if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {

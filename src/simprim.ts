@@ -135,8 +135,8 @@ class SimPrim {
 
             if (this.dragging) {
                 this.inputCvs.style.cursor = "move"; //　上の指定範囲から出てもドラッグ中は十字キーにするようにする
-                if (this.dx) this.beforeDx = this.dx;
-                if (this.dy) this.beforeDy = this.dy;
+                if (this.dx !== undefined) this.beforeDx = this.dx;
+                if (this.dy !== undefined) this.beforeDy = this.dy;
 
                 // マウスドラッグによるトリミング領域の移動
                 this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
@@ -176,7 +176,7 @@ class SimPrim {
         // サイズ変更可能エリアのマウスオーバー判定
         this.inputCvs.addEventListener("mousemove", (e) => {
             // 左側のサイズ変更エリア
-            if (this.dx && this.dy) {
+            if (this.dx !== undefined && this.dy !== undefined) {
                 if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
                     // 左上
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
