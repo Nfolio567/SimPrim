@@ -1,28 +1,49 @@
 declare class SimPrim {
-    cvs: HTMLCanvasElement;
-    img: HTMLImageElement | undefined;
-    ctx: CanvasRenderingContext2D | null;
-    trimming: HTMLImageElement | undefined;
-    previewCvs: HTMLCanvasElement | undefined;
-    cx: number;
-    cy: number;
-    dx: number;
-    dy: number;
-    beforeDx: number;
-    beforeDy: number;
-    scaleWidth: number;
-    scaleHeight: number;
-    resizing: boolean;
-    isDragging: boolean;
-    decisionWH: boolean;
-    defaultCursor: boolean;
-    drawTrimmingWidth: number;
-    drawTrimmingHeight: number;
-    constructor(cvs: HTMLCanvasElement);
-    init(img: HTMLImageElement, previewCvs: HTMLCanvasElement, trimmingPath: string): void;
+    private inputCvs;
+    private img;
+    private inputCtx;
+    private trimming;
+    private previewCvs;
+    private cx;
+    private cy;
+    private dx;
+    private dy;
+    private beforeDx;
+    private beforeDy;
+    private scaleWidth;
+    private scaleHeight;
+    private resizing;
+    private dragging;
+    private isDragging;
+    private decisionWH;
+    private isAnimating;
+    private defaultCursor;
+    private drawTrimmingWidth;
+    private drawTrimmingHeight;
+    private draggingFrame;
+    constructor(inputCvs: HTMLCanvasElement);
+    /**
+     * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
+     * @param img - The image to be edited.
+     * @param trimmingPath - The path to the trimming image.
+     * @param previewCvs - Optional : The canvas for previewing the trimmed image.
+     * @param inputCvsHeight - Optional : The height of the input canvas when height is longer than width.　If you want to trim a vertical image, you must explicitly specify it.
+     * @param inputCvsWidth - Optional : The width of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
+     */
+    init(img: HTMLImageElement, trimmingPath: string, previewCvs?: HTMLCanvasElement, inputCvsHeight?: String, inputCvsWidth?: String): void;
+    /**
+     * Detects mouse drag events on the canvas and allows for dragging the trimming area.
+     */
     dragDetection(): void;
+    /**
+     * Detects mouse drag events on the corners of the trimming area, allowing it to be resized.
+     */
     sizeChange(): void;
-    previewImg(previewCvs: HTMLCanvasElement): void;
+    private previewImg;
+    /**
+     * Exports the trimmed image to a specified canvas.
+     * @param exportCvs - The canvas to which the trimmed image will be exported.
+     */
     exportImg(exportCvs: HTMLCanvasElement): void;
 }
 export { SimPrim };
