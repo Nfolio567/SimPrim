@@ -4,12 +4,12 @@ class SimPrim {
     private inputCtx: CanvasRenderingContext2D | null; // 編集するキャンバスのコンテキスト
     private trimming: HTMLImageElement | undefined; // トリミングする範囲を指定する画像 as トリミング野郎
     private previewCvs: HTMLCanvasElement | undefined; // プレビュー用キャンバス
-    private cx = 0; // トリミング領域の中心X座標
-    private cy = 0; // トリミング領域の中心Y座標
-    private dx = 0; // トリミング画像の描画位置（X軸）
-    private dy = 0; // トリミング画像の描画位置（Y軸）
-    private beforeDx = 0; // 前フレームのX座標
-    private beforeDy = 0; // 前フレームのY座標
+    private cx: number | undefined; // トリミング領域の中心X座標
+    private cy: number | undefined; // トリミング領域の中心Y座標
+    private dx: number | undefined; // トリミング画像の描画位置（X軸）
+    private dy: number | undefined; // トリミング画像の描画位置（Y軸）
+    private beforeDx: number | undefined; // 前フレームのX座標
+    private beforeDy: number | undefined; // 前フレームのY座標
     private scaleWidth = 0; // キャンバス幅とクライアント幅の比率
     private scaleHeight = 0; // キャンバス高さとクライアント高さの比率
     private resizing = false; // サイズ変更中かどうか
@@ -35,9 +35,16 @@ class SimPrim {
      * @param inputCvsWidth - Optional : The width of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
      */
     init(img: HTMLImageElement, trimmingPath: string, inputCvsHeight?: String, inputCvsWidth?: String) {
+        //　変数初期化
         this.img = img;
         let drawWidth = 0;
         let drawHeight = 0;
+        this.cx = 0;
+        this.cy = 0;
+        this.dx = 0;
+        this.dy = 0;
+        this.beforeDx = 0;
+        this.beforeDy = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -67,7 +74,7 @@ class SimPrim {
             this.drawTrimmingHeight = this.drawTrimmingWidth;
         }
         this.trimming.onload = () => {
-            if (this.trimming) {
+            if (this.trimming && this.dx && this.dy) {
                 this.inputCtx?.drawImage(this.trimming, 0, 0, trimming.width, trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
             }
         };
@@ -113,16 +120,18 @@ class SimPrim {
 
             this.scaleWidth = this.inputCvs.width / this.inputCvs.clientWidth; // 比率計算
             this.scaleHeight = this.inputCvs.height / this.inputCvs.clientHeight; // 同じく
-            this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // 中心座標計算
-            this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // 同じく
-            if (e.offsetX >= this.cx - 10 && e.offsetX <= this.cx + 10 && e.offsetY >= this.cy - 10 && e.offsetY <= this.cy + 10) {
-                this.inputCvs.style.cursor = "move"; //　マウスを十字キーに
-                this.defaultCursor = false;
-                if (this.isDragging) {
-                    this.dragging = true;
+            if (this.dx) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // 中心座標計算
+            if (this.dy) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // 同じく
+            if (this.cx && this.cy) {
+                if (e.offsetX >= this.cx - 10 && e.offsetX <= this.cx + 10 && e.offsetY >= this.cy - 10 && e.offsetY <= this.cy + 10) {
+                    this.inputCvs.style.cursor = "move"; //　マウスを十字キーに
+                    this.defaultCursor = false;
+                    if (this.isDragging) {
+                        this.dragging = true;
+                    }
+                } else {
+                    this.defaultCursor = true;
                 }
-            } else {
-                this.defaultCursor = true;
             }
 
             if (this.dragging) {
@@ -144,7 +153,7 @@ class SimPrim {
                     if (!this.isAnimating) {
                         this.isAnimating = true;
                         this.draggingFrame = requestAnimationFrame(() => {
-                            if (this.img && this.trimming) {
+                            if (this.img && this.trimming && this.beforeDx && this.beforeDy && this.dx && this.dy) {
                                 this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
                                 this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                             }
@@ -168,161 +177,164 @@ class SimPrim {
         // サイズ変更可能エリアのマウスオーバー判定
         this.inputCvs.addEventListener("mousemove", (e) => {
             // 左側のサイズ変更エリア
-            if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
-                // 左上
-                if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
-                    property = "upL";
-                    this.inputCvs.style.cursor = "nwse-resize";
-                    this.defaultCursor = false;
-                    if (this.isDragging) {
-                        this.resizing = true;
+            if (this.dx && this.dy) {    
+                if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
+                    // 左上
+                    if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
+                        property = "upL";
+                        this.inputCvs.style.cursor = "nwse-resize";
+                        this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
+                    } else {
+                        this.defaultCursor = true;
+                    }
+                    // 左下
+                    if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
+                        property = "downL";
+                        this.inputCvs.style.cursor = "nesw-resize";
+                        this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
+                    } else {
+                        this.defaultCursor = true;
                     }
                 } else {
                     this.defaultCursor = true;
                 }
-                // 左下
-                if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
-                    property = "downL";
-                    this.inputCvs.style.cursor = "nesw-resize";
-                    this.defaultCursor = false;
-                    if (this.isDragging) {
-                        this.resizing = true;
-                    }
-                } else {
-                    this.defaultCursor = true;
-                }
-            } else {
-                this.defaultCursor = true;
-            }
 
-            // 右側のサイズ変更エリア
-            if (e.offsetX * this.scaleWidth >= this.dx + this.drawTrimmingWidth - 15 && e.offsetX * this.scaleWidth <= this.dx + this.drawTrimmingWidth + 15) {
-                // 右上
-                if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
-                    property = "upR";
-                    this.inputCvs.style.cursor = "nesw-resize";
-                    this.defaultCursor = false;
-                    if (this.isDragging) {
-                        this.resizing = true;
+                // 右側のサイズ変更エリア
+                if (e.offsetX * this.scaleWidth >= this.dx + this.drawTrimmingWidth - 15 && e.offsetX * this.scaleWidth <= this.dx + this.drawTrimmingWidth + 15) {
+                    // 右上
+                    if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
+                        property = "upR";
+                        this.inputCvs.style.cursor = "nesw-resize";
+                        this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
+                    } else {
+                        this.defaultCursor = true;
+                    }
+                    // 右下
+                    if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
+                        property = "downR";
+                        this.inputCvs.style.cursor = "nwse-resize";
+                        this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
+                    } else {
+                        this.defaultCursor = true;
                     }
                 } else {
                     this.defaultCursor = true;
                 }
-                // 右下
-                if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
-                    property = "downR";
-                    this.inputCvs.style.cursor = "nwse-resize";
-                    this.defaultCursor = false;
-                    if (this.isDragging) {
-                        this.resizing = true;
-                    }
-                } else {
-                    this.defaultCursor = true;
-                }
-            } else {
-                this.defaultCursor = true;
-            }
+            
 
-            // トリミング領域のサイズ変更処理
-            if (this.resizing) {
-                beforeWidth = this.drawTrimmingWidth;
-                beforeHeight = this.drawTrimmingHeight;
-                if (property == "downR" && this.img) {
-                    this.inputCvs.style.cursor = "nwse-resize";
+                // トリミング領域のサイズ変更処理
+                if (this.resizing) {
+                    beforeWidth = this.drawTrimmingWidth;
+                    beforeHeight = this.drawTrimmingHeight;
+                    if (property == "downR" && this.img) {
+                        this.inputCvs.style.cursor = "nwse-resize";
 
-                    // サイズ変更判定
-                    if (e.movementX != 0) this.drawTrimmingWidth += e.movementX * this.scaleWidth;
-                    if (e.movementY != 0) this.drawTrimmingHeight += e.movementY * this.scaleHeight;
-                    if (e.movementX != 0 && e.movementY != 0) {
-                        this.drawTrimmingWidth += 2 * (e.movementX / this.scaleWidth / 4) - e.movementX / this.scaleWidth / 2;
-                        this.drawTrimmingHeight += 2 * (e.movementY / this.scaleHeight / 4) - e.movementX / this.scaleHeight / 2;
-                    }
-                    this.drawTrimmingHeight = this.drawTrimmingWidth;
-                    // はみ出し判定
-                    if (this.dx + this.drawTrimmingWidth >= this.img.width) {
-                        this.drawTrimmingWidth = this.img.width - this.dx;
+                        // サイズ変更判定
+                        if (e.movementX != 0) this.drawTrimmingWidth += e.movementX * this.scaleWidth;
+                        if (e.movementY != 0) this.drawTrimmingHeight += e.movementY * this.scaleHeight;
+                        if (e.movementX != 0 && e.movementY != 0) {
+                            this.drawTrimmingWidth += 2 * (e.movementX / this.scaleWidth / 4) - e.movementX / this.scaleWidth / 2;
+                            this.drawTrimmingHeight += 2 * (e.movementY / this.scaleHeight / 4) - e.movementX / this.scaleHeight / 2;
+                        }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
-                    }
-                    if (this.dy + this.drawTrimmingHeight >= this.img.height) {
-                        this.drawTrimmingHeight = this.img.height - this.dy;
-                        this.drawTrimmingWidth = this.drawTrimmingHeight;
-                    }
+                        // はみ出し判定
+                        if (this.dx + this.drawTrimmingWidth >= this.img.width) {
+                            this.drawTrimmingWidth = this.img.width - this.dx;
+                            this.drawTrimmingHeight = this.drawTrimmingWidth;
+                        }
+                        if (this.dy + this.drawTrimmingHeight >= this.img.height) {
+                            this.drawTrimmingHeight = this.img.height - this.dy;
+                            this.drawTrimmingWidth = this.drawTrimmingHeight;
+                        }
 
-                    this.inputCtx?.drawImage(this.img, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
+                        this.inputCtx?.drawImage(this.img, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
+                    }
+                    if (property == "upR" && this.img) {
+                        this.beforeDy = this.dy;
+                        this.inputCvs.style.cursor = "nesw-resize";
+
+                        // サイズ変更判定
+                        if (e.movementX != 0) {
+                            this.dy -= e.movementX * this.scaleWidth;
+                            this.drawTrimmingWidth += e.movementX * this.scaleWidth;
+                        }
+                        this.drawTrimmingHeight = this.drawTrimmingWidth;
+                        // はみ出し判定
+                        if (this.dx + this.drawTrimmingWidth >= this.img.width) this.drawTrimmingWidth = this.img.width - this.dx;
+                        if (this.dy <= 0) {
+                            this.dy = 0;
+                            this.drawTrimmingHeight = beforeHeight;
+                            this.drawTrimmingWidth = beforeWidth;
+                        }
+
+                        this.inputCtx?.drawImage(this.img, this.dx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
+                    }
+                    if (property == "downL" && this.img) {
+                        this.beforeDx = this.dx;
+                        this.inputCvs.style.cursor = "nesw-resize";
+
+                        // サイズ変更判定
+                        if (e.movementX != 0) {
+                            this.dx += e.movementX * this.scaleWidth;
+                            this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
+                        }
+                        this.drawTrimmingHeight = this.drawTrimmingWidth;
+
+                        // はみ出し判定
+                        if (this.dx <= 0) {
+                            this.dx = 0;
+                            this.drawTrimmingWidth = beforeWidth;
+                            this.drawTrimmingHeight = beforeHeight;
+                        }
+                        if (this.dy + this.drawTrimmingHeight >= this.img.height) {
+                            this.drawTrimmingHeight = this.img.height - this.dy;
+                            this.drawTrimmingWidth = this.drawTrimmingHeight;
+                            this.dx = this.beforeDx;
+                        }
+                        this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
+                    }
+                    if (property == "upL") {
+                        this.beforeDx = this.dx;
+                        this.beforeDy = this.dy;
+                        this.inputCvs.style.cursor = "nwse-resize";
+
+                        // サイズ変更判定
+                        if (e.movementX != 0) {
+                            this.dx += e.movementX * this.scaleWidth;
+                            this.dy += e.movementX * this.scaleWidth;
+                            this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
+                        }
+                        this.drawTrimmingHeight = this.drawTrimmingWidth;
+
+                        // はみ出し判定
+                        if (this.dx <= 0) {
+                            this.dx = 0;
+                            this.dy = this.beforeDy;
+                            this.drawTrimmingWidth = beforeWidth;
+                            this.drawTrimmingHeight = beforeHeight;
+                        }
+                        if (this.dy < -0) {
+                            this.dy = 0;
+                            this.dx = this.beforeDx;
+                            this.drawTrimmingWidth = beforeWidth;
+                            this.drawTrimmingHeight = beforeHeight;
+                        }
+                        if (this.img) this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
+                    }
+                    if (this.trimming) this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                 }
-                if (property == "upR" && this.img) {
-                    this.beforeDy = this.dy;
-                    this.inputCvs.style.cursor = "nesw-resize";
-
-                    // サイズ変更判定
-                    if (e.movementX != 0) {
-                        this.dy -= e.movementX * this.scaleWidth;
-                        this.drawTrimmingWidth += e.movementX * this.scaleWidth;
-                    }
-                    this.drawTrimmingHeight = this.drawTrimmingWidth;
-                    // はみ出し判定
-                    if (this.dx + this.drawTrimmingWidth >= this.img.width) this.drawTrimmingWidth = this.img.width - this.dx;
-                    if (this.dy <= 0) {
-                        this.dy = 0;
-                        this.drawTrimmingHeight = beforeHeight;
-                        this.drawTrimmingWidth = beforeWidth;
-                    }
-
-                    this.inputCtx?.drawImage(this.img, this.dx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
-                }
-                if (property == "downL" && this.img) {
-                    this.beforeDx = this.dx;
-                    this.inputCvs.style.cursor = "nesw-resize";
-
-                    // サイズ変更判定
-                    if (e.movementX != 0) {
-                        this.dx += e.movementX * this.scaleWidth;
-                        this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
-                    }
-                    this.drawTrimmingHeight = this.drawTrimmingWidth;
-
-                    // はみ出し判定
-                    if (this.dx <= 0) {
-                        this.dx = 0;
-                        this.drawTrimmingWidth = beforeWidth;
-                        this.drawTrimmingHeight = beforeHeight;
-                    }
-                    if (this.dy + this.drawTrimmingHeight >= this.img.height) {
-                        this.drawTrimmingHeight = this.img.height - this.dy;
-                        this.drawTrimmingWidth = this.drawTrimmingHeight;
-                        this.dx = this.beforeDx;
-                    }
-                    this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
-                }
-                if (property == "upL") {
-                    this.beforeDx = this.dx;
-                    this.beforeDy = this.dy;
-                    this.inputCvs.style.cursor = "nwse-resize";
-
-                    // サイズ変更判定
-                    if (e.movementX != 0) {
-                        this.dx += e.movementX * this.scaleWidth;
-                        this.dy += e.movementX * this.scaleWidth;
-                        this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
-                    }
-                    this.drawTrimmingHeight = this.drawTrimmingWidth;
-
-                    // はみ出し判定
-                    if (this.dx <= 0) {
-                        this.dx = 0;
-                        this.dy = this.beforeDy;
-                        this.drawTrimmingWidth = beforeWidth;
-                        this.drawTrimmingHeight = beforeHeight;
-                    }
-                    if (this.dy < -0) {
-                        this.dy = 0;
-                        this.dx = this.beforeDx;
-                        this.drawTrimmingWidth = beforeWidth;
-                        this.drawTrimmingHeight = beforeHeight;
-                    }
-                    if (this.img) this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
-                }
-                if (this.trimming) this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
             }
         });
     }
@@ -332,7 +344,7 @@ class SimPrim {
         this.previewCvs = previewCvs;
         const previewCtx = this.previewCvs.getContext("2d");
         previewCtx?.clearRect(0, 0, previewCvs.width, previewCvs.height);
-        if (this.img) previewCtx?.drawImage(this.img, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight, 0, 0, previewCvs.width, previewCvs.height);
+        if (this.img && this.dx && this.dy) previewCtx?.drawImage(this.img, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight, 0, 0, previewCvs.width, previewCvs.height);
     }
 
     /**
