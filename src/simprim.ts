@@ -342,7 +342,7 @@ class SimPrim {
         this.previewCvs = previewCvs;
         const previewCtx = this.previewCvs.getContext("2d");
         previewCtx?.clearRect(0, 0, previewCvs.width, previewCvs.height);
-        if (this.img && this.dx && this.dy) previewCtx?.drawImage(this.img, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight, 0, 0, previewCvs.width, previewCvs.height);
+        if (this.img && this.dx !== undefined && this.dy !== undefined) previewCtx?.drawImage(this.img, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight, 0, 0, previewCvs.width, previewCvs.height);
     }
 
     /**
