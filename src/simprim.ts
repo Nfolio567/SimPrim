@@ -128,7 +128,7 @@ class SimPrim {
                 }
             }
 
-            if (this.dragging) {
+            if (this.dragging || this.resizing) {
                 this.inputCvs.style.cursor = "move"; //　上の指定範囲から出てもドラッグ中は十字キーにするようにする
                 if (this.dx !== undefined) this.beforeDx = this.dx;
                 if (this.dy !== undefined) this.beforeDy = this.dy;
