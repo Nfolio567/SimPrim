@@ -74,7 +74,6 @@ class SimPrim {
         this.trimming.onload = () => {
             if (this.trimming && this.dx !== undefined && this.dy !== undefined) {
                 this.inputCtx?.drawImage(this.trimming, 0, 0, trimming.width, trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
-                console.log("#####################");
             }
         };
         this.trimming.src = trimmingPath;
@@ -128,7 +127,7 @@ class SimPrim {
                 }
             }
 
-            if (this.dragging || this.resizing) {
+            if (this.dragging) {
                 this.inputCvs.style.cursor = "move"; //　上の指定範囲から出てもドラッグ中は十字キーにするようにする
                 if (this.dx !== undefined) this.beforeDx = this.dx;
                 if (this.dy !== undefined) this.beforeDy = this.dy;
@@ -144,18 +143,21 @@ class SimPrim {
                     if (this.dx + this.drawTrimmingWidth >= this.img.width) this.dx = this.img.width - this.drawTrimmingWidth;
                     if (this.dy + this.drawTrimmingHeight >= this.img.height) this.dy = this.img.height - this.drawTrimmingHeight;
 
-                    if (!this.isAnimating) {
-                        this.isAnimating = true;
-                        this.draggingFrame = requestAnimationFrame(() => {
-                            if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined) {
-                                this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
-                                this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
-                            }
-                            if (previewCvs) this.previewImg(previewCvs); // フレームが生成された時にプレビューキャンバスにトリミング範囲を描画
-                        });
-                        this.isAnimating = false;
-                    }
+                    
                 }
+            }
+
+            if (!this.isAnimating) {
+                this.isAnimating = true;
+                this.draggingFrame = requestAnimationFrame(() => {
+                    if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined) {
+                        this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
+                        this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+                    }
+                    if (previewCvs) this.previewImg(previewCvs); // フレームが生成された時にプレビューキャンバスにトリミング範囲を描画
+                    console.log("##################");
+                });
+                this.isAnimating = false;
             }
         });
     }
