@@ -71,11 +71,7 @@
                 }
             };
             this.trimming.src = trimmingPath;
-            // プレビューキャンバスに、初期化したトリミング野郎が指定してる範囲を描画
-            // マウスが動くごとにプレビュー描画
             this.inputCvs.addEventListener("mousemove", () => {
-                if (this.draggingFrame)
-                    cancelAnimationFrame(this.draggingFrame); // 既存のアニメーションをキャンセル
                 if (this.defaultCursor) {
                     this.inputCvs.style.cursor = "default"; // マウスを普通に戻す
                 }
