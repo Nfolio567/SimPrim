@@ -128,7 +128,7 @@
                 return;
             requestAnimationFrame(() => {
                 var _a, _b;
-                if (!this.resizing) {
+                if (this.dragging) {
                     this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
                     if (this.dx !== undefined)
                         this.beforeDx = this.dx;
