@@ -32,9 +32,9 @@ class SimPrim {
     /**
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
      * @param img - The image to be edited.
-     * @param trimmingPath - The path to the trimming image.
      * @param inputCvsHeight - Optional : The height of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
      * @param inputCvsWidth - Optional : The width of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
+     * @param trimmingPath - The path to the trimming image(Default : https://cdn.nfolio.one/trimming.png).
      */
     init(img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath: string = "https://cdn.nfolio.one/trimming.png") {
         // Initialize variables
