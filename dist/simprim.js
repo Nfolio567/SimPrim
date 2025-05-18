@@ -117,31 +117,31 @@
                         this.defaultCursor = true;
                     }
                 }
-                if (this.dragging) {
-                    this.inputCvs.style.cursor = "move"; //　上の指定範囲から出てもドラッグ中は十字キーにするようにする
-                    if (this.dx !== undefined)
-                        this.beforeDx = this.dx;
-                    if (this.dy !== undefined)
-                        this.beforeDy = this.dy;
-                    // マウスドラッグによるトリミング領域の移動
-                    this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
-                    this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
-                    // トリミング領域のはみ出しチェック
-                    if (this.trimming && this.img) {
-                        if (this.dx <= 0)
-                            this.dx = 0;
-                        if (this.dy <= 0)
-                            this.dy = 0;
-                        if (this.dx + this.drawTrimmingWidth >= this.img.width)
-                            this.dx = this.img.width - this.drawTrimmingWidth;
-                        if (this.dy + this.drawTrimmingHeight >= this.img.height)
-                            this.dy = this.img.height - this.drawTrimmingHeight;
-                    }
-                }
                 if (!this.isAnimating) {
                     this.isAnimating = true;
                     this.draggingFrame = requestAnimationFrame(() => {
                         var _a, _b, _c;
+                        if (this.dragging) {
+                            this.inputCvs.style.cursor = "move"; //　上の指定範囲から出てもドラッグ中は十字キーにするようにする
+                            if (this.dx !== undefined)
+                                this.beforeDx = this.dx;
+                            if (this.dy !== undefined)
+                                this.beforeDy = this.dy;
+                            // マウスドラッグによるトリミング領域の移動
+                            this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
+                            this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
+                            // トリミング領域のはみ出しチェック
+                            if (this.trimming && this.img) {
+                                if (this.dx <= 0)
+                                    this.dx = 0;
+                                if (this.dy <= 0)
+                                    this.dy = 0;
+                                if (this.dx + this.drawTrimmingWidth >= this.img.width)
+                                    this.dx = this.img.width - this.drawTrimmingWidth;
+                                if (this.dy + this.drawTrimmingHeight >= this.img.height)
+                                    this.dy = this.img.height - this.drawTrimmingHeight;
+                            }
+                        }
                         if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined) {
                             (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.clearRect(this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                             (_b = this.inputCtx) === null || _b === void 0 ? void 0 : _b.drawImage(this.img, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);

@@ -127,29 +127,29 @@ class SimPrim {
                 }
             }
 
-            if (this.dragging) {
-                this.inputCvs.style.cursor = "move"; //　上の指定範囲から出てもドラッグ中は十字キーにするようにする
-                if (this.dx !== undefined) this.beforeDx = this.dx;
-                if (this.dy !== undefined) this.beforeDy = this.dy;
-
-                // マウスドラッグによるトリミング領域の移動
-                this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
-                this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
-
-                // トリミング領域のはみ出しチェック
-                if (this.trimming && this.img) {
-                    if (this.dx <= 0) this.dx = 0;
-                    if (this.dy <= 0) this.dy = 0;
-                    if (this.dx + this.drawTrimmingWidth >= this.img.width) this.dx = this.img.width - this.drawTrimmingWidth;
-                    if (this.dy + this.drawTrimmingHeight >= this.img.height) this.dy = this.img.height - this.drawTrimmingHeight;
-
-                    
-                }
-            }
-
             if (!this.isAnimating) {
                 this.isAnimating = true;
                 this.draggingFrame = requestAnimationFrame(() => {
+                if (this.dragging) {
+                    this.inputCvs.style.cursor = "move"; //　上の指定範囲から出てもドラッグ中は十字キーにするようにする
+                    if (this.dx !== undefined) this.beforeDx = this.dx;
+                    if (this.dy !== undefined) this.beforeDy = this.dy;
+
+                    // マウスドラッグによるトリミング領域の移動
+                    this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
+                    this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
+
+                    // トリミング領域のはみ出しチェック
+                    if (this.trimming && this.img) {
+                        if (this.dx <= 0) this.dx = 0;
+                        if (this.dy <= 0) this.dy = 0;
+                        if (this.dx + this.drawTrimmingWidth >= this.img.width) this.dx = this.img.width - this.drawTrimmingWidth;
+                        if (this.dy + this.drawTrimmingHeight >= this.img.height) this.dy = this.img.height - this.drawTrimmingHeight;
+
+                        
+                    }
+                }
+
                     if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined) {
                         this.inputCtx?.clearRect(this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                         this.inputCtx?.drawImage(this.img, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
