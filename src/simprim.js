@@ -138,7 +138,7 @@ class SimPrim {
                 this.draggingFrame = requestAnimationFrame(() => {
                     var _a, _b, _c;
                     if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined) {
-                        (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.clearRect(this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
+                        (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.clearRect(this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                         (_b = this.inputCtx) === null || _b === void 0 ? void 0 : _b.drawImage(this.img, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                         (_c = this.inputCtx) === null || _c === void 0 ? void 0 : _c.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                     }
