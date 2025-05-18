@@ -95,8 +95,7 @@
                 this.isDragging = true; // ドラッグフラグ
             });
             this.inputCvs.addEventListener("mousemove", (e) => {
-                if (this.draggingFrame)
-                    cancelAnimationFrame(this.draggingFrame); // 既存のアニメーションをキャンセル
+                //if (this.draggingFrame) cancelAnimationFrame(this.draggingFrame); // 既存のアニメーションをキャンセル
                 if (this.defaultCursor) {
                     this.inputCvs.style.cursor = "default"; //　マウスを普通に戻す
                 }
