@@ -176,7 +176,7 @@ class SimPrim {
                         this.defaultCursor = true;
                     }
                     // 左下
-                    if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
+                    if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight) {
                         property = "downL";
                         this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
@@ -192,9 +192,9 @@ class SimPrim {
                     this.defaultCursor = true;
                 }
                 // 右側のサイズ変更エリア
-                if (e.offsetX * this.scaleWidth >= this.dx + this.drawTrimmingWidth - 15 && e.offsetX * this.scaleWidth <= this.dx + this.drawTrimmingWidth + 15) {
+                if (e.offsetX * this.scaleWidth >= this.dx + this.drawTrimmingWidth && e.offsetX * this.scaleWidth <= this.dx + this.drawTrimmingWidth) {
                     // 右上
-                    if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
+                    if (e.offsetY * this.scaleHeight >= this.dy && e.offsetY * this.scaleHeight <= this.dy) {
                         property = "upR";
                         this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
@@ -206,7 +206,7 @@ class SimPrim {
                         this.defaultCursor = true;
                     }
                     // 右下
-                    if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
+                    if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight) {
                         property = "downR";
                         this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
