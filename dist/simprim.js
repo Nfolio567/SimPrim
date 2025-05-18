@@ -157,7 +157,7 @@
                     this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
                 console.log("#########################");
             });
-            if (!this.dragging || !this.resizing) {
+            if (!this.dragging && !this.resizing) {
                 this.isAnimating = false;
             }
         }

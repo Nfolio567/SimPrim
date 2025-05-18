@@ -169,7 +169,7 @@ class SimPrim {
             console.log("#########################");
         });
 
-        if (!this.dragging || !this.resizing) {
+        if (!this.dragging && !this.resizing) {
             this.isAnimating = false;
         }
     }
