@@ -36,7 +36,7 @@ class SimPrim {
      * @param inputCvsHeight - Optional : The height of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
      * @param inputCvsWidth - Optional : The width of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
      */
-    init(img: HTMLImageElement, trimmingPath: string = "https://cdn.nfolio.one/trimming.png", inputCvsHeight?: String, inputCvsWidth?: String) {
+    init(img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath: string = "https://cdn.nfolio.one/trimming.png") {
         // Initialize variables
         this.img = img;
         let drawWidth = 0;

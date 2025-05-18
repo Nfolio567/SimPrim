@@ -27,7 +27,7 @@
          * @param inputCvsHeight - Optional : The height of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
          * @param inputCvsWidth - Optional : The width of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
          */
-        init(img, trimmingPath = "https://cdn.nfolio.one/trimming.png", inputCvsHeight, inputCvsWidth) {
+        init(img, inputCvsHeight, inputCvsWidth, trimmingPath = "https://cdn.nfolio.one/trimming.png") {
             var _a;
             // Initialize variables
             this.img = img;
