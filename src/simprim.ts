@@ -92,8 +92,8 @@ class SimPrim {
         // Use window to allow dragging even if the mouse leaves the canvas
         window.addEventListener("mouseup", () => {
             this.isDragging = false;
-            this.resizing = false;
             this.dragging = false;
+            this.resizing = false;
             //if (this.draggingFrame) cancelAnimationFrame(this.draggingFrame); // Cancel existing animation
         });
     }
