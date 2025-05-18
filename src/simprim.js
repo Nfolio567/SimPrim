@@ -1,16 +1,16 @@
 /*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
 class SimPrim {
     constructor(inputCvs) {
-        this.scaleWidth = 0; // キャンバス幅とクライアント幅の比率
-        this.scaleHeight = 0; // キャンバス高さとクライアント高さの比率
-        this.resizing = false; // サイズ変更中かどうか
-        this.dragging = false; // 範囲内でのドラッグフラグ
-        this.isDragging = false; // ドラッグ中かどうか
-        this.decisionWH = false; // 横長か縦長か
-        this.isAnimating = false; // アニメーション中かどうか
-        this.defaultCursor = true; // デフォルトカーソルのフラグ
-        this.drawTrimmingWidth = 0; // トリミングの幅
-        this.drawTrimmingHeight = 0; // トリミングの高さ
+        this.scaleWidth = 0; // Ratio of canvas width to client width
+        this.scaleHeight = 0; // Ratio of canvas height to client height
+        this.resizing = false; // Whether resizing is in progress
+        this.dragging = false; // Drag flag within the area
+        this.isDragging = false; // Whether dragging is in progress
+        this.decisionWH = false; // Whether the image is landscape or portrait
+        this.isAnimating = false; // Whether animation is in progress
+        this.defaultCursor = true; // Default cursor flag
+        this.drawTrimmingWidth = 0; // Width of the trimming area
+        this.drawTrimmingHeight = 0; // Height of the trimming area
         this.inputCvs = inputCvs;
         this.inputCtx = this.inputCvs.getContext("2d");
     }
@@ -18,12 +18,12 @@ class SimPrim {
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
      * @param img - The image to be edited.
      * @param trimmingPath - The path to the trimming image.
-     * @param inputCvsHeight - Optional : The height of the input canvas when height is longer than width.　If you want to trim a vertical image, you must explicitly specify it.
+     * @param inputCvsHeight - Optional : The height of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
      * @param inputCvsWidth - Optional : The width of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
      */
-    init(img, trimmingPath, inputCvsHeight, inputCvsWidth) {
+    init(img, trimmingPath = "https://cdn.nfolio.one/trimming.png", inputCvsHeight, inputCvsWidth) {
         var _a;
-        //　変数初期化
+        // Initialize variables
         this.img = img;
         let drawWidth = 0;
         let drawHeight = 0;
@@ -35,7 +35,7 @@ class SimPrim {
         this.beforeDy = 0;
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
-        // 画像の縦横比を判定し、縦長の場合は高さ優先に設定
+        // Determine aspect ratio and set height priority for portrait images
         if (this.img.width <= this.img.height) {
             this.decisionWH = false;
             this.inputCvs.style.cssText += "height:" + inputCvsHeight + ";" + "width:" + inputCvsWidth + ";";
@@ -43,11 +43,11 @@ class SimPrim {
         else {
             this.decisionWH = true;
         }
-        // Canvasに画像を描画する際の幅と高さを設定
+        // Set width and height for drawing the image on the canvas
         drawWidth = this.inputCvs.width;
         drawHeight = this.inputCvs.height;
         (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.drawImage(this.img, 0, 0, this.img.width, this.img.height, 0, 0, drawWidth, drawHeight);
-        // トリミング画像を初期化
+        // Initialize trimming image
         const trimming = new Image();
         trimming.crossOrigin = "anonymous";
         this.trimming = trimming;
@@ -68,16 +68,15 @@ class SimPrim {
         this.trimming.src = trimmingPath;
         this.inputCvs.addEventListener("mousemove", () => {
             if (this.defaultCursor) {
-                this.inputCvs.style.cursor = "default"; // マウスを普通に戻す
+                this.inputCvs.style.cursor = "default"; // Reset mouse to default
             }
         });
-        // windowにしてるのは、マウスがキャンバスから出てもドラッグを続けられるようにするため
+        // Use window to allow dragging even if the mouse leaves the canvas
         window.addEventListener("mouseup", () => {
             this.isDragging = false;
             this.resizing = false;
             this.dragging = false;
-            if (this.draggingFrame)
-                cancelAnimationFrame(this.draggingFrame); // 既存のアニメーションをキャンセル
+            //if (this.draggingFrame) cancelAnimationFrame(this.draggingFrame); // Cancel existing animation
         });
     }
     /**
@@ -86,24 +85,24 @@ class SimPrim {
      */
     dragDetection(previewCvs) {
         if (previewCvs)
-            this.previewImg(previewCvs); // プレビューcanvasに描画
+            this.previewImg(previewCvs); // Draw to preview canvas
         this.inputCvs.addEventListener("mousedown", () => {
-            this.isDragging = true; // ドラッグフラグ
+            this.isDragging = true; // Drag flag
         });
         this.inputCvs.addEventListener("mousemove", (e) => {
-            //if (this.draggingFrame) cancelAnimationFrame(this.draggingFrame); // 既存のアニメーションをキャンセル
+            //if (this.draggingFrame) cancelAnimationFrame(this.draggingFrame); // Cancel existing animation
             if (this.defaultCursor) {
-                this.inputCvs.style.cursor = "default"; //　マウスを普通に戻す
+                this.inputCvs.style.cursor = "default"; // Reset mouse to default
             }
-            this.scaleWidth = this.inputCvs.width / this.inputCvs.clientWidth; // 比率計算
-            this.scaleHeight = this.inputCvs.height / this.inputCvs.clientHeight; // 同じく
+            this.scaleWidth = this.inputCvs.width / this.inputCvs.clientWidth; // Calculate ratio
+            this.scaleHeight = this.inputCvs.height / this.inputCvs.clientHeight; // Calculate ratio
             if (this.dx !== undefined)
-                this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // 中心座標計算
+                this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
             if (this.dy !== undefined)
-                this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // 同じく
+                this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // Calculate center coordinate
             if (this.cx !== undefined && this.cy !== undefined) {
                 if (e.offsetX >= this.cx - 10 && e.offsetX <= this.cx + 10 && e.offsetY >= this.cy - 10 && e.offsetY <= this.cy + 10) {
-                    this.inputCvs.style.cursor = "move"; //　マウスを十字キーに
+                    this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
                     this.defaultCursor = false;
                     if (this.isDragging) {
                         this.dragging = true;
@@ -113,58 +112,65 @@ class SimPrim {
                     this.defaultCursor = true;
                 }
             }
-            if (!this.isAnimating) {
-                this.isAnimating = true;
-                this.draggingFrame = requestAnimationFrame(() => {
-                    var _a, _b, _c;
-                    if (this.dragging) {
-                        this.inputCvs.style.cursor = "move"; //　上の指定範囲から出てもドラッグ中は十字キーにするようにする
-                        if (this.dx !== undefined)
-                            this.beforeDx = this.dx;
-                        if (this.dy !== undefined)
-                            this.beforeDy = this.dy;
-                        // マウスドラッグによるトリミング領域の移動
-                        this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
-                        this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
-                        // トリミング領域のはみ出しチェック
-                        if (this.trimming && this.img) {
-                            if (this.dx <= 0)
-                                this.dx = 0;
-                            if (this.dy <= 0)
-                                this.dy = 0;
-                            if (this.dx + this.drawTrimmingWidth >= this.img.width)
-                                this.dx = this.img.width - this.drawTrimmingWidth;
-                            if (this.dy + this.drawTrimmingHeight >= this.img.height)
-                                this.dy = this.img.height - this.drawTrimmingHeight;
-                        }
-                    }
-                    if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined && this.beforeDx !== undefined && this.beforeDy !== undefined) {
-                        (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.clearRect(this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
-                        (_b = this.inputCtx) === null || _b === void 0 ? void 0 : _b.drawImage(this.img, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
-                        (_c = this.inputCtx) === null || _c === void 0 ? void 0 : _c.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
-                    }
-                    if (previewCvs)
-                        this.previewImg(previewCvs); // フレームが生成された時にプレビューキャンバスにトリミング範囲を描画
-                    console.log("##################");
-                });
-                this.isAnimating = false;
-            }
+            if (previewCvs !== undefined)
+                this.requestFrame(previewCvs, e);
         });
+    }
+    requestFrame(previewCvs, e) {
+        if (this.isAnimating) {
+            return;
+        }
+        else {
+            this.isAnimating = true;
+            requestAnimationFrame(() => {
+                var _a, _b, _c;
+                if (this.dragging) {
+                    this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
+                    if (this.dx !== undefined)
+                        this.beforeDx = this.dx;
+                    if (this.dy !== undefined)
+                        this.beforeDy = this.dy;
+                    // Move the trimming area by mouse drag
+                    this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
+                    this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
+                    // Check for out-of-bounds of the trimming area
+                    if (this.trimming && this.img) {
+                        if (this.dx <= 0)
+                            this.dx = 0;
+                        if (this.dy <= 0)
+                            this.dy = 0;
+                        if (this.dx + this.drawTrimmingWidth >= this.img.width)
+                            this.dx = this.img.width - this.drawTrimmingWidth;
+                        if (this.dy + this.drawTrimmingHeight >= this.img.height)
+                            this.dy = this.img.height - this.drawTrimmingHeight;
+                    }
+                }
+                if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined && this.beforeDx !== undefined && this.beforeDy !== undefined) {
+                    (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.clearRect(this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+                    (_b = this.inputCtx) === null || _b === void 0 ? void 0 : _b.drawImage(this.img, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+                    (_c = this.inputCtx) === null || _c === void 0 ? void 0 : _c.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+                }
+                if (previewCvs)
+                    this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
+                console.log("##################");
+                this.isAnimating = false;
+            });
+        }
     }
     /**
      * Detects mouse drag events on the corners of the trimming area, allowing it to be resized.
      */
     sizeChange() {
-        let property = ""; // マウスが今どこにいるか
-        let beforeWidth = 0; // サイズ変更前の幅
-        let beforeHeight = 0; // サイズ変更前の高さ
-        // サイズ変更可能エリアのマウスオーバー判定
+        let property = ""; // Where the mouse is now
+        let beforeWidth = 0; // Width before resizing
+        let beforeHeight = 0; // Height before resizing
+        // Mouseover detection for resizable area
         this.inputCvs.addEventListener("mousemove", (e) => {
             var _a, _b, _c, _d, _e;
-            // 左側のサイズ変更エリア
+            // Left resizable area
             if (this.dx !== undefined && this.dy !== undefined) {
                 if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
-                    // 左上
+                    // Top left
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
                         property = "upL";
                         this.inputCvs.style.cursor = "nwse-resize";
@@ -176,7 +182,7 @@ class SimPrim {
                     else {
                         this.defaultCursor = true;
                     }
-                    // 左下
+                    // Bottom left
                     if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
                         property = "downL";
                         this.inputCvs.style.cursor = "nesw-resize";
@@ -192,9 +198,9 @@ class SimPrim {
                 else {
                     this.defaultCursor = true;
                 }
-                // 右側のサイズ変更エリア
+                // Right resizable area
                 if (e.offsetX * this.scaleWidth >= this.dx + this.drawTrimmingWidth - 15 && e.offsetX * this.scaleWidth <= this.dx + this.drawTrimmingWidth + 15) {
-                    // 右上
+                    // Top right
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
                         property = "upR";
                         this.inputCvs.style.cursor = "nesw-resize";
@@ -206,7 +212,7 @@ class SimPrim {
                     else {
                         this.defaultCursor = true;
                     }
-                    // 右下
+                    // Bottom right
                     if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
                         property = "downR";
                         this.inputCvs.style.cursor = "nwse-resize";
@@ -222,13 +228,13 @@ class SimPrim {
                 else {
                     this.defaultCursor = true;
                 }
-                // トリミング領域のサイズ変更処理
+                // Trimming area resizing process
                 if (this.resizing) {
                     beforeWidth = this.drawTrimmingWidth;
                     beforeHeight = this.drawTrimmingHeight;
                     if (property == "downR" && this.img) {
                         this.inputCvs.style.cursor = "nwse-resize";
-                        // サイズ変更判定
+                        // Resize detection
                         if (e.movementX != 0)
                             this.drawTrimmingWidth += e.movementX * this.scaleWidth;
                         if (e.movementY != 0)
@@ -238,7 +244,7 @@ class SimPrim {
                             this.drawTrimmingHeight += 2 * (e.movementY / this.scaleHeight / 4) - e.movementX / this.scaleHeight / 2;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
-                        // はみ出し判定
+                        // Out-of-bounds check
                         if (this.dx + this.drawTrimmingWidth >= this.img.width) {
                             this.drawTrimmingWidth = this.img.width - this.dx;
                             this.drawTrimmingHeight = this.drawTrimmingWidth;
@@ -252,13 +258,13 @@ class SimPrim {
                     if (property == "upR" && this.img) {
                         this.beforeDy = this.dy;
                         this.inputCvs.style.cursor = "nesw-resize";
-                        // サイズ変更判定
+                        // Resize detection
                         if (e.movementX != 0) {
                             this.dy -= e.movementX * this.scaleWidth;
                             this.drawTrimmingWidth += e.movementX * this.scaleWidth;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
-                        // はみ出し判定
+                        // Out-of-bounds check
                         if (this.dx + this.drawTrimmingWidth >= this.img.width)
                             this.drawTrimmingWidth = this.img.width - this.dx;
                         if (this.dy <= 0) {
@@ -271,13 +277,13 @@ class SimPrim {
                     if (property == "downL" && this.img) {
                         this.beforeDx = this.dx;
                         this.inputCvs.style.cursor = "nesw-resize";
-                        // サイズ変更判定
+                        // Resize detection
                         if (e.movementX != 0) {
                             this.dx += e.movementX * this.scaleWidth;
                             this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
-                        // はみ出し判定
+                        // Out-of-bounds check
                         if (this.dx <= 0) {
                             this.dx = 0;
                             this.drawTrimmingWidth = beforeWidth;
@@ -294,14 +300,14 @@ class SimPrim {
                         this.beforeDx = this.dx;
                         this.beforeDy = this.dy;
                         this.inputCvs.style.cursor = "nwse-resize";
-                        // サイズ変更判定
+                        // Resize detection
                         if (e.movementX != 0) {
                             this.dx += e.movementX * this.scaleWidth;
                             this.dy += e.movementX * this.scaleWidth;
                             this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
-                        // はみ出し判定
+                        // Out-of-bounds check
                         if (this.dx <= 0) {
                             this.dx = 0;
                             this.dy = this.beforeDy;
@@ -323,7 +329,7 @@ class SimPrim {
             }
         });
     }
-    // プレビューキャンバスにトリミング範囲を描画
+    // Draw the trimming area to the preview canvas
     previewImg(previewCvs) {
         this.previewCvs = previewCvs;
         const previewCtx = this.previewCvs.getContext("2d");
@@ -335,7 +341,7 @@ class SimPrim {
      * Exports the trimmed image to a specified canvas.
      * @param exportCvs - The canvas to which the trimmed image will be exported.
      */
-    // トリミング領域をエクスポート用Canvasに描画
+    // Draw the trimming area to the export canvas
     exportImg(exportCvs) {
         var _a;
         let exportCtx = exportCvs.getContext("2d");

@@ -27,15 +27,16 @@ declare class SimPrim {
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
      * @param img - The image to be edited.
      * @param trimmingPath - The path to the trimming image.
-     * @param inputCvsHeight - Optional : The height of the input canvas when height is longer than width.　If you want to trim a vertical image, you must explicitly specify it.
+     * @param inputCvsHeight - Optional : The height of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
      * @param inputCvsWidth - Optional : The width of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
      */
-    init(img: HTMLImageElement, trimmingPath: string, inputCvsHeight?: String, inputCvsWidth?: String): void;
+    init(img: HTMLImageElement, trimmingPath?: string, inputCvsHeight?: String, inputCvsWidth?: String): void;
     /**
      * Detects mouse drag events on the canvas and allows for dragging the trimming area.
      * @param previewCvs - Optional : The canvas for previewing the trimmed image.
      */
     dragDetection(previewCvs?: HTMLCanvasElement): void;
+    private requestFrame;
     /**
      * Detects mouse drag events on the corners of the trimming area, allowing it to be resized.
      */
