@@ -2,7 +2,7 @@
 
 > ## SimPrim is a Simple Trimming Image Library
 
-## Including SimPrim
+### Including SimPrim
 
 Script tag
 
@@ -12,7 +12,7 @@ Script tag
 
 ---
 
-## To use
+### To use
 
 ```javascript
 const simprim = new SimPrim(inputCvs);
