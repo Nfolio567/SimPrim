@@ -1,3 +1,5 @@
+/*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
+
 class SimPrim {
     private inputCvs: HTMLCanvasElement; // 編集するキャンバス
     private img: HTMLImageElement | undefined; // 編集させられる画像
@@ -63,6 +65,7 @@ class SimPrim {
 
         // トリミング画像を初期化
         const trimming = new Image();
+        trimming.crossOrigin = "anonymous";
         this.trimming = trimming;
         if (this.decisionWH) {
             this.drawTrimmingHeight = (this.inputCvs.height / 3) * 2;

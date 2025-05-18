@@ -1,3 +1,4 @@
+/*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
 class SimPrim {
     constructor(inputCvs) {
         this.beforeDx = 0; // 前フレームのX座標
@@ -48,6 +49,7 @@ class SimPrim {
         (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.drawImage(this.img, 0, 0, this.img.width, this.img.height, 0, 0, drawWidth, drawHeight);
         // トリミング画像を初期化
         const trimming = new Image();
+        trimming.crossOrigin = "anonymous";
         this.trimming = trimming;
         if (this.decisionWH) {
             this.drawTrimmingHeight = (this.inputCvs.height / 3) * 2;
