@@ -138,7 +138,6 @@ class SimPrim {
     }
 
     private requestFrame(previewCvs: HTMLCanvasElement, e: MouseEvent) {
-
         if (!this.isAnimating) return;
 
         this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
@@ -163,6 +162,8 @@ class SimPrim {
             this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
         }
         if (previewCvs) this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
+
+        console.log("#########################");
 
         if (this.dragging) {
             requestAnimationFrame(() => this.requestFrame(previewCvs, e));

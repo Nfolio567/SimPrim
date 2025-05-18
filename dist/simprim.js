@@ -153,6 +153,7 @@
             }
             if (previewCvs)
                 this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
+            console.log("#########################");
             if (this.dragging) {
                 requestAnimationFrame(() => this.requestFrame(previewCvs, e));
             }
