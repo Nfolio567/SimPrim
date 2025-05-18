@@ -124,40 +124,39 @@
             });
         }
         requestFrame(previewCvs, e) {
-            var _a, _b, _c;
             if (!this.isAnimating)
                 return;
-            this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
-            if (this.dx !== undefined)
-                this.beforeDx = this.dx;
-            if (this.dy !== undefined)
-                this.beforeDy = this.dy;
-            // Move the trimming area by mouse drag
-            this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
-            this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
-            // Check for out-of-bounds of the trimming area
-            if (this.trimming && this.img) {
-                if (this.dx <= 0)
-                    this.dx = 0;
-                if (this.dy <= 0)
-                    this.dy = 0;
-                if (this.dx + this.drawTrimmingWidth >= this.img.width)
-                    this.dx = this.img.width - this.drawTrimmingWidth;
-                if (this.dy + this.drawTrimmingHeight >= this.img.height)
-                    this.dy = this.img.height - this.drawTrimmingHeight;
-            }
-            if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined && this.beforeDx !== undefined && this.beforeDy !== undefined) {
-                (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.clearRect(this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
-                (_b = this.inputCtx) === null || _b === void 0 ? void 0 : _b.drawImage(this.img, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
-                (_c = this.inputCtx) === null || _c === void 0 ? void 0 : _c.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
-            }
-            if (previewCvs)
-                this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
-            console.log("#########################");
-            if (this.dragging) {
-                requestAnimationFrame(() => this.requestFrame(previewCvs, e));
-            }
-            else {
+            requestAnimationFrame(() => {
+                var _a, _b, _c;
+                this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
+                if (this.dx !== undefined)
+                    this.beforeDx = this.dx;
+                if (this.dy !== undefined)
+                    this.beforeDy = this.dy;
+                // Move the trimming area by mouse drag
+                this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
+                this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
+                // Check for out-of-bounds of the trimming area
+                if (this.trimming && this.img) {
+                    if (this.dx <= 0)
+                        this.dx = 0;
+                    if (this.dy <= 0)
+                        this.dy = 0;
+                    if (this.dx + this.drawTrimmingWidth >= this.img.width)
+                        this.dx = this.img.width - this.drawTrimmingWidth;
+                    if (this.dy + this.drawTrimmingHeight >= this.img.height)
+                        this.dy = this.img.height - this.drawTrimmingHeight;
+                }
+                if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined && this.beforeDx !== undefined && this.beforeDy !== undefined) {
+                    (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.clearRect(this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+                    (_b = this.inputCtx) === null || _b === void 0 ? void 0 : _b.drawImage(this.img, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+                    (_c = this.inputCtx) === null || _c === void 0 ? void 0 : _c.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+                }
+                if (previewCvs)
+                    this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
+                console.log("#########################");
+            });
+            if (!this.dragging) {
                 this.isAnimating = false;
             }
         }
