@@ -10,8 +10,8 @@ class SimPrim {
     private cy: number | undefined; // トリミング領域の中心Y座標
     private dx: number | undefined; // トリミング画像の描画位置（X軸）
     private dy: number | undefined; // トリミング画像の描画位置（Y軸）
-    private beforeDx = 0; // 前フレームのX座標
-    private beforeDy = 0; // 前フレームのY座標
+    private beforeDx: number | undefined; // 前フレームのX座標
+    private beforeDy: number | undefined; // 前フレームのY座標
     private scaleWidth = 0; // キャンバス幅とクライアント幅の比率
     private scaleHeight = 0; // キャンバス高さとクライアント高さの比率
     private resizing = false; // サイズ変更中かどうか
@@ -45,6 +45,8 @@ class SimPrim {
         this.cy = 0;
         this.dx = 0;
         this.dy = 0;
+        this.beforeDx = 0;
+        this.beforeDy = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -153,7 +155,7 @@ class SimPrim {
                     }
                 }
 
-                    if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined) {
+                    if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined && this.beforeDx !== undefined && this.beforeDy !== undefined) {
                         this.inputCtx?.clearRect(this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                         this.inputCtx?.drawImage(this.img, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                         this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);

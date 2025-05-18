@@ -7,8 +7,6 @@
     /*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
     class SimPrim {
         constructor(inputCvs) {
-            this.beforeDx = 0; // 前フレームのX座標
-            this.beforeDy = 0; // 前フレームのY座標
             this.scaleWidth = 0; // キャンバス幅とクライアント幅の比率
             this.scaleHeight = 0; // キャンバス高さとクライアント高さの比率
             this.resizing = false; // サイズ変更中かどうか
@@ -39,6 +37,8 @@
             this.cy = 0;
             this.dx = 0;
             this.dy = 0;
+            this.beforeDx = 0;
+            this.beforeDy = 0;
             this.inputCvs.width = this.img.width;
             this.inputCvs.height = this.img.height;
             // 画像の縦横比を判定し、縦長の場合は高さ優先に設定
@@ -144,7 +144,7 @@
                                     this.dy = this.img.height - this.drawTrimmingHeight;
                             }
                         }
-                        if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined) {
+                        if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined && this.beforeDx !== undefined && this.beforeDy !== undefined) {
                             (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.clearRect(this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                             (_b = this.inputCtx) === null || _b === void 0 ? void 0 : _b.drawImage(this.img, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight, this.beforeDx, this.beforeDy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                             (_c = this.inputCtx) === null || _c === void 0 ? void 0 : _c.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
