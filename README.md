@@ -20,7 +20,7 @@ const simprim = new SimPrim(inputCvs);
 
 It need 
 
-- Image: will be edited
+- img: Image will be edited
 - inputCvs: Canvas for edit image
 - exportCvs: Cannas for draw edidited image
 - Optional - inputCvsWidth: when height is longer than width
@@ -33,7 +33,7 @@ It need
 Methods
 
 ```javascript
-simprim.init(Image, inputCvsWidth, inputCvsWidth, trimmingPath);
+simprim.init(img, inputCvsWidth, inputCvsWidth, trimmingPath);
 simprim.dragDetection(previewCvs);
 simprim.sizeChange();
 simprim.exprotImg(exportCvs);
