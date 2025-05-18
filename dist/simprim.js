@@ -127,7 +127,7 @@
             if (!this.isAnimating)
                 return;
             requestAnimationFrame(() => {
-                var _a, _b;
+                var _a, _b, _c;
                 this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
                 if (this.dx !== undefined)
                     this.beforeDx = this.dx;
@@ -148,8 +148,9 @@
                         this.dy = this.img.height - this.drawTrimmingHeight;
                 }
                 if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined && this.beforeDx !== undefined && this.beforeDy !== undefined) {
-                    (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
-                    (_b = this.inputCtx) === null || _b === void 0 ? void 0 : _b.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+                    (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.clearRect(this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
+                    (_b = this.inputCtx) === null || _b === void 0 ? void 0 : _b.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
+                    (_c = this.inputCtx) === null || _c === void 0 ? void 0 : _c.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                 }
                 if (previewCvs)
                     this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
