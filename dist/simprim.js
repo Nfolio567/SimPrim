@@ -232,6 +232,7 @@
                     }
                     // Trimming area resizing process
                     if (this.resizing) {
+                        this.isAnimating = true;
                         beforeWidth = this.drawTrimmingWidth;
                         beforeHeight = this.drawTrimmingHeight;
                         if (property == "downR" && this.img) {
