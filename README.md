@@ -20,13 +20,13 @@ const simprim = new SimPrim(inputCvs);
 
 It need 
 
-    - Image: will be edited
-    - inputCvs: Canvas for edit image
-    - exportCvs: Cannas for draw edidited image
-    - Optional - inputCvsWidth: when height is longer than width
-    - Optional - inputCvsHeight: when height is longer than width
-    - Optional - previewCvs: Canvas for draw preview image
-    - Optional - trimmingPath: Image for specifying the edit range(Default: "[https://cdn.nfolio.one/trimming.png](https://cdn.nfolio.one/trimming.png)")
+- Image: will be edited
+- inputCvs: Canvas for edit image
+- exportCvs: Cannas for draw edidited image
+- Optional - inputCvsWidth: when height is longer than width
+- Optional - inputCvsHeight: when height is longer than width
+- Optional - previewCvs: Canvas for draw preview image
+- Optional - trimmingPath: Image for specifying the edit range(Default: "[https://cdn.nfolio.one/trimming.png](https://cdn.nfolio.one/trimming.png)")
 
 
 
