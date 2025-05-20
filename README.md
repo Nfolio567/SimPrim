@@ -7,7 +7,10 @@
 Script tag
 
 ```html
+//uncompressed
 <script src="https://cdn.nfolio.one/simprim.js" integrity="8b75d89cdd3fd996d3c334489a2145a233b17d582b428bb10f94c8123ed29a9a" crossorigin="anonymous"></script>
+//minifide
+<script src="https://cdn.nfolio.one/simprim.min.js" integrity="5b29a8c62acb050ae10890b2625e30760a3c6b7f2f69cd43ecdf0c01fb5fefd3" crossorigin="anonymous"></script>
 ```
 
 ---
@@ -15,7 +18,7 @@ Script tag
 ### To use
 
 ```javascript
-const simprim = new SimPrim(inputCvs);
+const simprim = new SimPrim(input);
 ```
 
 It need 
