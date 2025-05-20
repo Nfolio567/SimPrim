@@ -1,6 +1,6 @@
 {
   "name": "simprim",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Simple Trimming",
   "main": "dist/simprim.js",
   "types": "dist/simprim.types.d.ts",
@@ -23,7 +23,11 @@
     "url": "git+https://github.com/Nfolio567/SimPrim.git"
   },
   "keywords": [
-    "simprim"
+    "simprim",
+    "image",
+    "edit",
+    "trim",
+    "simple"
   ],
   "author": "Nfolio",
   "license": "ISC",
