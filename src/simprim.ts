@@ -22,7 +22,6 @@ class SimPrim {
     private defaultCursor = true; // Default cursor flag
     private drawTrimmingWidth = 0; // Width of the trimming area
     private drawTrimmingHeight = 0; // Height of the trimming area
-    private draggingFrame: number | undefined; // Frame during dragging
 
     constructor(inputCvs: HTMLCanvasElement) {
         this.inputCvs = inputCvs;
