@@ -21,7 +21,6 @@ declare class SimPrim {
     private defaultCursor;
     private drawTrimmingWidth;
     private drawTrimmingHeight;
-    private draggingFrame;
     constructor(inputCvs: HTMLCanvasElement);
     /**
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.

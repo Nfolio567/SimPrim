@@ -54,3 +54,4 @@ simprim.exportImg(exportCvs);
 ## 📝 Notes
 
 - SimPrim only supports square trimming.
+- Sample page : [https://nfolio567.github.io/SimPrim-example/](https://nfolio567.github.io/SimPrim-example/)
