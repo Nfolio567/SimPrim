@@ -140,7 +140,7 @@ class SimPrim {
         if (!this.isAnimating) return;
 
         requestAnimationFrame(() => {
-            if (this.dragging){
+            if (this.dragging) {
                 this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
                 if (this.dx !== undefined) this.beforeDx = this.dx;
                 if (this.dy !== undefined) this.beforeDy = this.dy;
@@ -162,15 +162,16 @@ class SimPrim {
                     this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
                 }
             }
-            
-            if (previewCvs) this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
 
-            console.log("#########################");
+            if (previewCvs) this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
         });
 
         if (!this.dragging && !this.resizing) {
             this.isAnimating = false;
         }
+
+        if (this.dragging) this.resizing = false;
+        if (this.resizing) this.dragging = false;
     }
 
     /**
@@ -184,7 +185,7 @@ class SimPrim {
         // Mouseover detection for resizable area
         this.inputCvs.addEventListener("mousemove", (e) => {
             // Left resizable area
-            if (this.dx !== undefined && this.dy !== undefined) {
+            if (this.dx !== undefined && this.dy !== undefined && !this.resizing) {
                 if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
                     // Top left
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {

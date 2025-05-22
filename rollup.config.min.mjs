@@ -24,7 +24,6 @@ export default {
                     },
                     format: {
                         beautify: false,
-                        comments: false,
                     }
                 })
             ],

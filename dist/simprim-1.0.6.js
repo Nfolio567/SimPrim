@@ -155,11 +155,14 @@
                 }
                 if (previewCvs)
                     this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
-                console.log("#########################");
             });
             if (!this.dragging && !this.resizing) {
                 this.isAnimating = false;
             }
+            if (this.dragging)
+                this.resizing = false;
+            if (this.resizing)
+                this.dragging = false;
         }
         /**
          * Detects mouse drag events on the corners of the trimming area, allowing it to be resized.
@@ -172,7 +175,7 @@
             this.inputCvs.addEventListener("mousemove", (e) => {
                 var _a, _b, _c, _d, _e;
                 // Left resizable area
-                if (this.dx !== undefined && this.dy !== undefined) {
+                if (this.dx !== undefined && this.dy !== undefined && !this.resizing) {
                     if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
                         // Top left
                         if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
