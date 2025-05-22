@@ -182,6 +182,9 @@ class SimPrim {
 
         // Mouseover detection for resizable area
         this.inputCvs.addEventListener("mousemove", (e) => {
+            if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
+                this.resizing = false;
+            }
             funcResizing.call(this, e);
             beforeProperty = property;
             // Left resizable area
@@ -192,7 +195,10 @@ class SimPrim {
                         property = "upL";
                         if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
-
+                        if (this.isDragging) {
+                            this.resizing = true;
+                            console.log(this.resizing);
+                        }
                     } else {
                         this.defaultCursor = true;
                     }
@@ -201,6 +207,9 @@ class SimPrim {
                         property = "downL";
                         if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
                     } else {
                         this.defaultCursor = true;
                     }
@@ -215,6 +224,9 @@ class SimPrim {
                         property = "upR";
                         if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
                     } else {
                         this.defaultCursor = true;
                     }
@@ -223,6 +235,9 @@ class SimPrim {
                         property = "downR";
                         if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
                     } else {
                         this.defaultCursor = true;
                     }
@@ -233,13 +248,6 @@ class SimPrim {
         });
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
-            if (this.isDragging) {
-                if(this.drawTrimmingWidth <= 10 || this.drawTrimmingHeight <= 10) {
-                    this.resizing = false;
-                }else {
-                    this.resizing = true;
-                }
-            }
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
                 this.dragging = false;
