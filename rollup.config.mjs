@@ -3,7 +3,7 @@ import typescript from "rollup-plugin-typescript2";
 export default {
     input: "src/simprim.ts",
     output: {
-        file: "dist/simprim-1.0.6.js",
+        file: "dist/simprim-1.0.7.js",
         format: "umd",
         name: "SimPrim",
         globals: {},

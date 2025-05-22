@@ -1,6 +1,6 @@
 {
   "name": "simprim",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Simple Trimming",
   "main": "dist/simprim.js",
   "types": "dist/simprim.types.d.ts",
