@@ -170,8 +170,8 @@
             let beforeHeight = 0; // Height before resizing
             // Mouseover detection for resizable area
             this.inputCvs.addEventListener("mousemove", (e) => {
-                beforeProperty = property;
                 resizing.call(this, e);
+                beforeProperty = property;
                 // Left resizable area
                 if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
                     if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
