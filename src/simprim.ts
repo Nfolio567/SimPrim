@@ -176,13 +176,15 @@ class SimPrim {
      */
     sizeChange() {
         let property = ""; // Where the mouse is now
+        let beforeProperty = "";
         let beforeWidth = 0; // Width before resizing
         let beforeHeight = 0; // Height before resizing
 
         // Mouseover detection for resizable area
         this.inputCvs.addEventListener("mousemove", (e) => {
+            resizing.bind(this, e);
             // Left resizable area
-            if (this.dx !== undefined && this.dy !== undefined/* && !this.resizing*/) {
+            if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
                 if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
                     // Top left
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
@@ -241,111 +243,113 @@ class SimPrim {
                 } else {
                     this.defaultCursor = true;
                 }
-
-                // Trimming area resizing process
-                if (this.resizing) {
-                    this.isAnimating = true;
-                    beforeWidth = this.drawTrimmingWidth;
-                    beforeHeight = this.drawTrimmingHeight;
-                    if (property == "downR" && this.img) {
-                        this.inputCvs.style.cursor = "nwse-resize";
-
-                        // Resize detection
-                        if (e.movementX != 0) this.drawTrimmingWidth += e.movementX * this.scaleWidth;
-                        if (e.movementY != 0) this.drawTrimmingHeight += e.movementY * this.scaleHeight;
-                        if (e.movementX != 0 && e.movementY != 0) {
-                            this.drawTrimmingWidth += 2 * (e.movementX / this.scaleWidth / 4) - e.movementX / this.scaleWidth / 2;
-                            this.drawTrimmingHeight += 2 * (e.movementY / this.scaleHeight / 4) - e.movementX / this.scaleHeight / 2;
-                        }
-                        this.drawTrimmingHeight = this.drawTrimmingWidth;
-                        // Out-of-bounds check
-                        if (this.dx + this.drawTrimmingWidth >= this.img.width) {
-                            this.drawTrimmingWidth = this.img.width - this.dx;
-                            this.drawTrimmingHeight = this.drawTrimmingWidth;
-                        }
-                        if (this.dy + this.drawTrimmingHeight >= this.img.height) {
-                            this.drawTrimmingHeight = this.img.height - this.dy;
-                            this.drawTrimmingWidth = this.drawTrimmingHeight;
-                        }
-
-                        this.inputCtx?.drawImage(this.img, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
-                    }
-                    if (property == "upR" && this.img) {
-                        this.beforeDy = this.dy;
-                        this.inputCvs.style.cursor = "nesw-resize";
-
-                        // Resize detection
-                        if (e.movementX != 0) {
-                            this.dy -= e.movementX * this.scaleWidth;
-                            this.drawTrimmingWidth += e.movementX * this.scaleWidth;
-                        }
-                        this.drawTrimmingHeight = this.drawTrimmingWidth;
-                        // Out-of-bounds check
-                        if (this.dx + this.drawTrimmingWidth >= this.img.width) this.drawTrimmingWidth = this.img.width - this.dx;
-                        if (this.dy <= 0) {
-                            this.dy = 0;
-                            this.drawTrimmingHeight = beforeHeight;
-                            this.drawTrimmingWidth = beforeWidth;
-                        }
-
-                        this.inputCtx?.drawImage(this.img, this.dx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
-                    }
-                    if (property == "downL" && this.img) {
-                        this.beforeDx = this.dx;
-                        this.inputCvs.style.cursor = "nesw-resize";
-
-                        // Resize detection
-                        if (e.movementX != 0) {
-                            this.dx += e.movementX * this.scaleWidth;
-                            this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
-                        }
-                        this.drawTrimmingHeight = this.drawTrimmingWidth;
-
-                        // Out-of-bounds check
-                        if (this.dx <= 0) {
-                            this.dx = 0;
-                            this.drawTrimmingWidth = beforeWidth;
-                            this.drawTrimmingHeight = beforeHeight;
-                        }
-                        if (this.dy + this.drawTrimmingHeight >= this.img.height) {
-                            this.drawTrimmingHeight = this.img.height - this.dy;
-                            this.drawTrimmingWidth = this.drawTrimmingHeight;
-                            this.dx = this.beforeDx;
-                        }
-                        this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
-                    }
-                    if (property == "upL") {
-                        this.beforeDx = this.dx;
-                        this.beforeDy = this.dy;
-                        this.inputCvs.style.cursor = "nwse-resize";
-
-                        // Resize detection
-                        if (e.movementX != 0) {
-                            this.dx += e.movementX * this.scaleWidth;
-                            this.dy += e.movementX * this.scaleWidth;
-                            this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
-                        }
-                        this.drawTrimmingHeight = this.drawTrimmingWidth;
-
-                        // Out-of-bounds check
-                        if (this.dx <= 0) {
-                            this.dx = 0;
-                            this.dy = this.beforeDy;
-                            this.drawTrimmingWidth = beforeWidth;
-                            this.drawTrimmingHeight = beforeHeight;
-                        }
-                        if (this.dy <= 0) {
-                            this.dy = 0;
-                            this.dx = this.beforeDx;
-                            this.drawTrimmingWidth = beforeWidth;
-                            this.drawTrimmingHeight = beforeHeight;
-                        }
-                        if (this.img) this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
-                    }
-                    if (this.trimming) this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
-                }
             }
         });
+
+        function resizing(this: SimPrim, e: MouseEvent) {
+            // Trimming area resizing process
+            if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
+                this.isAnimating = true;
+                beforeWidth = this.drawTrimmingWidth;
+                beforeHeight = this.drawTrimmingHeight;
+                if (property == "downR" && this.img) {
+                    this.inputCvs.style.cursor = "nwse-resize";
+
+                    // Resize detection
+                    if (e.movementX != 0) this.drawTrimmingWidth += e.movementX * this.scaleWidth;
+                    if (e.movementY != 0) this.drawTrimmingHeight += e.movementY * this.scaleHeight;
+                    if (e.movementX != 0 && e.movementY != 0) {
+                        this.drawTrimmingWidth += 2 * (e.movementX / this.scaleWidth / 4) - e.movementX / this.scaleWidth / 2;
+                        this.drawTrimmingHeight += 2 * (e.movementY / this.scaleHeight / 4) - e.movementX / this.scaleHeight / 2;
+                    }
+                    this.drawTrimmingHeight = this.drawTrimmingWidth;
+                    // Out-of-bounds check
+                    if (this.dx + this.drawTrimmingWidth >= this.img.width) {
+                        this.drawTrimmingWidth = this.img.width - this.dx;
+                        this.drawTrimmingHeight = this.drawTrimmingWidth;
+                    }
+                    if (this.dy + this.drawTrimmingHeight >= this.img.height) {
+                        this.drawTrimmingHeight = this.img.height - this.dy;
+                        this.drawTrimmingWidth = this.drawTrimmingHeight;
+                    }
+
+                    this.inputCtx?.drawImage(this.img, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
+                }
+                if (property == "upR" && this.img) {
+                    this.beforeDy = this.dy;
+                    this.inputCvs.style.cursor = "nesw-resize";
+
+                    // Resize detection
+                    if (e.movementX != 0) {
+                        this.dy -= e.movementX * this.scaleWidth;
+                        this.drawTrimmingWidth += e.movementX * this.scaleWidth;
+                    }
+                    this.drawTrimmingHeight = this.drawTrimmingWidth;
+                    // Out-of-bounds check
+                    if (this.dx + this.drawTrimmingWidth >= this.img.width) this.drawTrimmingWidth = this.img.width - this.dx;
+                    if (this.dy <= 0) {
+                        this.dy = 0;
+                        this.drawTrimmingHeight = beforeHeight;
+                        this.drawTrimmingWidth = beforeWidth;
+                    }
+
+                    this.inputCtx?.drawImage(this.img, this.dx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
+                }
+                if (property == "downL" && this.img) {
+                    this.beforeDx = this.dx;
+                    this.inputCvs.style.cursor = "nesw-resize";
+
+                    // Resize detection
+                    if (e.movementX != 0) {
+                        this.dx += e.movementX * this.scaleWidth;
+                        this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
+                    }
+                    this.drawTrimmingHeight = this.drawTrimmingWidth;
+
+                    // Out-of-bounds check
+                    if (this.dx <= 0) {
+                        this.dx = 0;
+                        this.drawTrimmingWidth = beforeWidth;
+                        this.drawTrimmingHeight = beforeHeight;
+                    }
+                    if (this.dy + this.drawTrimmingHeight >= this.img.height) {
+                        this.drawTrimmingHeight = this.img.height - this.dy;
+                        this.drawTrimmingWidth = this.drawTrimmingHeight;
+                        this.dx = this.beforeDx;
+                    }
+                    this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
+                }
+                if (property == "upL") {
+                    this.beforeDx = this.dx;
+                    this.beforeDy = this.dy;
+                    this.inputCvs.style.cursor = "nwse-resize";
+
+                    // Resize detection
+                    if (e.movementX != 0) {
+                        this.dx += e.movementX * this.scaleWidth;
+                        this.dy += e.movementX * this.scaleWidth;
+                        this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
+                    }
+                    this.drawTrimmingHeight = this.drawTrimmingWidth;
+
+                    // Out-of-bounds check
+                    if (this.dx <= 0) {
+                        this.dx = 0;
+                        this.dy = this.beforeDy;
+                        this.drawTrimmingWidth = beforeWidth;
+                        this.drawTrimmingHeight = beforeHeight;
+                    }
+                    if (this.dy <= 0) {
+                        this.dy = 0;
+                        this.dx = this.beforeDx;
+                        this.drawTrimmingWidth = beforeWidth;
+                        this.drawTrimmingHeight = beforeHeight;
+                    }
+                    if (this.img) this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
+                }
+                if (this.trimming) this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+            }
+        }
     }
 
     // Draw the trimming area to the preview canvas
