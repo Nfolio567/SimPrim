@@ -182,7 +182,7 @@ class SimPrim {
 
         // Mouseover detection for resizable area
         this.inputCvs.addEventListener("mousemove", (e) => {
-            resizing.call(this, e);
+            funcResizing.call(this, e);
             beforeProperty = property;
             // Left resizable area
             if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
@@ -190,7 +190,7 @@ class SimPrim {
                     // Top left
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
                         property = "upL";
-                        this.inputCvs.style.cursor = "nwse-resize";
+                        if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
@@ -202,7 +202,7 @@ class SimPrim {
                     // Bottom left
                     if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
                         property = "downL";
-                        this.inputCvs.style.cursor = "nesw-resize";
+                        if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
@@ -220,7 +220,7 @@ class SimPrim {
                     // Top right
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
                         property = "upR";
-                        this.inputCvs.style.cursor = "nesw-resize";
+                        if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
@@ -232,7 +232,7 @@ class SimPrim {
                     // Bottom right
                     if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
                         property = "downR";
-                        this.inputCvs.style.cursor = "nwse-resize";
+                        if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
@@ -247,7 +247,7 @@ class SimPrim {
             }
         });
 
-        function resizing(this: SimPrim, e: MouseEvent) {
+        function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
                 property = beforeProperty;
