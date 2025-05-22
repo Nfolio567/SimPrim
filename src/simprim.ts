@@ -192,10 +192,10 @@ class SimPrim {
                         property = "upL";
                         if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
-                        if (this.isDragging) {
+                        /*if (this.isDragging) {
                             if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = false;
                             else this.resizing = true;
-                        }
+                        }*/
                     } else {
                         this.defaultCursor = true;
                     }
