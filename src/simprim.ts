@@ -1,4 +1,4 @@
-/*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
+/*! SimPrim-Simple Image Trimming Library v1.0.6 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
 
 class SimPrim {
     private inputCvs: HTMLCanvasElement; // Canvas to edit
@@ -12,8 +12,8 @@ class SimPrim {
     private dy: number | undefined; // Drawing position Y of the trimming image
     private beforeDx: number | undefined; // Previous frame X coordinate
     private beforeDy: number | undefined; // Previous frame Y coordinate
-    private scaleWidth = 0; // Ratio of canvas width to client width
-    private scaleHeight = 0; // Ratio of canvas height to client height
+    private scaleWidth: number | undefined; // Ratio of canvas width to client width
+    private scaleHeight: number | undefined; // Ratio of canvas height to client height
     private resizing = false; // Whether resizing is in progress
     private dragging = false; // Drag flag within the area
     private isDragging = false; // Whether dragging is in progress
@@ -48,6 +48,8 @@ class SimPrim {
         this.beforeDy = 0;
         this.drawTrimmingWidth = 0;
         this.drawTrimmingHeight = 0;
+        this.scaleWidth = 0;
+        this.scaleHeight = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -148,8 +150,8 @@ class SimPrim {
                 if (this.dy !== undefined) this.beforeDy = this.dy;
 
                 // Move the trimming area by mouse drag
-                if (this.drawTrimmingWidth !== undefined) this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
-                if (this.drawTrimmingHeight !== undefined) this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
+                if (this.drawTrimmingWidth !== undefined && this.scaleWidth !== undefined) this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
+                if (this.drawTrimmingHeight !== undefined && this.scaleHeight !== undefined) this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
 
                 // Check for out-of-bounds of the trimming area
                 if (this.trimming && this.img && this.dx !== undefined && this.dy !== undefined && this.drawTrimmingWidth !== undefined && this.drawTrimmingHeight !== undefined) {
@@ -186,7 +188,7 @@ class SimPrim {
         // Mouseover detection for resizable area
         this.inputCvs.addEventListener("mousemove", (e) => {
             // Left resizable area
-            if (this.dx !== undefined && this.dy !== undefined && this.drawTrimmingHeight !== undefined && this.drawTrimmingWidth !== undefined) {
+            if (this.dx !== undefined && this.dy !== undefined && this.drawTrimmingHeight !== undefined && this.drawTrimmingWidth !== undefined && this.scaleWidth !== undefined && this.scaleHeight !== undefined) {
                 if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
                     // Top left
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
