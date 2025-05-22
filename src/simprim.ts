@@ -193,7 +193,8 @@ class SimPrim {
                         if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
-                            this.resizing = true;
+                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = false;
+                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = true;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -204,7 +205,8 @@ class SimPrim {
                         if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
-                            this.resizing = true;
+                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = false;
+                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = true;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -221,7 +223,8 @@ class SimPrim {
                         if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
-                            this.resizing = true;
+                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = false;
+                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = true;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -232,7 +235,8 @@ class SimPrim {
                         if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
-                            this.resizing = true;
+                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = false;
+                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = true;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -244,8 +248,6 @@ class SimPrim {
         });
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
-            if(this.drawTrimmingWidth == 0 || this.drawTrimmingHeight == 0) this.resizing = false;
-
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
                 this.dragging = false;
