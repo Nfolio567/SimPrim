@@ -194,7 +194,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = false;
-                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = true;
+                            if(this.drawTrimmingWidth > 0 || this.drawTrimmingHeight > 0) this.resizing = true;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -206,7 +206,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = false;
-                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = true;
+                            if(this.drawTrimmingWidth > 0 || this.drawTrimmingHeight > 0) this.resizing = true;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -224,7 +224,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = false;
-                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = true;
+                            if(this.drawTrimmingWidth > 0 || this.drawTrimmingHeight > 0) this.resizing = true;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -236,7 +236,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = false;
-                            if(this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) this.resizing = true;
+                            if(this.drawTrimmingWidth > 0 || this.drawTrimmingHeight > 0) this.resizing = true;
                         }
                     } else {
                         this.defaultCursor = true;
