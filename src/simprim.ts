@@ -253,6 +253,7 @@ class SimPrim {
                 this.dragging = false;
                 property = beforeProperty;
                 console.log(this.drawTrimmingWidth);
+                console.log(this.resizing);
                 this.isAnimating = true;
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
