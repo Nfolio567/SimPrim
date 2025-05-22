@@ -10,10 +10,10 @@ Use a `<script>` tag to include the library:
 
 ```html
 <!-- Uncompressed -->
-<script src="https://cdn.nfolio.one/simprim.js" integrity="sha256-qrPx0jmwpeft9mt670Gz0Cvc4kARXk7apLFAteQrftQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.nfolio.one/simprim-1.0.6.js" integrity="sha256-w27QxHhrlwGV6vq/PHL6q25iDwkeRAqcihJxyFbHdM8=" crossorigin="anonymous"></script>
 
 <!-- Minified -->
-<script src="https://cdn.nfolio.one/simprim.min.js" integrity="sha256-WymoxirLBQrhCJCyYl4wdgo8a38vac1D7N8MAftf79M=" crossorigin="anonymous"></script>
+<script src="https://cdn.nfolio.one/simprim-1.0.6.min.js" integrity="sha256-wD8Ud10pocbL08xmK6Tlp7hG8bZp7kBqsmmKtSHnp5k=" crossorigin="anonymous"></script>
 ```
 
 ---
