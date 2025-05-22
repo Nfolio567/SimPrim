@@ -169,9 +169,6 @@ class SimPrim {
         if (!this.dragging && !this.resizing) {
             this.isAnimating = false;
         }
-
-        if (this.dragging) this.resizing = false;
-        if (this.resizing) this.dragging = false;
     }
 
     /**
@@ -194,6 +191,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
+                            this.dragging = false;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -205,6 +203,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
+                            this.dragging = false;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -222,6 +221,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
+                            this.dragging = false;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -233,6 +233,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
+                            this.dragging = false;
                         }
                     } else {
                         this.defaultCursor = true;
