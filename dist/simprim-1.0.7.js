@@ -165,10 +165,12 @@
          */
         sizeChange() {
             let property = ""; // Where the mouse is now
+            let beforeProperty = "";
             let beforeWidth = 0; // Width before resizing
             let beforeHeight = 0; // Height before resizing
             // Mouseover detection for resizable area
             this.inputCvs.addEventListener("mousemove", (e) => {
+                beforeProperty = property;
                 resizing.call(this, e);
                 // Left resizable area
                 if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
@@ -241,6 +243,8 @@
                 var _a, _b, _c, _d, _e;
                 // Trimming area resizing process
                 if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
+                    property = beforeProperty;
+                    console.log(property);
                     this.isAnimating = true;
                     beforeWidth = this.drawTrimmingWidth;
                     beforeHeight = this.drawTrimmingHeight;
