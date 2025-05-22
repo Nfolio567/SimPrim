@@ -170,7 +170,7 @@
             let beforeHeight = 0; // Height before resizing
             // Mouseover detection for resizable area
             this.inputCvs.addEventListener("mousemove", (e) => {
-                resizing.call(this, e);
+                funcResizing.call(this, e);
                 beforeProperty = property;
                 // Left resizable area
                 if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
@@ -178,11 +178,11 @@
                         // Top left
                         if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
                             property = "upL";
-                            this.inputCvs.style.cursor = "nwse-resize";
+                            if (!this.resizing)
+                                this.inputCvs.style.cursor = "nwse-resize";
                             this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
-                                this.dragging = false;
                             }
                         }
                         else {
@@ -191,11 +191,11 @@
                         // Bottom left
                         if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
                             property = "downL";
-                            this.inputCvs.style.cursor = "nesw-resize";
+                            if (!this.resizing)
+                                this.inputCvs.style.cursor = "nesw-resize";
                             this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
-                                this.dragging = false;
                             }
                         }
                         else {
@@ -210,11 +210,11 @@
                         // Top right
                         if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
                             property = "upR";
-                            this.inputCvs.style.cursor = "nesw-resize";
+                            if (!this.resizing)
+                                this.inputCvs.style.cursor = "nesw-resize";
                             this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
-                                this.dragging = false;
                             }
                         }
                         else {
@@ -223,11 +223,11 @@
                         // Bottom right
                         if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
                             property = "downR";
-                            this.inputCvs.style.cursor = "nwse-resize";
+                            if (!this.resizing)
+                                this.inputCvs.style.cursor = "nwse-resize";
                             this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
-                                this.dragging = false;
                             }
                         }
                         else {
@@ -239,12 +239,16 @@
                     }
                 }
             });
-            function resizing(e) {
+            function funcResizing(e) {
                 var _a, _b, _c, _d, _e;
                 // Trimming area resizing process
                 if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
+                    if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
+                        this.drawTrimmingHeight = 0;
+                        this.drawTrimmingWidth = this.drawTrimmingHeight;
+                    }
+                    this.dragging = false;
                     property = beforeProperty;
-                    console.log(property);
                     this.isAnimating = true;
                     beforeWidth = this.drawTrimmingWidth;
                     beforeHeight = this.drawTrimmingHeight;

@@ -194,7 +194,6 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
-                            console.log(this.resizing);
                         }
                     } else {
                         this.defaultCursor = true;
@@ -253,7 +252,6 @@ class SimPrim {
             }
                 this.dragging = false;
                 property = beforeProperty;
-                console.log(this.drawTrimmingWidth);
                 this.isAnimating = true;
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
