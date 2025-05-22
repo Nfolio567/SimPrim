@@ -5,7 +5,7 @@ export default {
     input: "src/simprim.ts",
     output: [
         {
-            file: "dist/simprim.min.js",
+            file: "dist/simprim-1.0.6.min.js",
             format: "iife",
             name: "SimPrim",
             plugins: [
