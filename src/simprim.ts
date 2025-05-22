@@ -194,7 +194,6 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
-                            this.dragging = false;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -206,7 +205,6 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
-                            this.dragging = false;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -224,7 +222,6 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
-                            this.dragging = false;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -236,7 +233,6 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
-                            this.dragging = false;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -250,6 +246,7 @@ class SimPrim {
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
+                this.dragging = false;
                 property = beforeProperty;
                 console.log(property);
                 this.isAnimating = true;
