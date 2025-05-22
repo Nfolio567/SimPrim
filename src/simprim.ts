@@ -182,7 +182,7 @@ class SimPrim {
 
         // Mouseover detection for resizable area
         this.inputCvs.addEventListener("mousemove", (e) => {
-            funcResizing.call(this, e);
+            //funcResizing.call(this, e);
             beforeProperty = property;
             // Left resizable area
             if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
