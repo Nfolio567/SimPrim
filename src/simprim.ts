@@ -182,9 +182,6 @@ class SimPrim {
 
         // Mouseover detection for resizable area
         this.inputCvs.addEventListener("mousemove", (e) => {
-            if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
-                this.resizing = false;
-            }
             funcResizing.call(this, e);
             beforeProperty = property;
             // Left resizable area
@@ -250,6 +247,10 @@ class SimPrim {
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
+            if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
+                this.drawTrimmingHeight = 0;
+                this.drawTrimmingWidth = this.drawTrimmingHeight;
+            }
                 this.dragging = false;
                 property = beforeProperty;
                 console.log(this.drawTrimmingWidth);
