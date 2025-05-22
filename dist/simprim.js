@@ -168,15 +168,9 @@
             let property = ""; // Where the mouse is now
             let beforeWidth = 0; // Width before resizing
             let beforeHeight = 0; // Height before resizing
-            let prevX = 0;
-            let prevY = 0;
             // Mouseover detection for resizable area
             this.inputCvs.addEventListener("mousemove", (e) => {
                 var _a, _b, _c, _d, _e;
-                const deltaX = e.clientX - prevX;
-                const deltaY = e.clientY - prevY;
-                prevX = e.clientX;
-                prevY = e.clientY;
                 // Left resizable area
                 if (this.dx !== undefined && this.dy !== undefined) {
                     if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
@@ -239,20 +233,20 @@
                         this.defaultCursor = true;
                     }
                     // Trimming area resizing process
-                    if (this.resizing && deltaX == e.clientX && deltaY == e.clientY) {
+                    if (this.resizing) {
                         this.isAnimating = true;
                         beforeWidth = this.drawTrimmingWidth;
                         beforeHeight = this.drawTrimmingHeight;
                         if (property == "downR" && this.img) {
                             this.inputCvs.style.cursor = "nwse-resize";
                             // Resize detection
-                            if (deltaX != 0)
-                                this.drawTrimmingWidth += deltaX * this.scaleWidth;
-                            if (deltaY != 0)
-                                this.drawTrimmingHeight += deltaY * this.scaleHeight;
-                            if (deltaX != 0 && deltaY != 0) {
-                                this.drawTrimmingWidth += 2 * (deltaX / this.scaleWidth / 4) - deltaX / this.scaleWidth / 2;
-                                this.drawTrimmingHeight += 2 * (deltaY / this.scaleHeight / 4) - deltaX / this.scaleHeight / 2;
+                            if (e.movementX != 0)
+                                this.drawTrimmingWidth += e.movementX * this.scaleWidth;
+                            if (e.movementY != 0)
+                                this.drawTrimmingHeight += e.movementY * this.scaleHeight;
+                            if (e.movementX != 0 && e.movementY != 0) {
+                                this.drawTrimmingWidth += 2 * (e.movementX / this.scaleWidth / 4) - e.movementX / this.scaleWidth / 2;
+                                this.drawTrimmingHeight += 2 * (e.movementY / this.scaleHeight / 4) - e.movementX / this.scaleHeight / 2;
                             }
                             this.drawTrimmingHeight = this.drawTrimmingWidth;
                             // Out-of-bounds check
@@ -270,9 +264,9 @@
                             this.beforeDy = this.dy;
                             this.inputCvs.style.cursor = "nesw-resize";
                             // Resize detection
-                            if (deltaX != 0) {
-                                this.dy -= deltaX * this.scaleWidth;
-                                this.drawTrimmingWidth += deltaX * this.scaleWidth;
+                            if (e.movementX != 0) {
+                                this.dy -= e.movementX * this.scaleWidth;
+                                this.drawTrimmingWidth += e.movementX * this.scaleWidth;
                             }
                             this.drawTrimmingHeight = this.drawTrimmingWidth;
                             // Out-of-bounds check
@@ -289,9 +283,9 @@
                             this.beforeDx = this.dx;
                             this.inputCvs.style.cursor = "nesw-resize";
                             // Resize detection
-                            if (deltaX != 0) {
-                                this.dx += deltaX * this.scaleWidth;
-                                this.drawTrimmingWidth -= deltaX * this.scaleWidth;
+                            if (e.movementX != 0) {
+                                this.dx += e.movementX * this.scaleWidth;
+                                this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
                             }
                             this.drawTrimmingHeight = this.drawTrimmingWidth;
                             // Out-of-bounds check
@@ -312,10 +306,10 @@
                             this.beforeDy = this.dy;
                             this.inputCvs.style.cursor = "nwse-resize";
                             // Resize detection
-                            if (deltaX != 0) {
-                                this.dx += deltaX * this.scaleWidth;
-                                this.dy += deltaX * this.scaleWidth;
-                                this.drawTrimmingWidth -= deltaX * this.scaleWidth;
+                            if (e.movementX != 0) {
+                                this.dx += e.movementX * this.scaleWidth;
+                                this.dy += e.movementX * this.scaleWidth;
+                                this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
                             }
                             this.drawTrimmingHeight = this.drawTrimmingWidth;
                             // Out-of-bounds check
@@ -325,7 +319,7 @@
                                 this.drawTrimmingWidth = beforeWidth;
                                 this.drawTrimmingHeight = beforeHeight;
                             }
-                            if (this.dy < -0) {
+                            if (this.dy <= 0) {
                                 this.dy = 0;
                                 this.dx = this.beforeDx;
                                 this.drawTrimmingWidth = beforeWidth;
