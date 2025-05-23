@@ -236,9 +236,9 @@ class SimPrim {
         beforeProperty = property;
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
-            console.log(property);
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
+                console.log(property);
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                     this.drawTrimmingHeight = 0;
                     this.drawTrimmingWidth = this.drawTrimmingHeight;
