@@ -104,7 +104,8 @@ class SimPrim {
      */
     dragDetection(previewCvs?: HTMLCanvasElement) {
         this.previewCvs = previewCvs;
-        const previewCtx = previewCvs?.getContext("2d")
+        const previewCtx = previewCvs?.getContext("2d");
+        if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx);
 
         this.inputCvs.addEventListener("mousedown", () => {
             this.isDragging = true; // Drag flag
@@ -134,7 +135,7 @@ class SimPrim {
                 }
             }
 
-            if (previewCtx !== null && previewCtx !== undefined) this.requestFrame(previewCtx, e);
+            if (previewCtx) this.requestFrame(previewCtx, e);
         });
     }
 
