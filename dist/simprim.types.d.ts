@@ -1,6 +1,5 @@
 /*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
 declare class SimPrim {
-    VERSION: string;
     private inputCvs;
     private img;
     private inputCtx;
@@ -42,7 +41,6 @@ declare class SimPrim {
      */
     sizeChange(): void;
     private previewImg;
-    private animateDrag;
     /**
      * Exports the trimmed image to a specified canvas.
      * @param exportCvs - The canvas to which the trimmed image will be exported.

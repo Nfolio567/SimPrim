@@ -1,7 +1,6 @@
 /*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
 
 class SimPrim {
-    VERSION = "1.1.0";
     private inputCvs: HTMLCanvasElement; // Canvas to edit
     private img: HTMLImageElement | undefined; // Image to be edited
     private inputCtx: CanvasRenderingContext2D | null; // Context of the canvas to edit
@@ -141,7 +140,29 @@ class SimPrim {
         if (!this.isAnimating) return;
 
         requestAnimationFrame(() => {
-            this.animateDrag(e);
+            if (this.dragging) {
+                this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
+                if (this.dx !== undefined) this.beforeDx = this.dx;
+                if (this.dy !== undefined) this.beforeDy = this.dy;
+
+                // Move the trimming area by mouse drag
+                this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
+                this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
+
+                // Check for out-of-bounds of the trimming area
+                if (this.trimming && this.img) {
+                    if (this.dx <= 0) this.dx = 0;
+                    if (this.dy <= 0) this.dy = 0;
+                    if (this.dx + this.drawTrimmingWidth >= this.img.width) this.dx = this.img.width - this.drawTrimmingWidth;
+                    if (this.dy + this.drawTrimmingHeight >= this.img.height) this.dy = this.img.height - this.drawTrimmingHeight;
+                }
+
+                if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined && this.beforeDx !== undefined && this.beforeDy !== undefined) {
+                    this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
+                    this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
+                }
+            }
+
             if (previewCvs) this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
         });
 
@@ -340,31 +361,6 @@ class SimPrim {
         const previewCtx = this.previewCvs.getContext("2d");
         previewCtx?.clearRect(0, 0, previewCvs.width, previewCvs.height);
         if (this.img && this.dx !== undefined && this.dy !== undefined) previewCtx?.drawImage(this.img, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight, 0, 0, previewCvs.width, previewCvs.height);
-    }
-
-    private animateDrag(e: MouseEvent){
-        if (this.dragging) {
-                this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
-                if (this.dx !== undefined) this.beforeDx = this.dx;
-                if (this.dy !== undefined) this.beforeDy = this.dy;
-
-                // Move the trimming area by mouse drag
-                this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
-                this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
-
-                // Check for out-of-bounds of the trimming area
-                if (this.trimming && this.img) {
-                    if (this.dx <= 0) this.dx = 0;
-                    if (this.dy <= 0) this.dy = 0;
-                    if (this.dx + this.drawTrimmingWidth >= this.img.width) this.dx = this.img.width - this.drawTrimmingWidth;
-                    if (this.dy + this.drawTrimmingHeight >= this.img.height) this.dy = this.img.height - this.drawTrimmingHeight;
-                }
-
-                if (this.img && this.trimming && this.dx !== undefined && this.dy !== undefined && this.beforeDx !== undefined && this.beforeDy !== undefined) {
-                    this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2, this.beforeDx - 1, this.beforeDy - 1, this.drawTrimmingWidth + 2, this.drawTrimmingHeight + 2);
-                    this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
-                }
-            }
     }
 
     /**
