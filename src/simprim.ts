@@ -153,6 +153,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
+                            this.isAnimating = true;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -164,6 +165,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
+                            this.isAnimating = true;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -181,6 +183,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
+                            this.isAnimating = true;
                         }
                     } else {
                         this.defaultCursor = true;
@@ -192,6 +195,7 @@ class SimPrim {
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
+                            this.isAnimating = true;
                         }
                     } else {
                         this.defaultCursor = true;
