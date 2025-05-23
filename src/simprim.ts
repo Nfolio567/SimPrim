@@ -212,6 +212,7 @@ class SimPrim {
             this.moveDrag(e);
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
             if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
+            console.log(this.resizable+","+this.resizing);
         });
 
         if (!this.dragging && !this.resizing) {
