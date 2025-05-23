@@ -238,6 +238,7 @@ class SimPrim {
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
+                console.log(this.img);
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                     this.drawTrimmingHeight = 0;
                     this.drawTrimmingWidth = this.drawTrimmingHeight;
@@ -248,7 +249,6 @@ class SimPrim {
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
                 if (property == "downR" && this.img) {
-                    console.log(property);
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
