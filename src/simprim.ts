@@ -252,8 +252,8 @@ class SimPrim {
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
-                    if (e.movementX != 0) this.drawTrimmingWidth += e.movementX * this.scaleWidth;
-                    if (e.movementY != 0) this.drawTrimmingWidth += e.movementY * this.scaleHeight;
+                    if (e.movementX != 0 && e.movementY == 0) this.drawTrimmingWidth += e.movementX * this.scaleWidth;
+                    if (e.movementY != 0 && e.movementX == 0) this.drawTrimmingWidth += e.movementY * this.scaleHeight;
                     if (e.movementX != 0 && e.movementY != 0) {
                         this.drawTrimmingWidth += 2 * (e.movementX / this.scaleWidth / 4) - e.movementX / this.scaleWidth / 2;
                         this.drawTrimmingHeight += 2 * (e.movementY / this.scaleHeight / 4) - e.movementX / this.scaleHeight / 2;
