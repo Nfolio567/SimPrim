@@ -232,8 +232,8 @@ class SimPrim {
     }
 
     private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
-        funcResizing.call(this, e);
         beforeProperty = property;
+        funcResizing.call(this, e);
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
