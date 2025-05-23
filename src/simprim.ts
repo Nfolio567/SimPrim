@@ -247,8 +247,8 @@ class SimPrim {
                 this.isAnimating = true;
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
+                console.log(this.img);
                 if (property == "downR" && this.img !== undefined) {
-                    console.log(this.img);
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
