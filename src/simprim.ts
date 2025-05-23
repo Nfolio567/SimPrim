@@ -142,6 +142,65 @@ class SimPrim {
                 }
             }
 
+            // Mouseover detection for resizable area
+            if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
+                // Left resizable area
+                if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
+                    // Top left
+                    if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
+                        property = "upL";
+                        if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
+                        this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
+                    } else {
+                        this.defaultCursor = true;
+                    }
+                    // Bottom left
+                    if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
+                        property = "downL";
+                        if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
+                        this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
+                    } else {
+                        this.defaultCursor = true;
+                    }
+                } else {
+                    this.defaultCursor = true;
+                }
+
+                // Right resizable area
+                if (e.offsetX * this.scaleWidth >= this.dx + this.drawTrimmingWidth - 15 && e.offsetX * this.scaleWidth <= this.dx + this.drawTrimmingWidth + 15) {
+                    // Top right
+                    if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
+                        property = "upR";
+                        if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
+                        this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
+                    } else {
+                        this.defaultCursor = true;
+                    }
+                    // Bottom right
+                    if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
+                        property = "downR";
+                        if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
+                        this.defaultCursor = false;
+                        if (this.isDragging) {
+                            this.resizing = true;
+                        }
+                    } else {
+                        this.defaultCursor = true;
+                    }
+                } else {
+                    this.defaultCursor = true;
+                }
+            }
+
             if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
         });
     }
@@ -168,67 +227,8 @@ class SimPrim {
     }
 
     private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
-
-        // Mouseover detection for resizable area
         funcResizing.call(this, e);
         beforeProperty = property;
-        // Left resizable area
-        if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
-            if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
-                // Top left
-                if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
-                    property = "upL";
-                    if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
-                    this.defaultCursor = false;
-                    if (this.isDragging) {
-                        this.resizing = true;
-                    }
-                } else {
-                    this.defaultCursor = true;
-                }
-                // Bottom left
-                if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
-                    property = "downL";
-                    if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
-                    this.defaultCursor = false;
-                    if (this.isDragging) {
-                        this.resizing = true;
-                    }
-                } else {
-                    this.defaultCursor = true;
-                }
-            } else {
-                this.defaultCursor = true;
-            }
-
-            // Right resizable area
-            if (e.offsetX * this.scaleWidth >= this.dx + this.drawTrimmingWidth - 15 && e.offsetX * this.scaleWidth <= this.dx + this.drawTrimmingWidth + 15) {
-                // Top right
-                if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
-                    property = "upR";
-                    if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
-                    this.defaultCursor = false;
-                    if (this.isDragging) {
-                        this.resizing = true;
-                    }
-                } else {
-                    this.defaultCursor = true;
-                }
-                // Bottom right
-                if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
-                    property = "downR";
-                    if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
-                    this.defaultCursor = false;
-                    if (this.isDragging) {
-                        this.resizing = true;
-                    }
-                } else {
-                    this.defaultCursor = true;
-                }
-            } else {
-                this.defaultCursor = true;
-            }
-        }
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
