@@ -16,6 +16,7 @@ declare class SimPrim {
     private scaleHeight;
     private resizing;
     private dragging;
+    private resizable;
     private isDragging;
     private decisionWH;
     private isAnimating;
@@ -41,8 +42,9 @@ declare class SimPrim {
      * Detects mouse drag events on the corners of the trimming area, allowing it to be resized.
      */
     sizeChange(): void;
+    private resizeDrag;
     private previewImg;
-    private animateDrag;
+    private moveDrag;
     /**
      * Exports the trimmed image to a specified canvas.
      * @param exportCvs - The canvas to which the trimmed image will be exported.

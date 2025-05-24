@@ -7,7 +7,7 @@
     /*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
     class SimPrim {
         constructor(inputCvs) {
-            this.VERSION = "1.1.0";
+            this.VERSION = "1.1.1";
             this.scaleWidth = 0; // Ratio of canvas width to client width
             this.scaleHeight = 0; // Ratio of canvas height to client height
             this.resizing = false; // Whether resizing is in progress
@@ -40,6 +40,7 @@
             this.dy = 0;
             this.beforeDx = 0;
             this.beforeDy = 0;
+            this.resizable = false;
             this.inputCvs.width = this.img.width;
             this.inputCvs.height = this.img.height;
             // Determine aspect ratio and set height priority for portrait images
@@ -91,8 +92,14 @@
          * @param previewCvs - Optional : The canvas for previewing the trimmed image.
          */
         dragDetection(previewCvs) {
-            if (previewCvs)
-                this.previewImg(previewCvs); // Draw to preview canvas
+            let property = ""; // Where the mouse is now
+            let beforeProperty = "";
+            let beforeWidth = 0; // Width before resizing
+            let beforeHeight = 0; // Height before resizing
+            this.previewCvs = previewCvs;
+            const previewCtx = previewCvs === null || previewCvs === void 0 ? void 0 : previewCvs.getContext("2d");
+            if (this.previewCvs && previewCtx)
+                this.previewImg(this.previewCvs, previewCtx);
             this.inputCvs.addEventListener("mousedown", () => {
                 this.isDragging = true; // Drag flag
             });
@@ -120,36 +127,9 @@
                         this.defaultCursor = true;
                     }
                 }
-                if (previewCvs !== undefined)
-                    this.requestFrame(previewCvs, e);
-            });
-        }
-        requestFrame(previewCvs, e) {
-            if (!this.isAnimating)
-                return;
-            requestAnimationFrame(() => {
-                this.animateDrag(e);
-                if (previewCvs)
-                    this.previewImg(previewCvs); // Draw the trimming area to the preview canvas when the frame is generated
-            });
-            if (!this.dragging && !this.resizing) {
-                this.isAnimating = false;
-            }
-        }
-        /**
-         * Detects mouse drag events on the corners of the trimming area, allowing it to be resized.
-         */
-        sizeChange() {
-            let property = ""; // Where the mouse is now
-            let beforeProperty = "";
-            let beforeWidth = 0; // Width before resizing
-            let beforeHeight = 0; // Height before resizing
-            // Mouseover detection for resizable area
-            this.inputCvs.addEventListener("mousemove", (e) => {
-                funcResizing.call(this, e);
-                beforeProperty = property;
-                // Left resizable area
+                // Mouseover detection for resizable area
                 if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
+                    // Left resizable area
                     if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
                         // Top left
                         if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
@@ -159,6 +139,7 @@
                             this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
+                                this.isAnimating = true;
                             }
                         }
                         else {
@@ -172,6 +153,7 @@
                             this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
+                                this.isAnimating = true;
                             }
                         }
                         else {
@@ -191,6 +173,7 @@
                             this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
+                                this.isAnimating = true;
                             }
                         }
                         else {
@@ -204,6 +187,7 @@
                             this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
+                                this.isAnimating = true;
                             }
                         }
                         else {
@@ -214,7 +198,35 @@
                         this.defaultCursor = true;
                     }
                 }
+                if (previewCtx)
+                    this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
             });
+        }
+        requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight) {
+            if (!this.isAnimating)
+                return;
+            requestAnimationFrame(() => {
+                this.moveDrag(e);
+                if (this.previewCvs && previewCtx)
+                    this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
+                if (this.resizable)
+                    this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
+                console.log(this.resizable + "," + this.resizing);
+            });
+            if (!this.dragging && !this.resizing) {
+                this.isAnimating = false;
+            }
+        }
+        /**
+         * Detects mouse drag events on the corners of the trimming area, allowing it to be resized.
+         */
+        sizeChange() {
+            this.resizable = true;
+        }
+        resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight) {
+            const zoomClearance = 2;
+            beforeProperty = property;
+            funcResizing.call(this, e);
             function funcResizing(e) {
                 var _a, _b, _c, _d, _e;
                 // Trimming area resizing process
@@ -228,16 +240,17 @@
                     this.isAnimating = true;
                     beforeWidth = this.drawTrimmingWidth;
                     beforeHeight = this.drawTrimmingHeight;
-                    if (property == "downR" && this.img) {
+                    console.log(property);
+                    if (property == "downR" && this.img !== undefined) {
                         this.inputCvs.style.cursor = "nwse-resize";
                         // Resize detection
-                        if (e.movementX != 0)
-                            this.drawTrimmingWidth += e.movementX * this.scaleWidth;
-                        if (e.movementY != 0)
-                            this.drawTrimmingHeight += e.movementY * this.scaleHeight;
+                        if (e.movementX != 0 && e.movementY == 0)
+                            this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                        if (e.movementY != 0 && e.movementX == 0)
+                            this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                         if (e.movementX != 0 && e.movementY != 0) {
-                            this.drawTrimmingWidth += 2 * (e.movementX / this.scaleWidth / 4) - e.movementX / this.scaleWidth / 2;
-                            this.drawTrimmingHeight += 2 * (e.movementY / this.scaleHeight / 4) - e.movementX / this.scaleHeight / 2;
+                            this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
                         // Out-of-bounds check
@@ -250,14 +263,25 @@
                             this.drawTrimmingWidth = this.drawTrimmingHeight;
                         }
                         (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.drawImage(this.img, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
+                        console.log("unkoooooooooooooooo");
                     }
                     if (property == "upR" && this.img) {
                         this.beforeDy = this.dy;
                         this.inputCvs.style.cursor = "nesw-resize";
                         // Resize detection
-                        if (e.movementX != 0) {
-                            this.dy -= e.movementX * this.scaleWidth;
-                            this.drawTrimmingWidth += e.movementX * this.scaleWidth;
+                        if (e.movementX != 0 && e.movementY == 0) {
+                            this.dy -= (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                        }
+                        if (e.movementY != 0 && e.movementX == 0) {
+                            this.dy += (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight) / zoomClearance;
+                        }
+                        if (e.movementX != 0 && e.movementY != 0) {
+                            this.dy -= (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.dy += (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight) / zoomClearance;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
                         // Out-of-bounds check
@@ -274,9 +298,19 @@
                         this.beforeDx = this.dx;
                         this.inputCvs.style.cursor = "nesw-resize";
                         // Resize detection
-                        if (e.movementX != 0) {
-                            this.dx += e.movementX * this.scaleWidth;
-                            this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
+                        if (e.movementX != 0 && e.movementY == 0) {
+                            this.dx += (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth) / zoomClearance;
+                        }
+                        if (e.movementY != 0 && e.movementX == 0) {
+                            this.dx -= (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
+                        }
+                        if (e.movementX != 0 && e.movementY != 0) {
+                            this.dx += (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.dx -= (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
                         // Out-of-bounds check
@@ -297,10 +331,23 @@
                         this.beforeDy = this.dy;
                         this.inputCvs.style.cursor = "nwse-resize";
                         // Resize detection
-                        if (e.movementX != 0) {
-                            this.dx += e.movementX * this.scaleWidth;
-                            this.dy += e.movementX * this.scaleWidth;
-                            this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
+                        if (e.movementX != 0 && e.movementY == 0) {
+                            this.dx += (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.dy += (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth) / zoomClearance;
+                        }
+                        if (e.movementY != 0 && e.movementX == 0) {
+                            this.dx += (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.dy += (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight) / zoomClearance;
+                        }
+                        if (e.movementX != 0 && e.movementY != 0) {
+                            this.dx += (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.dy += (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.dx += (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.dy += (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight) / zoomClearance;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
                         // Out-of-bounds check
@@ -325,14 +372,12 @@
             }
         }
         // Draw the trimming area to the preview canvas
-        previewImg(previewCvs) {
-            this.previewCvs = previewCvs;
-            const previewCtx = this.previewCvs.getContext("2d");
+        previewImg(previewCvs, previewCtx) {
             previewCtx === null || previewCtx === void 0 ? void 0 : previewCtx.clearRect(0, 0, previewCvs.width, previewCvs.height);
             if (this.img && this.dx !== undefined && this.dy !== undefined)
                 previewCtx === null || previewCtx === void 0 ? void 0 : previewCtx.drawImage(this.img, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight, 0, 0, previewCvs.width, previewCvs.height);
         }
-        animateDrag(e) {
+        moveDrag(e) {
             var _a, _b;
             if (this.dragging) {
                 this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
