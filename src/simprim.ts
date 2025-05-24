@@ -286,7 +286,7 @@ class SimPrim {
                         this.dy += (e.movementY * this.scaleHeight) / zoomClearance;
                         this.drawTrimmingWidth -= (e.movementY * this.scaleHeight) / zoomClearance;
                     }
-                    if(e.movementX != 0 && e.movementY != 0){
+                    if (e.movementX != 0 && e.movementY != 0) {
                         this.dy -= (e.movementX * this.scaleWidth) / zoomClearance;
                         this.dy += (e.movementY * this.scaleHeight) / zoomClearance;
                         this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
@@ -309,18 +309,18 @@ class SimPrim {
 
                     // Resize detection
                     if (e.movementX != 0 && e.movementY == 0) {
-                        this.dx += e.movementX * this.scaleWidth;
-                        this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
+                        this.dx += e.movementX * this.scaleWidth / zoomClearance;
+                        this.drawTrimmingWidth -= e.movementX * this.scaleWidth / zoomClearance;
                     }
-                    if(e.movementY != 0 && e.movementX == 0){
-                        this.dx += e.movementY * this.scaleHeight;
-                        this.drawTrimmingWidth -= e.movementY * this.scaleHeight;
+                    if (e.movementY != 0 && e.movementX == 0) {
+                        this.dx -= e.movementY * this.scaleHeight / zoomClearance;
+                        this.drawTrimmingWidth += e.movementY * this.scaleHeight / zoomClearance;
                     }
-                    if(e.movementX != 0 && e.movementY != 0){
-                        this.dx += e.movementX * this.scaleWidth;
-                        this.dx += e.movementY * this.scaleHeight;
-                        this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
-                        this.drawTrimmingWidth -= e.movementY * this.scaleHeight;
+                    if (e.movementX != 0 && e.movementY != 0) {
+                        this.dx += e.movementX * this.scaleWidth / zoomClearance;
+                        this.dx -= e.movementY * this.scaleHeight / zoomClearance;
+                        this.drawTrimmingWidth -= e.movementX * this.scaleWidth / zoomClearance;
+                        this.drawTrimmingWidth += e.movementY * this.scaleHeight / zoomClearance;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
 
