@@ -232,6 +232,7 @@ class SimPrim {
     }
 
     private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
+        const zoomClearance = 2;
         beforeProperty = property;
         funcResizing.call(this, e);
 
@@ -252,11 +253,11 @@ class SimPrim {
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
-                    if (e.movementX != 0 && e.movementY == 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / 2;
-                    if (e.movementY != 0 && e.movementX == 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / 2;
+                    if (e.movementX != 0 && e.movementY == 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                    if (e.movementY != 0 && e.movementX == 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                     if (e.movementX != 0 && e.movementY != 0) {
-                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / 2;
-                        this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / 2;
+                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
@@ -277,9 +278,19 @@ class SimPrim {
                     this.inputCvs.style.cursor = "nesw-resize";
 
                     // Resize detection
-                    if (e.movementX != 0) {
-                        this.dy -= e.movementX * this.scaleWidth;
-                        this.drawTrimmingWidth += e.movementX * this.scaleWidth;
+                    if (e.movementX != 0 && e.movementY == 0) {
+                        this.dy -= (e.movementX * this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                    }
+                    if (e.movementY != 0 && e.movementX == 0) {
+                        this.dy -= (e.movementY * this.scaleHeight) / zoomClearance;
+                        this.drawTrimmingWidth += (e.movementX * this.scaleHeight) / zoomClearance;
+                    }
+                    if(e.movementX != 0 && e.movementY != 0){
+                        this.dy -= (e.movementX * this.scaleWidth) / zoomClearance;
+                        this.dy -= (e.movementY * this.scaleHeight) / zoomClearance;
+                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (e.movementX * this.scaleHeight) / zoomClearance;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
