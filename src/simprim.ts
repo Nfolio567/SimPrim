@@ -1,7 +1,7 @@
 /*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
 
 class SimPrim {
-    VERSION = "1.1.1";
+    VERSION = "1.1.beta";
     private inputCvs: HTMLCanvasElement; // Canvas to edit
     private img: HTMLImageElement | undefined; // Image to be edited
     private inputCtx: CanvasRenderingContext2D | null; // Context of the canvas to edit
