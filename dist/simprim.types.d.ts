@@ -1,4 +1,3 @@
-/*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
 declare class SimPrim {
     VERSION: string;
     private inputCvs;

@@ -1,10 +1,10 @@
+/*! SimPrim - Simple Image Trimming Library v1.1.1 | (c) Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.SimPrim = {}));
 })(this, (function (exports) { 'use strict';
 
-    /*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
     class SimPrim {
         constructor(inputCvs) {
             this.VERSION = "1.1.1";

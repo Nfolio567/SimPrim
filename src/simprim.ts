@@ -1,5 +1,3 @@
-/*! SimPrim-Simple Image Trimming Library v1.1.1 | (c) Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
-
 class SimPrim {
     VERSION = "1.1.1";
     private inputCvs: HTMLCanvasElement; // Canvas to edit
