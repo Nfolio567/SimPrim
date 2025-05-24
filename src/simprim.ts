@@ -1,7 +1,7 @@
 /*! SimPrim-Simple Image Trimming Library v1.0.0 | Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
 
 class SimPrim {
-    VERSION = "1.1.0";
+    VERSION = "1.1.beta";
     private inputCvs: HTMLCanvasElement; // Canvas to edit
     private img: HTMLImageElement | undefined; // Image to be edited
     private inputCtx: CanvasRenderingContext2D | null; // Context of the canvas to edit
@@ -308,9 +308,19 @@ class SimPrim {
                     this.inputCvs.style.cursor = "nesw-resize";
 
                     // Resize detection
-                    if (e.movementX != 0) {
+                    if (e.movementX != 0 && e.movementY == 0) {
                         this.dx += e.movementX * this.scaleWidth;
                         this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
+                    }
+                    if(e.movementY != 0 && e.movementX == 0){
+                        this.dx += e.movementY * this.scaleHeight;
+                        this.drawTrimmingWidth -= e.movementY * this.scaleHeight;
+                    }
+                    if(e.movementX != 0 && e.movementY != 0){
+                        this.dx += e.movementX * this.scaleWidth;
+                        this.dx += e.movementY * this.scaleHeight;
+                        this.drawTrimmingWidth -= e.movementX * this.scaleWidth;
+                        this.drawTrimmingWidth -= e.movementY * this.scaleHeight;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
 
