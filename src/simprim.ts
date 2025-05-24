@@ -216,7 +216,7 @@ class SimPrim {
             this.moveDrag(e);
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
             if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
-            console.log(this.resizable+","+this.resizing);
+            console.log(this.resizable + "," + this.resizing);
         });
 
         if (!this.dragging && !this.resizing) {
@@ -252,11 +252,11 @@ class SimPrim {
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
-                    if (e.movementX != 0 && e.movementY == 0) this.drawTrimmingWidth += e.movementX * this.scaleWidth;// TODO: /　2してみる
-                    if (e.movementY != 0 && e.movementX == 0) this.drawTrimmingWidth += e.movementY * this.scaleHeight;
+                    if (e.movementX != 0 && e.movementY == 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / 2;
+                    if (e.movementY != 0 && e.movementX == 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / 2;
                     if (e.movementX != 0 && e.movementY != 0) {
-                        this.drawTrimmingWidth += e.movementX * this.scaleWidth / 2;
-                        this.drawTrimmingWidth += e.movementY * this.scaleHeight / 2;
+                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / 2;
+                        this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / 2;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
