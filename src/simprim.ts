@@ -266,11 +266,11 @@ class SimPrim {
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
-                    if (this.veloX != 0 && this.veloY == 0 && this.veloX !== undefined) this.drawTrimmingWidth += (this.veloX * this.scaleWidth) / zoomClearance;
-                    if (this.veloY != 0 && this.veloX == 0 && this.veloY !== undefined) this.drawTrimmingWidth += (this.veloY* this.scaleHeight) / zoomClearance;
+                    if (this.veloX != 0 && this.veloY == 0 && this.veloX !== undefined) this.drawTrimmingWidth += (this.veloX / this.scaleWidth) / zoomClearance;
+                    if (this.veloY != 0 && this.veloX == 0 && this.veloY !== undefined) this.drawTrimmingWidth += (this.veloY / this.scaleHeight) / zoomClearance;
                     if (this.veloX != 0 && this.veloY != 0 && this.veloX !== undefined && this.veloY !== undefined) {
-                        this.drawTrimmingWidth += (this.veloX * this.scaleWidth) / zoomClearance;
-                        this.drawTrimmingWidth += (this.veloY * this.scaleHeight) / zoomClearance;
+                        this.drawTrimmingWidth += (this.veloX / this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (this.veloY / this.scaleHeight) / zoomClearance;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
