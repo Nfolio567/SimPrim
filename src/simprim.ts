@@ -240,7 +240,7 @@ class SimPrim {
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
             let veloX = 0;
-            let veloY = 0;;
+            let veloY = 0;
             if(this.prevX !== undefined && this.prevY !== undefined){
                 veloX = e.clientX - this.prevX;
                 veloY = e.clientY - this.prevY;
@@ -265,11 +265,11 @@ class SimPrim {
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
-                    if (e.movementX != 0 && e.movementY == 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
-                    if (e.movementY != 0 && e.movementX == 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
-                    if (e.movementX != 0 && e.movementY != 0) {
-                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
-                        this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
+                    if (veloX != 0 && veloY == 0) this.drawTrimmingWidth += (veloX * this.scaleWidth) / zoomClearance;
+                    if (veloY != 0 && veloX == 0) this.drawTrimmingWidth += (veloY* this.scaleHeight) / zoomClearance;
+                    if (veloX != 0 && veloY != 0) {
+                        this.drawTrimmingWidth += (veloX * this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (veloY * this.scaleHeight) / zoomClearance;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
