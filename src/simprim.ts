@@ -239,6 +239,7 @@ class SimPrim {
         function funcResizing(this: SimPrim, e: MouseEvent, prevX: number, prevY: number) {
             const veloX = e.clientX - prevX;
             const veloY = e.clientY - prevY;
+            console.log(prevX + "," + e.clientX);
             prevX = e.clientX;
             prevY = e.clientY;
             // Trimming area resizing process
@@ -263,7 +264,6 @@ class SimPrim {
                     if (e.movementX != 0 && e.movementY != 0) {
                         this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
                         this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
-                        console.log(veloX + "," + veloY);
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
