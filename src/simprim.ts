@@ -239,8 +239,8 @@ class SimPrim {
         funcResizing.call(this, e);
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
-            let veloX = 0;
-            let veloY = 0;
+            let veloX = e.clientX;
+            let veloY = e.clientY;
             if(this.prevX !== undefined && this.prevY !== undefined){
                 veloX = e.clientX - this.prevX;
                 veloY = e.clientY - this.prevY;
