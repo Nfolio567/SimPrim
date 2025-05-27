@@ -239,11 +239,13 @@ class SimPrim {
         funcResizing.call(this, e);
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
+            let veloX = 0;
+            let veloY = 0;;
             if(this.prevX !== undefined && this.prevY !== undefined){
-                const veloX = e.clientX - this.prevX;
-                const veloY = e.clientY - this.prevY;
+                veloX = e.clientX - this.prevX;
+                veloY = e.clientY - this.prevY;
             }
-            console.log(this.prevX + "," + e.clientX);
+            console.log(veloX + "," + veloY);
             this.prevX = e.clientX;
             this.prevY = e.clientY;
             // Trimming area resizing process
