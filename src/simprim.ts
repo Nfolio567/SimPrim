@@ -107,6 +107,8 @@ class SimPrim {
         let beforeProperty = "";
         let beforeWidth = 0; // Width before resizing
         let beforeHeight = 0; // Height before resizing
+        let prevX = 0;
+        let prevY = 0;
 
         this.previewCvs = previewCvs;
         const previewCtx = previewCvs?.getContext("2d");
@@ -203,17 +205,17 @@ class SimPrim {
                 }
             }
 
-            if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
+            if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight, prevX, prevY);
         });
     }
 
-    private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
+    private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number, prevX: number, prevY: number) {
         if (!this.isAnimating) return;
 
         requestAnimationFrame(() => {
             this.moveDrag(e);
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
-            if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
+            if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight, prevX, prevY);
             console.log(this.resizable + "," + this.resizing);
         });
 
@@ -229,16 +231,16 @@ class SimPrim {
         this.resizable = true;
     }
 
-    private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
+    private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number, prevX: number, prevY: number) {
         const zoomClearance = 2;
-        let prevX = e.clientX;
-        let prevY = e.clientY;
         beforeProperty = property;
-        funcResizing.call(this, e);
+        funcResizing.call(this, e, prevX, prevY);
 
-        function funcResizing(this: SimPrim, e: MouseEvent) {
+        function funcResizing(this: SimPrim, e: MouseEvent, prevX: number, prevY: number) {
             const veloX = e.clientX - prevX;
             const veloY = e.clientY - prevY;
+            prevX = e.clientX;
+            prevY = e.clientY;
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
