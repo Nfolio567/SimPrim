@@ -9,6 +9,8 @@ class SimPrim {
     private cy: number | undefined; // Center Y coordinate of the trimming area
     private dx: number | undefined; // Drawing position X of the trimming image
     private dy: number | undefined; // Drawing position Y of the trimming image
+    private prevX: number | undefined;
+    private prevY: number | undefined;
     private beforeDx: number | undefined; // Previous frame X coordinate
     private beforeDy: number | undefined; // Previous frame Y coordinate
     private scaleWidth = 0; // Ratio of canvas width to client width
@@ -47,6 +49,8 @@ class SimPrim {
         this.beforeDx = 0;
         this.beforeDy = 0;
         this.resizable = false;
+        this.prevX = 0;
+        this.prevY = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -107,8 +111,6 @@ class SimPrim {
         let beforeProperty = "";
         let beforeWidth = 0; // Width before resizing
         let beforeHeight = 0; // Height before resizing
-        let prevX = 0;
-        let prevY = 0;
 
         this.previewCvs = previewCvs;
         const previewCtx = previewCvs?.getContext("2d");
@@ -205,17 +207,17 @@ class SimPrim {
                 }
             }
 
-            if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight, prevX, prevY);
+            if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
         });
     }
 
-    private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number, prevX: number, prevY: number) {
+    private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         if (!this.isAnimating) return;
 
         requestAnimationFrame(() => {
             this.moveDrag(e);
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
-            if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight, prevX, prevY);
+            if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
             console.log(this.resizable + "," + this.resizing);
         });
 
@@ -231,17 +233,19 @@ class SimPrim {
         this.resizable = true;
     }
 
-    private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number, prevX: number, prevY: number) {
+    private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         const zoomClearance = 2;
         beforeProperty = property;
-        funcResizing.call(this, e, prevX, prevY);
+        funcResizing.call(this, e);
 
-        function funcResizing(this: SimPrim, e: MouseEvent, prevX: number, prevY: number) {
-            const veloX = e.clientX - prevX;
-            const veloY = e.clientY - prevY;
-            console.log(prevX + "," + e.clientX);
-            prevX = e.clientX;
-            prevY = e.clientY;
+        function funcResizing(this: SimPrim, e: MouseEvent) {
+            if(this.prevX !== undefined && this.prevY !== undefined){
+                const veloX = e.clientX - this.prevX;
+                const veloY = e.clientY - this.prevY;
+            }
+            console.log(this.prevX + "," + e.clientX);
+            this.prevX = e.clientX;
+            this.prevY = e.clientY;
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
