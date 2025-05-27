@@ -51,6 +51,8 @@ class SimPrim {
         this.beforeDx = 0;
         this.beforeDy = 0;
         this.resizable = false;
+        this.veloX = 0;
+        this.veloY = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -245,6 +247,7 @@ class SimPrim {
         funcResizing.call(this, e);
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
+            console.log("################");
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
