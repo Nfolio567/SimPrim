@@ -5,7 +5,7 @@ export default {
     input: "src/simprim.ts",
     output: [
         {
-            file: "dist/simprim-1.1.2.min.js",
+            file: "dist/simprim-1.1.3beta.min.js",
             format: "iife",
             name: "SimPrim",
             plugins: [
@@ -27,7 +27,7 @@ export default {
                     }
                 })
             ],
-            banner: "/*! SimPrim - Simple Image Trimming Library v1.1.1 | (c) Nfolio | ISC | https://github.com/Nfolio567/SimPrim */",
+            banner: "/*! SimPrim - Simple Image Trimming Library v1.1.3 | (c) Nfolio | ISC | https://github.com/Nfolio567/SimPrim */",
         },
     ],
     plugins: [typescript({ tsconfig: "./tsconfig.min.json" })],

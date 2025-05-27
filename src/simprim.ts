@@ -231,22 +231,27 @@ class SimPrim {
 
     private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         const zoomClearance = 2;
+        let prevX = e.clientX;
+        let prevY = e.clientY;
         beforeProperty = property;
         funcResizing.call(this, e);
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
+            const veloX = e.clientX - prevX;
+            const veloY = e.clientY - prevY;
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                     this.drawTrimmingHeight = 0;
                     this.drawTrimmingWidth = this.drawTrimmingHeight;
                 }
+
                 this.dragging = false;
                 property = beforeProperty;
                 this.isAnimating = true;
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
-                console.log(property);
+
                 if (property == "downR" && this.img !== undefined) {
                     this.inputCvs.style.cursor = "nwse-resize";
 
@@ -256,6 +261,7 @@ class SimPrim {
                     if (e.movementX != 0 && e.movementY != 0) {
                         this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
                         this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
+                        console.log(veloX + "," + veloY);
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
@@ -269,7 +275,6 @@ class SimPrim {
                     }
 
                     this.inputCtx?.drawImage(this.img, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
-                    console.log("unkoooooooooooooooo");
                 }
                 if (property == "upR" && this.img) {
                     this.beforeDy = this.dy;
