@@ -121,6 +121,13 @@ class SimPrim {
         });
 
         this.inputCvs.addEventListener("mousemove", (e) => {
+            if(this.prevX && this.prevY){
+                this.veloX = e.clientX - this.prevX;
+                this.veloY = e.clientY - this.prevY;
+            }
+            console.log(this.veloX + "," + this.veloY + "," + e.clientX + "," + e.clientY);
+            this.prevX = e.clientX;
+            this.prevY = e.clientY;
 
             if (this.defaultCursor) {
                 this.inputCvs.style.cursor = "default"; // Reset mouse to default
@@ -236,16 +243,8 @@ class SimPrim {
         const zoomClearance = 2;
         beforeProperty = property;
         funcResizing.call(this, e);
-        console.log("################")
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
-            if(this.prevX && this.prevY){
-                this.veloX = e.clientX - this.prevX;
-                this.veloY = e.clientY - this.prevY;
-            }
-            console.log(this.veloX + "," + this.veloY + "," + e.clientX + "," + e.clientY);
-            this.prevX = e.clientX;
-            this.prevY = e.clientY;
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
