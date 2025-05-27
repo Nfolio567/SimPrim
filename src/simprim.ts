@@ -51,8 +51,6 @@ class SimPrim {
         this.beforeDx = 0;
         this.beforeDy = 0;
         this.resizable = false;
-        this.prevX = 0;
-        this.prevY = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -241,12 +239,10 @@ class SimPrim {
         console.log("################")
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
-            if(this.prevX !== undefined && this.prevY !== undefined){
+            if(this.prevX && this.prevY){
                 this.veloX = e.clientX - this.prevX;
                 this.veloY = e.clientY - this.prevY;
             }
-            if(this.veloX == e.clientX) this.veloX = 0;
-            if(this.veloY == e.clientY) this.veloY = 0;
             console.log(this.veloX + "," + this.veloY);
             this.prevX = e.clientX;
             this.prevY = e.clientY;
@@ -402,6 +398,7 @@ class SimPrim {
         if (this.img && this.dx !== undefined && this.dy !== undefined) previewCtx?.drawImage(this.img, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight, 0, 0, previewCvs.width, previewCvs.height);
     }
 
+    // Dragging trimming area
     private moveDrag(e: MouseEvent) {
         if (this.dragging) {
             this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
@@ -433,9 +430,9 @@ class SimPrim {
      */
     // Draw the trimming area to the export canvas
     exportImg(exportCvs: HTMLCanvasElement) {
-        let exportCtx = exportCvs.getContext("2d");
-        let exportImgObject = this.previewCvs?.toDataURL();
-        let exportImgElement = new Image();
+        const exportCtx = exportCvs.getContext("2d");
+        const exportImgObject = this.previewCvs?.toDataURL();
+        const exportImgElement = new Image();
         exportImgElement.onload = () => {
             if (exportImgObject) exportCtx?.drawImage(exportImgElement, 0, 0);
         };
