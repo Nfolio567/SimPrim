@@ -243,7 +243,7 @@ class SimPrim {
                 this.veloX = e.clientX - this.prevX;
                 this.veloY = e.clientY - this.prevY;
             }
-            console.log(this.veloX + "," + this.veloY);
+            console.log(this.veloX + "," + this.veloY + "," + e.clientX + "," + e.clientY);
             this.prevX = e.clientX;
             this.prevY = e.clientY;
             // Trimming area resizing process
