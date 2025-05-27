@@ -261,7 +261,6 @@ class SimPrim {
                 beforeHeight = this.drawTrimmingHeight;
 
                 if (property == "downR" && this.img !== undefined) {
-                    console.log("################");
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
@@ -270,6 +269,7 @@ class SimPrim {
                     if (this.veloX != 0 && this.veloY != 0 && this.veloX !== undefined && this.veloY !== undefined) {
                         this.drawTrimmingWidth += (this.veloX * this.scaleWidth) / zoomClearance;
                         this.drawTrimmingWidth += (this.veloY * this.scaleHeight) / zoomClearance;
+                        console.log("################");
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
