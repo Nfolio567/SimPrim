@@ -51,6 +51,8 @@ class SimPrim {
         this.beforeDx = 0;
         this.beforeDy = 0;
         this.resizable = false;
+        this.prevX = 0;
+        this.prevY = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -99,7 +101,6 @@ class SimPrim {
             this.dragging = false;
             this.resizing = false;
             this.veloX, this.veloY = 0;
-            //if (this.draggingFrame) cancelAnimationFrame(this.draggingFrame); // Cancel existing animation
         });
     }
 
@@ -112,8 +113,6 @@ class SimPrim {
         let beforeProperty = "";
         let beforeWidth = 0; // Width before resizing
         let beforeHeight = 0; // Height before resizing
-        this.prevX = 0;
-        this.prevY = 0;
 
         this.previewCvs = previewCvs;
         const previewCtx = previewCvs?.getContext("2d");
@@ -124,6 +123,7 @@ class SimPrim {
         });
 
         this.inputCvs.addEventListener("mousemove", (e) => {
+
             if (this.defaultCursor) {
                 this.inputCvs.style.cursor = "default"; // Reset mouse to default
             }
@@ -216,8 +216,6 @@ class SimPrim {
         if (!this.isAnimating) return;
 
         requestAnimationFrame(() => {
-            this.prevX = e.clientX;
-            this.prevY = e.clientY;
             this.moveDrag(e);
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
             if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
@@ -246,6 +244,8 @@ class SimPrim {
                 this.veloX = e.clientX - this.prevX;
                 this.veloY = e.clientY - this.prevY;
             }
+            if(this.veloX == e.clientX) this.veloX = 0;
+            if(this.veloY == e.clientY) this.veloY = 0;
             console.log(this.veloX + "," + this.veloY);
             this.prevX = e.clientX;
             this.prevY = e.clientY;
