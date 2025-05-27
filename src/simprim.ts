@@ -53,6 +53,8 @@ class SimPrim {
         this.resizable = false;
         this.veloX = 0;
         this.veloY = 0;
+        this.prevX = 0;
+        this.prevY = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
