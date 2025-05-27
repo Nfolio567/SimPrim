@@ -231,10 +231,10 @@ class SimPrim {
 
     private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         const zoomClearance = 2;
-        beforeProperty = property;
-        funcResizing.call(this, e);
         let prevX = e.clientX;
         let prevY = e.clientY;
+        beforeProperty = property;
+        funcResizing.call(this, e);
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
             const veloX = e.clientX - prevX;
