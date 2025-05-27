@@ -11,8 +11,8 @@ class SimPrim {
     private dy: number | undefined; // Drawing position Y of the trimming image
     private prevX: number | undefined;
     private prevY: number | undefined;
-    private veloX: number | undefined;
-    private veloY: number | undefined;
+    veloX: number | undefined;
+    veloY: number | undefined;
     private beforeDx: number | undefined; // Previous frame X coordinate
     private beforeDy: number | undefined; // Previous frame Y coordinate
     private scaleWidth = 0; // Ratio of canvas width to client width
