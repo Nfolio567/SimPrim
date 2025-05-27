@@ -231,10 +231,10 @@ class SimPrim {
 
     private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         const zoomClearance = 2;
-        let prevX = e.clientX;
-        let prevY = e.clientY;
         beforeProperty = property;
         funcResizing.call(this, e);
+        let prevX = e.clientX;
+        let prevY = e.clientY;
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
             const veloX = e.clientX - prevX;
@@ -261,7 +261,7 @@ class SimPrim {
                     if (e.movementX != 0 && e.movementY != 0) {
                         this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
                         this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
-                        console.log(veloX + "," + veloY);
+                        console.log(prevX + "," + e.clientX);
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
