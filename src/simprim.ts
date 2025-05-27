@@ -11,6 +11,8 @@ class SimPrim {
     private dy: number | undefined; // Drawing position Y of the trimming image
     private prevX: number | undefined;
     private prevY: number | undefined;
+    private veloX: number | undefined;
+    private veloY: number | undefined;
     private beforeDx: number | undefined; // Previous frame X coordinate
     private beforeDy: number | undefined; // Previous frame Y coordinate
     private scaleWidth = 0; // Ratio of canvas width to client width
@@ -98,6 +100,7 @@ class SimPrim {
             this.isDragging = false;
             this.dragging = false;
             this.resizing = false;
+            this.veloX, this.veloY = 0;
             //if (this.draggingFrame) cancelAnimationFrame(this.draggingFrame); // Cancel existing animation
         });
     }
@@ -239,13 +242,11 @@ class SimPrim {
         funcResizing.call(this, e);
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
-            let veloX = e.clientX;
-            let veloY = e.clientY;
             if(this.prevX !== undefined && this.prevY !== undefined){
-                veloX = e.clientX - this.prevX;
-                veloY = e.clientY - this.prevY;
+                this.veloX = e.clientX - this.prevX;
+                this.veloY = e.clientY - this.prevY;
             }
-            console.log(veloX + "," + veloY);
+            console.log(this.veloX + "," + this.veloY);
             this.prevX = e.clientX;
             this.prevY = e.clientY;
             // Trimming area resizing process
@@ -265,11 +266,11 @@ class SimPrim {
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
-                    if (veloX != 0 && veloY == 0) this.drawTrimmingWidth += (veloX * this.scaleWidth) / zoomClearance;
-                    if (veloY != 0 && veloX == 0) this.drawTrimmingWidth += (veloY* this.scaleHeight) / zoomClearance;
-                    if (veloX != 0 && veloY != 0) {
-                        this.drawTrimmingWidth += (veloX * this.scaleWidth) / zoomClearance;
-                        this.drawTrimmingWidth += (veloY * this.scaleHeight) / zoomClearance;
+                    if (this.veloX != 0 && this.veloY == 0 && this.veloX !== undefined) this.drawTrimmingWidth += (this.veloX * this.scaleWidth) / zoomClearance;
+                    if (this.veloY != 0 && this.veloX == 0 && this.veloY !== undefined) this.drawTrimmingWidth += (this.veloY* this.scaleHeight) / zoomClearance;
+                    if (this.veloX != 0 && this.veloY != 0 && this.veloX !== undefined && this.veloY !== undefined) {
+                        this.drawTrimmingWidth += (this.veloX * this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (this.veloY * this.scaleHeight) / zoomClearance;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
