@@ -11,10 +11,10 @@ class SimPrim {
     private dy: number | undefined; // Drawing position Y of the trimming image
     private beforeDx: number | undefined; // Previous frame X coordinate
     private beforeDy: number | undefined; // Previous frame Y coordinate
-    private scaleWidth = 0; // Ratio of canvas width to client width
-    private scaleHeight = 0; // Ratio of canvas height to client height
+    private scaleWidth: number | undefined; // Ratio of canvas width to client width
+    private scaleHeight: number | undefined; // Ratio of canvas height to client height
     private resizing = false; // Whether resizing is in progress
-    private dragging = false; // Drag flag within the area
+    private areaMoving = false; // Drag flag within the area
     private resizable: boolean | undefined; // resize flag
     private isDragging = false; // Whether dragging is in progress
     private decisionWH = false; // Whether the image is landscape or portrait
@@ -47,6 +47,8 @@ class SimPrim {
         this.beforeDx = 0;
         this.beforeDy = 0;
         this.resizable = false;
+        this.scaleWidth = 0;
+        this.scaleHeight = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -86,16 +88,16 @@ class SimPrim {
         this.scaleWidth = this.inputCvs.width / this.inputCvs.clientWidth; // Calculate ratio
         this.scaleHeight = this.inputCvs.height / this.inputCvs.clientHeight; // Calculate ratio
 
-        this.inputCvs.addEventListener("mousemove", () => {
+        /*this.inputCvs.addEventListener("mousemove", () => {
             if (this.defaultCursor) {
                 this.inputCvs.style.cursor = "default"; // Reset mouse to default
             }
-        });
+        });*/
 
         // Use window to allow dragging even if the mouse leaves the canvas
         window.addEventListener("mouseup", () => {
             this.isDragging = false;
-            this.dragging = false;
+            this.areaMoving = false;
             this.resizing = false;
         });
     }
@@ -119,16 +121,16 @@ class SimPrim {
         });
 
         this.inputCvs.addEventListener("mousemove", (e) => {
-            //if (this.defaultCursor) this.inputCvs.style.cursor = "default"; // Reset mouse to default
+            if (this.defaultCursor) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
-            if (this.dx !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
-            if (this.dy !== undefined) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // Calculate center coordinate
+            if (this.dx !== undefined && this.scaleWidth !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
+            if (this.dy !== undefined && this.scaleHeight !== undefined) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // Calculate center coordinate
             if (this.cx !== undefined && this.cy !== undefined) {
                 if (e.offsetX >= this.cx - 10 && e.offsetX <= this.cx + 10 && e.offsetY >= this.cy - 10 && e.offsetY <= this.cy + 10) {
                     this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
                     this.defaultCursor = false;
                     if (this.isDragging) {
-                        this.dragging = true;
+                        this.areaMoving = true;
                         this.isAnimating = true;
                     }
                 } else {
@@ -137,7 +139,7 @@ class SimPrim {
             }
 
             // Mouseover detection for resizable area
-            if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
+            if (this.dx !== undefined && this.dy !== undefined && this.scaleWidth !== undefined && this.scaleHeight !== undefined) {
                 // Left resizable area
                 if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
                     // Top left
@@ -213,7 +215,7 @@ class SimPrim {
             console.log(this.resizable + "," + this.resizing);
         });
 
-        if (!this.dragging && !this.resizing) {
+        if (!this.areaMoving && !this.resizing) {
             this.isAnimating = false;
         }
     }
@@ -232,17 +234,17 @@ class SimPrim {
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
-            if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
+            if (this.resizing && this.dx !== undefined && this.dy !== undefined && this.scaleWidth !== undefined && this.scaleHeight !== undefined) {
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                     this.drawTrimmingHeight = 0;
                     this.drawTrimmingWidth = this.drawTrimmingHeight;
                 }
-                this.dragging = false;
+                this.areaMoving = false;
                 property = beforeProperty;
                 this.isAnimating = true;
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
-                
+
                 if (property == "downR" && this.img !== undefined) {
                     this.inputCvs.style.cursor = "nwse-resize";
 
@@ -385,7 +387,7 @@ class SimPrim {
 
     // Dragging trimming area
     private moveDrag(e: MouseEvent) {
-        if (this.dragging) {
+        if (this.areaMoving && this.scaleWidth !== undefined && this.scaleHeight !== undefined) {
             this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
             if (this.dx !== undefined) this.beforeDx = this.dx;
             if (this.dy !== undefined) this.beforeDy = this.dy;
