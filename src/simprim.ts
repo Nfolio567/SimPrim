@@ -9,10 +9,6 @@ class SimPrim {
     private cy: number | undefined; // Center Y coordinate of the trimming area
     private dx: number | undefined; // Drawing position X of the trimming image
     private dy: number | undefined; // Drawing position Y of the trimming image
-    private prevX: number | undefined;
-    private prevY: number | undefined;
-    veloX: number | undefined;
-    veloY: number | undefined;
     private beforeDx: number | undefined; // Previous frame X coordinate
     private beforeDy: number | undefined; // Previous frame Y coordinate
     private scaleWidth = 0; // Ratio of canvas width to client width
@@ -51,10 +47,6 @@ class SimPrim {
         this.beforeDx = 0;
         this.beforeDy = 0;
         this.resizable = false;
-        this.veloX = 0;
-        this.veloY = 0;
-        this.prevX = 0;
-        this.prevY = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -91,6 +83,9 @@ class SimPrim {
         };
         this.trimming.src = trimmingPath;
 
+        this.scaleWidth = this.inputCvs.width / this.inputCvs.clientWidth; // Calculate ratio
+        this.scaleHeight = this.inputCvs.height / this.inputCvs.clientHeight; // Calculate ratio
+
         this.inputCvs.addEventListener("mousemove", () => {
             if (this.defaultCursor) {
                 this.inputCvs.style.cursor = "default"; // Reset mouse to default
@@ -102,7 +97,6 @@ class SimPrim {
             this.isDragging = false;
             this.dragging = false;
             this.resizing = false;
-            this.veloX, this.veloY = 0;
         });
     }
 
@@ -125,15 +119,8 @@ class SimPrim {
         });
 
         this.inputCvs.addEventListener("mousemove", (e) => {
-            if(this.prevX && this.prevY){
-                this.veloX = e.clientX - this.prevX;
-                this.veloY = e.clientY - this.prevY;
-            }
-            this.prevX = e.clientX;
-            this.prevY = e.clientY;
+            //if (this.defaultCursor) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
-            this.scaleWidth = this.inputCvs.width / this.inputCvs.clientWidth; // Calculate ratio
-            this.scaleHeight = this.inputCvs.height / this.inputCvs.clientHeight; // Calculate ratio
             if (this.dx !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
             if (this.dy !== undefined) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // Calculate center coordinate
             if (this.cx !== undefined && this.cy !== undefined) {
@@ -212,10 +199,6 @@ class SimPrim {
                 }
             }
 
-            if (this.defaultCursor) {
-                this.inputCvs.style.cursor = "default"; // Reset mouse to default
-            }
-
             if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
         });
     }
@@ -259,13 +242,14 @@ class SimPrim {
                 this.isAnimating = true;
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
+                
                 if (property == "downR" && this.img !== undefined) {
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
-                    if (e.movementX != 0 && e.movementY == 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
-                    if (e.movementY != 0 && e.movementX == 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
-                    if (e.movementX != 0 && e.movementY != 0) {
+                    if (e.movementX !== 0 && e.movementY === 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                    if (e.movementY !== 0 && e.movementX === 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
+                    if (e.movementX !== 0 && e.movementY !== 0) {
                         this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
                         this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                     }
