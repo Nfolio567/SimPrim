@@ -129,7 +129,6 @@ class SimPrim {
                 this.veloX = e.clientX - this.prevX;
                 this.veloY = e.clientY - this.prevY;
             }
-            console.log(this.veloX + "," + this.veloY + "," + e.clientX + "," + e.clientY);
             this.prevX = e.clientX;
             this.prevY = e.clientY;
 
@@ -261,6 +260,7 @@ class SimPrim {
                 this.isAnimating = true;
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
+                console.log(this.veloX + "," + this.veloY + "," + e.clientX + "," + e.clientY);
 
                 if (property == "downR" && this.img !== undefined) {
                     this.inputCvs.style.cursor = "nwse-resize";
@@ -271,7 +271,6 @@ class SimPrim {
                     if (this.veloX != undefined && this.veloY != undefined) {
                         this.drawTrimmingWidth += (this.veloX * this.scaleWidth) / zoomClearance;
                         this.drawTrimmingWidth += (this.veloY * this.scaleHeight) / zoomClearance;
-                        console.log("################");
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
