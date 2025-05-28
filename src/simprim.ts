@@ -1,32 +1,27 @@
 class SimPrim {
     VERSION = "1.1.3beta";
-    private inputCvs: HTMLCanvasElement; // Canvas to edit
-    private img: HTMLImageElement | undefined; // Image to be edited
-    private inputCtx: CanvasRenderingContext2D | null; // Context of the canvas to edit
-    private trimming: HTMLImageElement | undefined; // Image specifying the trimming area
+    private inputCvs: HTMLCanvasElement | undefined; // Canvas to edit
     private previewCvs: HTMLCanvasElement | undefined; // Canvas for preview
+    private img: HTMLImageElement | undefined; // Image to be edited
+    private inputCtx: CanvasRenderingContext2D | null | undefined; // Context of the canvas to edit
+    private trimming: HTMLImageElement | undefined; // Image specifying the trimming area
     private cx: number | undefined; // Center X coordinate of the trimming area
     private cy: number | undefined; // Center Y coordinate of the trimming area
     private dx: number | undefined; // Drawing position X of the trimming image
     private dy: number | undefined; // Drawing position Y of the trimming image
     private beforeDx: number | undefined; // Previous frame X coordinate
     private beforeDy: number | undefined; // Previous frame Y coordinate
-    private scaleWidth = 0; // Ratio of canvas width to client width
-    private scaleHeight = 0; // Ratio of canvas height to client height
+    private resizable: boolean | undefined; // resize flag
     private resizing = false; // Whether resizing is in progress
     private areaMoving = false; // Drag flag within the area
-    private resizable: boolean | undefined; // resize flag
     private isDragging = false; // Whether dragging is in progress
     private decisionWH = false; // Whether the image is landscape or portrait
     private isAnimating = false; // Whether animation is in progress
     private defaultCursor = true; // Default cursor flag
+    private scaleWidth = 0; // Ratio of canvas width to client width
+    private scaleHeight = 0; // Ratio of canvas height to client height
     private drawTrimmingWidth = 0; // Width of the trimming area
     private drawTrimmingHeight = 0; // Height of the trimming area
-
-    constructor(inputCvs: HTMLCanvasElement) {
-        this.inputCvs = inputCvs;
-        this.inputCtx = this.inputCvs.getContext("2d");
-    }
 
     /**
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
@@ -35,8 +30,10 @@ class SimPrim {
      * @param inputCvsWidth - Optional : The width of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
      * @param trimmingPath - The path to the trimming image(Default : https://cdn.nfolio.one/trimming.png).
      */
-    init(img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath: string = "https://cdn.nfolio.one/trimming.png") {
+    init(inputCvs: HTMLCanvasElement, img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath: string = "https://cdn.nfolio.one/trimming.png") {
         // Initialize variables
+        this.inputCvs = inputCvs;
+        this.inputCtx = this.inputCvs.getContext("2d");
         this.img = img;
         let drawWidth = 0;
         let drawHeight = 0;
@@ -114,18 +111,18 @@ class SimPrim {
         const previewCtx = previewCvs?.getContext("2d");
         if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx);
 
-        this.inputCvs.addEventListener("mousedown", () => {
+        this.inputCvs?.addEventListener("mousedown", () => {
             this.isDragging = true; // Drag flag
         });
 
-        this.inputCvs.addEventListener("mousemove", (e) => {
-            if (this.defaultCursor) this.inputCvs.style.cursor = "default"; // Reset mouse to default
+        this.inputCvs?.addEventListener("mousemove", (e) => {
+            if (this.defaultCursor && this.inputCvs) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
             if (this.dx !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
             if (this.dy !== undefined) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // Calculate center coordinate
             if (this.cx !== undefined && this.cy !== undefined) {
                 if (e.offsetX >= this.cx - 10 && e.offsetX <= this.cx + 10 && e.offsetY >= this.cy - 10 && e.offsetY <= this.cy + 10) {
-                    this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
+                    if(this.inputCvs) this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
                     this.defaultCursor = false;
                     if (this.isDragging) {
                         this.areaMoving = true;
@@ -143,7 +140,7 @@ class SimPrim {
                     // Top left
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
                         property = "upL";
-                        if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
+                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
@@ -155,7 +152,7 @@ class SimPrim {
                     // Bottom left
                     if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
                         property = "downL";
-                        if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
+                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
@@ -173,7 +170,7 @@ class SimPrim {
                     // Top right
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
                         property = "upR";
-                        if (!this.resizing) this.inputCvs.style.cursor = "nesw-resize";
+                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
@@ -185,7 +182,7 @@ class SimPrim {
                     // Bottom right
                     if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
                         property = "downR";
-                        if (!this.resizing) this.inputCvs.style.cursor = "nwse-resize";
+                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
                         if (this.isDragging) {
                             this.resizing = true;
@@ -243,7 +240,7 @@ class SimPrim {
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
 
-                if (property == "downR" && this.img !== undefined) {
+                if (property == "downR" && this.img !== undefined && this.inputCvs) {
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
@@ -267,7 +264,7 @@ class SimPrim {
                     this.inputCtx?.drawImage(this.img, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
                     console.log("unkoooooooooooooooo");
                 }
-                if (property == "upR" && this.img) {
+                if (property == "upR" && this.img && this.inputCvs) {
                     this.beforeDy = this.dy;
                     this.inputCvs.style.cursor = "nesw-resize";
 
@@ -297,7 +294,7 @@ class SimPrim {
 
                     this.inputCtx?.drawImage(this.img, this.dx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
                 }
-                if (property == "downL" && this.img) {
+                if (property == "downL" && this.img && this.inputCvs) {
                     this.beforeDx = this.dx;
                     this.inputCvs.style.cursor = "nesw-resize";
 
@@ -331,7 +328,7 @@ class SimPrim {
                     }
                     this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
                 }
-                if (property == "upL") {
+                if (property == "upL" && this.img && this.inputCvs) {
                     this.beforeDx = this.dx;
                     this.beforeDy = this.dy;
                     this.inputCvs.style.cursor = "nwse-resize";
@@ -370,7 +367,7 @@ class SimPrim {
                         this.drawTrimmingWidth = beforeWidth;
                         this.drawTrimmingHeight = beforeHeight;
                     }
-                    if (this.img) this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
+                    this.inputCtx?.drawImage(this.img, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2, this.beforeDx - 1, this.beforeDy - 1, beforeWidth + 2, beforeHeight + 2);
                 }
                 if (this.trimming) this.inputCtx?.drawImage(this.trimming, 0, 0, this.trimming.width, this.trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
             }
@@ -385,7 +382,7 @@ class SimPrim {
 
     // Dragging trimming area
     private moveDrag(e: MouseEvent) {
-        if (this.areaMoving) {
+        if (this.areaMoving && this.inputCvs) {
             this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
             if (this.dx !== undefined) this.beforeDx = this.dx;
             if (this.dy !== undefined) this.beforeDy = this.dy;
