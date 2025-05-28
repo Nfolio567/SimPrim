@@ -132,10 +132,6 @@ class SimPrim {
             this.prevX = e.clientX;
             this.prevY = e.clientY;
 
-            if (this.defaultCursor) {
-                this.inputCvs.style.cursor = "default"; // Reset mouse to default
-            }
-
             this.scaleWidth = this.inputCvs.width / this.inputCvs.clientWidth; // Calculate ratio
             this.scaleHeight = this.inputCvs.height / this.inputCvs.clientHeight; // Calculate ratio
             if (this.dx !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
@@ -214,6 +210,10 @@ class SimPrim {
                 } else {
                     this.defaultCursor = true;
                 }
+            }
+
+            if (this.defaultCursor) {
+                this.inputCvs.style.cursor = "default"; // Reset mouse to default
             }
 
             if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
