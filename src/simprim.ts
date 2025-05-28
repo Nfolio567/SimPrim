@@ -11,8 +11,8 @@ class SimPrim {
     private dy: number | undefined; // Drawing position Y of the trimming image
     private beforeDx: number | undefined; // Previous frame X coordinate
     private beforeDy: number | undefined; // Previous frame Y coordinate
-    private scaleWidth: number | undefined; // Ratio of canvas width to client width
-    private scaleHeight: number | undefined; // Ratio of canvas height to client height
+    private scaleWidth = 0; // Ratio of canvas width to client width
+    private scaleHeight = 0; // Ratio of canvas height to client height
     private resizing = false; // Whether resizing is in progress
     private areaMoving = false; // Drag flag within the area
     private resizable: boolean | undefined; // resize flag
@@ -20,8 +20,8 @@ class SimPrim {
     private decisionWH = false; // Whether the image is landscape or portrait
     private isAnimating = false; // Whether animation is in progress
     private defaultCursor = true; // Default cursor flag
-    private drawTrimmingWidth: number | undefined; // Width of the trimming area
-    private drawTrimmingHeight: number | undefined; // Height of the trimming area
+    private drawTrimmingWidth = 0; // Width of the trimming area
+    private drawTrimmingHeight = 0; // Height of the trimming area
 
     constructor(inputCvs: HTMLCanvasElement) {
         this.inputCvs = inputCvs;
@@ -47,10 +47,6 @@ class SimPrim {
         this.beforeDx = 0;
         this.beforeDy = 0;
         this.resizable = false;
-        this.scaleWidth = 0;
-        this.scaleHeight = 0;
-        this.drawTrimmingWidth = 0;
-        this.drawTrimmingHeight = 0;
 
         this.inputCvs.width = this.img.width;
         this.inputCvs.height = this.img.height;
@@ -81,7 +77,7 @@ class SimPrim {
             this.drawTrimmingHeight = this.drawTrimmingWidth;
         }
         this.trimming.onload = () => {
-            if (this.trimming && this.dx !== undefined && this.dy !== undefined && this.drawTrimmingWidth !== undefined && this.drawTrimmingHeight !== undefined) {
+            if (this.trimming && this.dx !== undefined && this.dy !== undefined) {
                 this.inputCtx?.drawImage(this.trimming, 0, 0, trimming.width, trimming.height, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight);
             }
         };
@@ -125,8 +121,8 @@ class SimPrim {
         this.inputCvs.addEventListener("mousemove", (e) => {
             if (this.defaultCursor) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
-            if (this.dx !== undefined && this.scaleWidth !== undefined && this.drawTrimmingWidth !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
-            if (this.dy !== undefined && this.scaleHeight !== undefined && this.drawTrimmingHeight !== undefined) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // Calculate center coordinate
+            if (this.dx !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
+            if (this.dy !== undefined) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // Calculate center coordinate
             if (this.cx !== undefined && this.cy !== undefined) {
                 if (e.offsetX >= this.cx - 10 && e.offsetX <= this.cx + 10 && e.offsetY >= this.cy - 10 && e.offsetY <= this.cy + 10) {
                     this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
@@ -141,7 +137,7 @@ class SimPrim {
             }
 
             // Mouseover detection for resizable area
-            if (this.dx !== undefined && this.dy !== undefined && this.scaleWidth !== undefined && this.scaleHeight !== undefined && this.drawTrimmingWidth !== undefined && this.drawTrimmingHeight !== undefined) {
+            if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
                 // Left resizable area
                 if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
                     // Top left
@@ -236,7 +232,7 @@ class SimPrim {
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
-            if (this.resizing && this.dx !== undefined && this.dy !== undefined && this.scaleWidth !== undefined && this.scaleHeight !== undefined && this.drawTrimmingWidth !== undefined && this.drawTrimmingHeight !== undefined) {
+            if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                     this.drawTrimmingHeight = 0;
                     this.drawTrimmingWidth = this.drawTrimmingHeight;
@@ -384,12 +380,12 @@ class SimPrim {
     // Draw the trimming area to the preview canvas
     private previewImg(previewCvs: HTMLCanvasElement, previewCtx: CanvasRenderingContext2D) {
         previewCtx?.clearRect(0, 0, previewCvs.width, previewCvs.height);
-        if (this.img && this.dx !== undefined && this.dy !== undefined && this.drawTrimmingWidth !== undefined && this.drawTrimmingHeight !== undefined) previewCtx?.drawImage(this.img, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight, 0, 0, previewCvs.width, previewCvs.height);
+        if (this.img && this.dx !== undefined && this.dy !== undefined) previewCtx?.drawImage(this.img, this.dx, this.dy, this.drawTrimmingWidth, this.drawTrimmingHeight, 0, 0, previewCvs.width, previewCvs.height);
     }
 
     // Dragging trimming area
     private moveDrag(e: MouseEvent) {
-        if (this.areaMoving && this.scaleWidth !== undefined && this.scaleHeight !== undefined && this.drawTrimmingWidth !== undefined && this.drawTrimmingHeight !== undefined) {
+        if (this.areaMoving) {
             this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
             if (this.dx !== undefined) this.beforeDx = this.dx;
             if (this.dy !== undefined) this.beforeDy = this.dy;
