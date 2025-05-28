@@ -9,6 +9,10 @@ declare class SimPrim {
     private cy;
     private dx;
     private dy;
+    private prevX;
+    private prevY;
+    veloX: number | undefined;
+    veloY: number | undefined;
     private beforeDx;
     private beforeDy;
     private scaleWidth;

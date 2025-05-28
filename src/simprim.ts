@@ -1,5 +1,5 @@
 class SimPrim {
-    VERSION = "1.1.1";
+    VERSION = "1.1.3beta";
     private inputCvs: HTMLCanvasElement; // Canvas to edit
     private img: HTMLImageElement | undefined; // Image to be edited
     private inputCtx: CanvasRenderingContext2D | null; // Context of the canvas to edit
@@ -254,23 +254,20 @@ class SimPrim {
                     this.drawTrimmingHeight = 0;
                     this.drawTrimmingWidth = this.drawTrimmingHeight;
                 }
-
                 this.dragging = false;
                 property = beforeProperty;
                 this.isAnimating = true;
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
-                console.log(this.veloX + "," + this.veloY + "," + e.clientX + "," + e.clientY);
-
                 if (property == "downR" && this.img !== undefined) {
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
-                    if (this.veloY == 0 && this.veloX !== undefined) this.drawTrimmingWidth += (this.veloX * this.scaleWidth) / zoomClearance;
-                    if (this.veloX == 0 && this.veloY !== undefined) this.drawTrimmingWidth += (this.veloY * this.scaleHeight) / zoomClearance;
-                    if (this.veloX != undefined && this.veloY != undefined) {
-                        this.drawTrimmingWidth += (this.veloX * this.scaleWidth) / zoomClearance;
-                        this.drawTrimmingWidth += (this.veloY * this.scaleHeight) / zoomClearance;
+                    if (e.movementX != 0 && e.movementY == 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                    if (e.movementY != 0 && e.movementX == 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
+                    if (e.movementX != 0 && e.movementY != 0) {
+                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
@@ -284,6 +281,7 @@ class SimPrim {
                     }
 
                     this.inputCtx?.drawImage(this.img, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
+                    console.log("unkoooooooooooooooo");
                 }
                 if (property == "upR" && this.img) {
                     this.beforeDy = this.dy;
