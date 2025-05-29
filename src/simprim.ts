@@ -22,7 +22,7 @@ class SimPrim {
     private scaleHeight = 0; // Ratio of canvas height to client height
     private drawTrimmingWidth = 0; // Width of the trimming area
     private drawTrimmingHeight = 0; // Height of the trimming area
-    private animationFrameID: number | undefined;
+    private animationFrameID = 0;
 
     /**
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
@@ -32,6 +32,8 @@ class SimPrim {
      * @param trimmingPath - The path to the trimming image(Default : https://cdn.nfolio.one/trimming.png).
      */
     init(inputCvs: HTMLCanvasElement, img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath: string = "https://cdn.nfolio.one/trimming.png") {
+        if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
+        this.animationFrameID = 0;
         // Initialize variables
         this.inputCvs = inputCvs;
         this.inputCtx = this.inputCvs.getContext("2d");
@@ -44,7 +46,6 @@ class SimPrim {
         this.dy = 0;
         this.beforeDx = 0;
         this.beforeDy = 0;
-        this.animationFrameID = 0;
         this.resizable = false;
 
         this.inputCvs.width = this.img.width;
