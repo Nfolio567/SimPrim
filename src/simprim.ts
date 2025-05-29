@@ -22,6 +22,7 @@ class SimPrim {
     private scaleHeight = 0; // Ratio of canvas height to client height
     private drawTrimmingWidth = 0; // Width of the trimming area
     private drawTrimmingHeight = 0; // Height of the trimming area
+    private animationFrameID: number | undefined;
 
     /**
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
@@ -43,6 +44,7 @@ class SimPrim {
         this.dy = 0;
         this.beforeDx = 0;
         this.beforeDy = 0;
+        this.animationFrameID = 0;
         this.resizable = false;
 
         this.inputCvs.width = this.img.width;
@@ -94,6 +96,7 @@ class SimPrim {
             this.isDragging = false;
             this.areaMoving = false;
             this.resizing = false;
+            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         });
     }
 
@@ -122,7 +125,7 @@ class SimPrim {
             if (this.dy !== undefined) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // Calculate center coordinate
             if (this.cx !== undefined && this.cy !== undefined) {
                 if (e.offsetX >= this.cx - 10 && e.offsetX <= this.cx + 10 && e.offsetY >= this.cy - 10 && e.offsetY <= this.cy + 10) {
-                    if(this.inputCvs) this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
+                    if (this.inputCvs) this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
                     this.defaultCursor = false;
                     if (this.isDragging) {
                         this.areaMoving = true;
@@ -203,7 +206,7 @@ class SimPrim {
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         if (!this.isAnimating) return;
 
-        requestAnimationFrame(() => {
+        this.animationFrameID = requestAnimationFrame(() => {
             this.moveDrag(e);
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
             if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
