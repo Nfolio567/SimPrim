@@ -204,6 +204,7 @@ class SimPrim {
     }
 
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
+        if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         if (!this.isAnimating) return;
 
         this.animationFrameID = requestAnimationFrame(() => {
