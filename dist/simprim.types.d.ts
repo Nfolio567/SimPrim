@@ -1,32 +1,27 @@
 declare class SimPrim {
     VERSION: string;
     private inputCvs;
+    private previewCvs;
     private img;
     private inputCtx;
     private trimming;
-    private previewCvs;
     private cx;
     private cy;
     private dx;
     private dy;
-    private prevX;
-    private prevY;
-    veloX: number | undefined;
-    veloY: number | undefined;
     private beforeDx;
     private beforeDy;
-    private scaleWidth;
-    private scaleHeight;
-    private resizing;
-    private dragging;
     private resizable;
+    private resizing;
+    private areaMoving;
     private isDragging;
     private decisionWH;
     private isAnimating;
     private defaultCursor;
+    private scaleWidth;
+    private scaleHeight;
     private drawTrimmingWidth;
     private drawTrimmingHeight;
-    constructor(inputCvs: HTMLCanvasElement);
     /**
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
      * @param img - The image to be edited.
@@ -34,7 +29,7 @@ declare class SimPrim {
      * @param inputCvsWidth - Optional : The width of the input canvas when height is longer than width. If you want to trim a vertical image, you must explicitly specify it.
      * @param trimmingPath - The path to the trimming image(Default : https://cdn.nfolio.one/trimming.png).
      */
-    init(img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath?: string): void;
+    init(inputCvs: HTMLCanvasElement, img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath?: string): void;
     /**
      * Detects mouse drag events on the canvas and allows for dragging the trimming area.
      * @param previewCvs - Optional : The canvas for previewing the trimmed image.

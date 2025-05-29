@@ -1,5 +1,5 @@
 class SimPrim {
-    VERSION = "1.1.3beta";
+    VERSION = "1.1.3";
     private inputCvs: HTMLCanvasElement | undefined; // Canvas to edit
     private previewCvs: HTMLCanvasElement | undefined; // Canvas for preview
     private img: HTMLImageElement | undefined; // Image to be edited
