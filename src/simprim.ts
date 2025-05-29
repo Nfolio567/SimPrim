@@ -97,7 +97,6 @@ class SimPrim {
             this.isDragging = false;
             this.areaMoving = false;
             this.resizing = false;
-            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         });
     }
 
@@ -117,6 +116,7 @@ class SimPrim {
 
         this.inputCvs?.addEventListener("mousedown", () => {
             this.isDragging = true; // Drag flag
+            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         });
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
