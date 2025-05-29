@@ -116,6 +116,7 @@ class SimPrim {
 
         this.inputCvs?.addEventListener("mousedown", () => {
             this.isDragging = true; // Drag flag
+            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         });
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
