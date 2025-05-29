@@ -10,10 +10,10 @@ Use a `<script>` tag to include the library:
 
 ```html
 <!-- Uncompressed -->
-<script src="https://cdn.nfolio.one/simprim-1.1.2.js" integrity="sha256-v1K+fy7l4fcNWAw8g8T269H39hs+NwKNyp4pI0YGWsU=" crossorigin="anonymous"></script>
+<script src="https://cdn.nfolio.one/simprim-1.1.3.js" integrity="sha256-n1Fi3QGr3RwtrVFCMnoDqmi1n9WvuFYmuHD8M6J3bn0=" crossorigin="anonymous"></script>
 
 <!-- Minified -->
-<script src="https://cdn.nfolio.one/simprim-1.1.2.min.js" integrity="sha256-cQ9BLeyGsV9RuJPiG0SXgrHB1CE22k5pcUTe7Q+gScQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.nfolio.one/simprim-1.1.3.min.js" integrity="sha256-sjhuiPj/Uw1j4QWoGlficf4YGNF6QqHm+EfJLF4FCCE=" crossorigin="anonymous"></script>
 ```
 
 ---
@@ -23,7 +23,7 @@ Use a `<script>` tag to include the library:
 Create a new `SimPrim` instance by passing an input object:
 
 ```javascript
-const simprim = new SimPrim(input);
+const simprim = new SimPrim();
 ```
 
 ### 🧾 Input Object Properties
@@ -40,10 +40,12 @@ const simprim = new SimPrim(input);
 
 ---
 
+
+
 ## 🛠 Available Methods
 
 ```javascript
-simprim.init(img, inputCvsWidth, inputCvsHeight, trimmingPath);
+simprim.init(inputCvs, img, inputCvsWidth, inputCvsHeight, trimmingPath);
 simprim.dragDetection(previewCvs);
 simprim.sizeChange();
 simprim.exportImg(exportCvs);

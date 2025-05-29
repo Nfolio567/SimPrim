@@ -22,6 +22,7 @@ declare class SimPrim {
     private scaleHeight;
     private drawTrimmingWidth;
     private drawTrimmingHeight;
+    private animationFrameID;
     /**
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
      * @param img - The image to be edited.

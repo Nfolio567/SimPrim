@@ -18,6 +18,7 @@
             this.scaleHeight = 0; // Ratio of canvas height to client height
             this.drawTrimmingWidth = 0; // Width of the trimming area
             this.drawTrimmingHeight = 0; // Height of the trimming area
+            this.animationFrameID = 0;
         }
         /**
          * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
@@ -28,6 +29,9 @@
          */
         init(inputCvs, img, inputCvsHeight, inputCvsWidth, trimmingPath = "https://cdn.nfolio.one/trimming.png") {
             var _a;
+            if (this.animationFrameID !== undefined)
+                cancelAnimationFrame(this.animationFrameID);
+            this.animationFrameID = 0;
             // Initialize variables
             this.inputCvs = inputCvs;
             this.inputCtx = this.inputCvs.getContext("2d");
@@ -106,6 +110,8 @@
                 this.isDragging = true; // Drag flag
             });
             (_b = this.inputCvs) === null || _b === void 0 ? void 0 : _b.addEventListener("mousemove", (e) => {
+                if (this.animationFrameID !== undefined)
+                    cancelAnimationFrame(this.animationFrameID);
                 if (this.defaultCursor && this.inputCvs)
                     this.inputCvs.style.cursor = "default"; // Reset mouse to default
                 if (this.dx !== undefined)
@@ -204,13 +210,12 @@
         requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight) {
             if (!this.isAnimating)
                 return;
-            requestAnimationFrame(() => {
+            this.animationFrameID = requestAnimationFrame(() => {
                 this.moveDrag(e);
                 if (this.previewCvs && previewCtx)
                     this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
                 if (this.resizable)
                     this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
-                console.log(this.resizable + "," + this.resizing);
             });
             if (!this.areaMoving && !this.resizing) {
                 this.isAnimating = false;
