@@ -97,6 +97,7 @@ class SimPrim {
             this.isDragging = false;
             this.areaMoving = false;
             this.resizing = false;
+            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         });
     }
 
