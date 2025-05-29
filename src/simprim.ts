@@ -116,10 +116,10 @@ class SimPrim {
 
         this.inputCvs?.addEventListener("mousedown", () => {
             this.isDragging = true; // Drag flag
-            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         });
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
+            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
             if (this.defaultCursor && this.inputCvs) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
             if (this.dx !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
