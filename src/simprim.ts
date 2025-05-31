@@ -119,7 +119,6 @@ class SimPrim {
         });
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
-            if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
             console.log(this.defaultCursor);
             if (this.defaultCursor && this.inputCvs) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
@@ -133,6 +132,7 @@ class SimPrim {
                         this.areaMoving = true;
                         this.isAnimating = true;
                     }
+                    if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
                 } else {
                     this.defaultCursor = true;
                 }
@@ -151,6 +151,7 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
+                        if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
                     } else {
                         this.defaultCursor = true;
                     }
@@ -163,6 +164,7 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
+                        if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
                     } else {
                         this.defaultCursor = true;
                     }
@@ -181,6 +183,7 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
+                        if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
                     } else {
                         this.defaultCursor = true;
                     }
@@ -193,6 +196,7 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
+                        if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
                     } else {
                         this.defaultCursor = true;
                     }
