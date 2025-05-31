@@ -207,8 +207,7 @@ class SimPrim {
         if (!this.isAnimating) return;
 
         this.animationFrameID = requestAnimationFrame(() => {
-            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
-            this.moveDrag(e);
+            if (this.areaMoving) this.moveDrag(e);
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
             if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
         });
@@ -231,6 +230,7 @@ class SimPrim {
         funcResizing.call(this, e);
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
+            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
@@ -386,6 +386,7 @@ class SimPrim {
     // Dragging trimming area
     private moveDrag(e: MouseEvent) {
         if (this.areaMoving && this.inputCvs) {
+            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
             this.inputCvs.style.cursor = "move"; // Keep move cursor during dragging even outside the specified area
             if (this.dx !== undefined) this.beforeDx = this.dx;
             if (this.dy !== undefined) this.beforeDy = this.dy;
