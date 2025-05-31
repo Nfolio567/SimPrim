@@ -22,7 +22,7 @@ class SimPrim {
     private scaleHeight = 0; // Ratio of canvas height to client height
     private drawTrimmingWidth = 0; // Width of the trimming area
     private drawTrimmingHeight = 0; // Height of the trimming area
-    private animationFrameID = 0;
+    private animationFrameID: number | undefined;
 
     /**
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
