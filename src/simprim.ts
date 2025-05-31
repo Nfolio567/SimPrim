@@ -115,7 +115,7 @@ class SimPrim {
         });
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
-            if (previewCtx) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
+            if (previewCtx && this.isDragging) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
             console.log(this.defaultCursor);
             if (this.defaultCursor && this.inputCvs) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
