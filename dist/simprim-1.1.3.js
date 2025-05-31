@@ -110,8 +110,7 @@
                 this.isDragging = true; // Drag flag
             });
             (_b = this.inputCvs) === null || _b === void 0 ? void 0 : _b.addEventListener("mousemove", (e) => {
-                if (this.animationFrameID !== undefined)
-                    cancelAnimationFrame(this.animationFrameID);
+                console.log(this.defaultCursor);
                 if (this.defaultCursor && this.inputCvs)
                     this.inputCvs.style.cursor = "default"; // Reset mouse to default
                 if (this.dx !== undefined)
@@ -211,7 +210,8 @@
             if (!this.isAnimating)
                 return;
             this.animationFrameID = requestAnimationFrame(() => {
-                this.moveDrag(e);
+                if (this.areaMoving)
+                    this.moveDrag(e);
                 if (this.previewCvs && previewCtx)
                     this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
                 if (this.resizable)

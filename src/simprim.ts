@@ -126,8 +126,8 @@ class SimPrim {
             if (this.dy !== undefined) this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // Calculate center coordinate
             if (this.cx !== undefined && this.cy !== undefined) {
                 if (e.offsetX >= this.cx - 10 && e.offsetX <= this.cx + 10 && e.offsetY >= this.cy - 10 && e.offsetY <= this.cy + 10) {
-                    if (this.inputCvs) this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
                     this.defaultCursor = false;
+                    if (this.inputCvs) this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
                     if (this.isDragging) {
                         this.areaMoving = true;
                         this.isAnimating = true;
@@ -144,8 +144,8 @@ class SimPrim {
                     // Top left
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
                         property = "upL";
-                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
+                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nwse-resize";
                         if (this.isDragging) {
                             this.resizing = true;
                             this.isAnimating = true;
@@ -156,8 +156,8 @@ class SimPrim {
                     // Bottom left
                     if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
                         property = "downL";
-                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
+                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nesw-resize";
                         if (this.isDragging) {
                             this.resizing = true;
                             this.isAnimating = true;
@@ -174,8 +174,8 @@ class SimPrim {
                     // Top right
                     if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
                         property = "upR";
-                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nesw-resize";
                         this.defaultCursor = false;
+                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nesw-resize";
                         if (this.isDragging) {
                             this.resizing = true;
                             this.isAnimating = true;
@@ -186,8 +186,8 @@ class SimPrim {
                     // Bottom right
                     if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
                         property = "downR";
-                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nwse-resize";
                         this.defaultCursor = false;
+                        if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nwse-resize";
                         if (this.isDragging) {
                             this.resizing = true;
                             this.isAnimating = true;
