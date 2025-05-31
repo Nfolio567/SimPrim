@@ -100,6 +100,7 @@ class SimPrim {
      * @param previewCvs - Optional : The canvas for previewing the trimmed image.
      */
     dragDetection(previewCvs?: HTMLCanvasElement) {
+        if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         let property = ""; // Where the mouse is now
         let beforeProperty = "";
         let beforeWidth = 0; // Width before resizing
