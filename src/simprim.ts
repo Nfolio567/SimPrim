@@ -196,11 +196,13 @@ class SimPrim {
                     this.defaultCursor = true;
                 }
             }
+            
+            if (!this.areaMoving && !this.resizing) {
+                this.isAnimating = false;
+            }
         });
 
-        if (!this.areaMoving && !this.resizing) {
-            this.isAnimating = false;
-        }
+        
     }
 
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
