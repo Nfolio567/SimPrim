@@ -32,6 +32,7 @@ class SimPrim {
      * @param trimmingPath - The path to the trimming image(Default : https://cdn.nfolio.one/trimming.png).
      */
     init(inputCvs: HTMLCanvasElement, img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath: string = "https://cdn.nfolio.one/trimming.png") {
+        console.log(this.animationFrameID);
         if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         this.animationFrameID = 0;
         // Initialize variables
@@ -85,12 +86,6 @@ class SimPrim {
 
         this.scaleWidth = this.inputCvs.width / this.inputCvs.clientWidth; // Calculate ratio
         this.scaleHeight = this.inputCvs.height / this.inputCvs.clientHeight; // Calculate ratio
-
-        /*this.inputCvs.addEventListener("mousemove", () => {
-            if (this.defaultCursor) {
-                this.inputCvs.style.cursor = "default"; // Reset mouse to default
-            }
-        });*/
 
         // Use window to allow dragging even if the mouse leaves the canvas
         window.addEventListener("mouseup", () => {
