@@ -116,7 +116,7 @@ class SimPrim {
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
             if (previewCtx && this.isDragging) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
-            console.log(this.defaultCursor);
+            console.log(`${this.scaleHeight},${this.scaleWidth}`);
             if (this.defaultCursor && this.inputCvs) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
             if (this.dx !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
@@ -197,6 +197,10 @@ class SimPrim {
                 }
             }
         });
+
+        if (!this.areaMoving && !this.resizing) {
+            this.isAnimating = false;
+        }
     }
 
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
@@ -207,10 +211,6 @@ class SimPrim {
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
             if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
         });
-
-        if (!this.areaMoving && !this.resizing) {
-            this.isAnimating = false;
-        }
     }
 
     /**
