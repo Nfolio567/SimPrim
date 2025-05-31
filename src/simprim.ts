@@ -163,10 +163,10 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
-                    } else if (this.isAnimating) {
+                    } else if (!this.isAnimating) {
                         this.defaultCursor = true;
                     }
-                } else if (this.isAnimating) {
+                } else if (!this.isAnimating) {
                     this.defaultCursor = true;
                 }
 
@@ -181,7 +181,7 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
-                    } else if (this.isAnimating) {
+                    } else if (!this.isAnimating) {
                         this.defaultCursor = true;
                     }
                     // Bottom right
@@ -193,10 +193,10 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
-                    } else if (this.isAnimating) {
+                    } else if (!this.isAnimating) {
                         this.defaultCursor = true;
                     }
-                } else if (this.isAnimating) {
+                } else if (!this.isAnimating) {
                     this.defaultCursor = true;
                 }
             }
