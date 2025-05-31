@@ -119,7 +119,6 @@ class SimPrim {
         });
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
-            //if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
             if (this.defaultCursor && this.inputCvs) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
             if (this.dx !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
@@ -208,6 +207,7 @@ class SimPrim {
         if (!this.isAnimating) return;
 
         this.animationFrameID = requestAnimationFrame(() => {
+            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
             this.moveDrag(e);
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
             if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
