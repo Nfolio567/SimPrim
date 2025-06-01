@@ -100,7 +100,6 @@ class SimPrim {
      * @param previewCvs - Optional : The canvas for previewing the trimmed image.
      */
     dragDetection(previewCvs?: HTMLCanvasElement) {
-        if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         let property = ""; // Where the mouse is now
         let beforeProperty = "";
         let beforeWidth = 0; // Width before resizing
@@ -115,6 +114,7 @@ class SimPrim {
         });
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
+            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
             if (previewCtx && this.isDragging) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
             console.log(`${this.scaleHeight},${this.scaleWidth}`);
             if (this.defaultCursor && this.inputCvs) this.inputCvs.style.cursor = "default"; // Reset mouse to default
