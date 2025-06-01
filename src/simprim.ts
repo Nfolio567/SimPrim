@@ -237,13 +237,13 @@ class SimPrim {
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined && this.deltaX !== undefined && this.deltaY !== undefined) {
-                let veloX = e.offsetX - this.deltaX;
-                let veloY = e.offsetY - this.deltaY;
-                if(veloX == e.offsetX) veloX = 0;
-                if(veloY == e.offsetY) veloY = 0;
+                let veloX = e.clientX - this.deltaX;
+                let veloY = e.clientX - this.deltaY;
+                if(veloX == e.clientX) veloX = 0;
+                if(veloY == e.clientX) veloY = 0;
 
-                this.deltaX = e.offsetX;
-                this.deltaY = e.offsetY;
+                this.deltaX = e.clientX;
+                this.deltaY = e.clientX;
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                     this.drawTrimmingHeight = 0;
                     this.drawTrimmingWidth = this.drawTrimmingHeight;
