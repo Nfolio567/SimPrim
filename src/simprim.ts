@@ -16,7 +16,8 @@ class SimPrim {
     private areaMoving = false; // Drag flag within the area
     private isDragging = false; // Whether dragging is in progress
     private decisionWH = false; // Whether the image is landscape or portrait
-    private isAnimatingOK = false; // Whether animation is in progress
+    private isAnimating = false; // Whether animation is in progress
+    private isAnimatingOK = false; // Animation ready
     private defaultCursor = true; // Default cursor flag
     private scaleWidth = 0; // Ratio of canvas width to client width
     private scaleHeight = 0; // Ratio of canvas height to client height
@@ -127,7 +128,7 @@ class SimPrim {
                         this.areaMoving = true;
                         this.isAnimatingOK = true;
                     }
-                } else if(!this.isDragging) {
+                } else if (!this.isDragging) {
                     this.defaultCursor = true;
                 }
             }
@@ -145,7 +146,7 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimatingOK = true;
                         }
-                    } else if(!this.isDragging) {
+                    } else if (!this.isDragging) {
                         this.defaultCursor = true;
                     }
                     // Bottom left
@@ -157,10 +158,10 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimatingOK = true;
                         }
-                    } else if(!this.isDragging) {
+                    } else if (!this.isDragging) {
                         this.defaultCursor = true;
                     }
-                } else if(!this.isDragging) {
+                } else if (!this.isDragging) {
                     this.defaultCursor = true;
                 }
 
@@ -175,7 +176,7 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimatingOK = true;
                         }
-                    } else if(!this.isDragging) {
+                    } else if (!this.isDragging) {
                         this.defaultCursor = true;
                     }
                     // Bottom right
@@ -187,10 +188,10 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimatingOK = true;
                         }
-                    } else if(!this.isDragging) {
+                    } else if (!this.isDragging) {
                         this.defaultCursor = true;
                     }
-                } else if(!this.isDragging) {
+                } else if (!this.isDragging) {
                     this.defaultCursor = true;
                 }
             }
@@ -199,19 +200,21 @@ class SimPrim {
                 this.isAnimatingOK = false;
             }
         });
-
-        
     }
 
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         if (!this.isAnimatingOK) return;
 
         //if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
-        this.animationFrameID = requestAnimationFrame(() => {
-            if (this.areaMoving) this.moveDrag(e);
-            if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
-            if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
-        });
+        if (!this.isAnimating) {
+            this.isAnimating = true;
+            this.animationFrameID = requestAnimationFrame(() => {
+                if (this.areaMoving) this.moveDrag(e);
+                if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
+                if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
+                this.isAnimating = false;
+            });
+        }
     }
 
     /**
