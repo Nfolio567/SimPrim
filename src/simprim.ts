@@ -16,7 +16,7 @@ class SimPrim {
     private areaMoving = false; // Drag flag within the area
     private isDragging = false; // Whether dragging is in progress
     private decisionWH = false; // Whether the image is landscape or portrait
-    private isAnimating = false; // Whether animation is in progress
+    private isAnimatingOK = false; // Whether animation is in progress
     private defaultCursor = true; // Default cursor flag
     private scaleWidth = 0; // Ratio of canvas width to client width
     private scaleHeight = 0; // Ratio of canvas height to client height
@@ -33,8 +33,7 @@ class SimPrim {
      */
     init(inputCvs: HTMLCanvasElement, img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath: string = "https://cdn.nfolio.one/trimming.png") {
         console.log(this.animationFrameID);
-        //if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
-        this.animationFrameID = 0;
+        if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         // Initialize variables
         this.inputCvs = inputCvs;
         this.inputCtx = this.inputCvs.getContext("2d");
@@ -126,9 +125,9 @@ class SimPrim {
                     if (this.inputCvs) this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
                     if (this.isDragging) {
                         this.areaMoving = true;
-                        this.isAnimating = true;
+                        this.isAnimatingOK = true;
                     }
-                } else if(!this.isAnimating) {
+                } else if(!this.isDragging) {
                     this.defaultCursor = true;
                 }
             }
@@ -144,9 +143,9 @@ class SimPrim {
                         if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nwse-resize";
                         if (this.isDragging) {
                             this.resizing = true;
-                            this.isAnimating = true;
+                            this.isAnimatingOK = true;
                         }
-                    } else if(!this.isAnimating) {
+                    } else if(!this.isDragging) {
                         this.defaultCursor = true;
                     }
                     // Bottom left
@@ -156,12 +155,12 @@ class SimPrim {
                         if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nesw-resize";
                         if (this.isDragging) {
                             this.resizing = true;
-                            this.isAnimating = true;
+                            this.isAnimatingOK = true;
                         }
-                    } else if(!this.isAnimating) {
+                    } else if(!this.isDragging) {
                         this.defaultCursor = true;
                     }
-                } else if(!this.isAnimating) {
+                } else if(!this.isDragging) {
                     this.defaultCursor = true;
                 }
 
@@ -174,9 +173,9 @@ class SimPrim {
                         if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nesw-resize";
                         if (this.isDragging) {
                             this.resizing = true;
-                            this.isAnimating = true;
+                            this.isAnimatingOK = true;
                         }
-                    } else if(!this.isAnimating) {
+                    } else if(!this.isDragging) {
                         this.defaultCursor = true;
                     }
                     // Bottom right
@@ -186,18 +185,18 @@ class SimPrim {
                         if (!this.resizing && this.inputCvs) this.inputCvs.style.cursor = "nwse-resize";
                         if (this.isDragging) {
                             this.resizing = true;
-                            this.isAnimating = true;
+                            this.isAnimatingOK = true;
                         }
-                    } else if(!this.isAnimating) {
+                    } else if(!this.isDragging) {
                         this.defaultCursor = true;
                     }
-                } else if(!this.isAnimating) {
+                } else if(!this.isDragging) {
                     this.defaultCursor = true;
                 }
             }
 
             if (!this.areaMoving && !this.resizing) {
-                this.isAnimating = false;
+                this.isAnimatingOK = false;
             }
         });
 
@@ -205,14 +204,13 @@ class SimPrim {
     }
 
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
-        if (!this.isAnimating) return;
+        if (!this.isAnimatingOK) return;
 
         //if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
-        this.animationFrameID = requestAnimationFrame((entity) => {
+        this.animationFrameID = requestAnimationFrame(() => {
             if (this.areaMoving) this.moveDrag(e);
             if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
-            console.log(entity);
         });
     }
 
@@ -237,7 +235,7 @@ class SimPrim {
                 }
                 this.areaMoving = false;
                 property = beforeProperty;
-                this.isAnimating = true;
+                this.isAnimatingOK = true;
                 beforeWidth = this.drawTrimmingWidth;
                 beforeHeight = this.drawTrimmingHeight;
 
