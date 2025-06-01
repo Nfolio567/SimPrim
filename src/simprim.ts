@@ -114,7 +114,6 @@ class SimPrim {
         });
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
-            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
             if (previewCtx && this.isDragging) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
             console.log(`${this.scaleHeight},${this.scaleWidth}`);
             if (this.defaultCursor && this.inputCvs) this.inputCvs.style.cursor = "default"; // Reset mouse to default
@@ -207,6 +206,7 @@ class SimPrim {
 
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         if (!this.isAnimating) return;
+        if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         
         //if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         this.animationFrameID = requestAnimationFrame(() => {
@@ -248,8 +248,8 @@ class SimPrim {
                     if (e.movementX !== 0 && e.movementY === 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
                     if (e.movementY !== 0 && e.movementX === 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                     if (e.movementX !== 0 && e.movementY !== 0) {
-                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth);
-                        this.drawTrimmingWidth += (e.movementY * this.scaleHeight);
+                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                         console.log("###########");
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
