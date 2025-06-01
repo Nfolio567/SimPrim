@@ -197,7 +197,6 @@ class SimPrim {
                     this.defaultCursor = true;
                 }
             }
-            if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
 
             if (!this.areaMoving && !this.resizing) {
                 this.isAnimatingOK = false;
@@ -212,6 +211,7 @@ class SimPrim {
             this.isAnimating = true;
             this.animationFrameID = requestAnimationFrame(() => {
                 if (this.areaMoving) this.moveDrag(e);
+                if (this.resizable && this.resizing) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
                 if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
                 this.isAnimating = false;
             });
