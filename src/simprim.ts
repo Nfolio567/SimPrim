@@ -247,7 +247,7 @@ class SimPrim {
                     if (e.movementX !== 0 && e.movementY === 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
                     if (e.movementY !== 0 && e.movementX === 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                     if (e.movementX !== 0 && e.movementY !== 0) {
-                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth);
                         console.log("###########");
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
