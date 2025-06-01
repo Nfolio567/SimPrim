@@ -208,10 +208,11 @@ class SimPrim {
         if (!this.isAnimating) return;
 
         //if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
-        this.animationFrameID = requestAnimationFrame(() => {
+        this.animationFrameID = requestAnimationFrame((entity) => {
             if (this.areaMoving) this.moveDrag(e);
             if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
             if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
+            console.log(entity);
         });
     }
 
