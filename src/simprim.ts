@@ -207,15 +207,15 @@ class SimPrim {
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         if (!this.isAnimatingOK) return;
 
-        /*if (!this.isAnimating) {
-            this.isAnimating = true;*/
+        if (!this.isAnimating) {
+            this.isAnimating = true;
             this.animationFrameID = requestAnimationFrame(() => {
                 if (this.areaMoving) this.moveDrag(e);
                 if (this.resizable && this.resizing) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
                 if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
                 this.isAnimating = false;
             });
-        //}
+        }
     }
 
     /**
@@ -227,12 +227,18 @@ class SimPrim {
 
     private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         const zoomClearance = 2;
+        let deltaX: number | undefined;
+        let deltaY: number | undefined;
         beforeProperty = property;
         funcResizing.call(this, e);
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
-            if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
+            if (this.resizing && this.dx !== undefined && this.dy !== undefined && deltaX !== undefined && deltaY !== undefined) {
+                const veloX = e.offsetX - deltaX;
+                const veloY = e.offsetY - deltaY;
+                deltaX = e.offsetX;
+                deltaY = e.offsetY;
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                     this.drawTrimmingHeight = 0;
                     this.drawTrimmingWidth = this.drawTrimmingHeight;
@@ -247,10 +253,10 @@ class SimPrim {
                     this.inputCvs.style.cursor = "nwse-resize";
 
                     // Resize detection
-                    if (e.movementX !== 0 && e.movementY === 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
-                    if (e.movementY !== 0 && e.movementX === 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
+                    if (e.movementX !== 0 && e.movementY === 0) this.drawTrimmingWidth += (veloX * this.scaleWidth) / zoomClearance;
+                    if (e.movementY !== 0 && e.movementX === 0) this.drawTrimmingWidth += (veloY * this.scaleHeight) / zoomClearance;
                     if (e.movementX !== 0 && e.movementY !== 0) {
-                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth);
+                        this.drawTrimmingWidth += (veloX * this.scaleWidth);
                         console.log(`${this.drawTrimmingWidth} , ${e.movementX * this.scaleWidth}`);
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
