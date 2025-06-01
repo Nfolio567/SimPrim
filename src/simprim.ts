@@ -246,8 +246,8 @@ class SimPrim {
                     if (e.movementX !== 0 && e.movementY === 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
                     if (e.movementY !== 0 && e.movementX === 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                     if (e.movementX !== 0 && e.movementY !== 0) {
-                        this.drawTrimmingWidth += 2 * ((e.movementX * this.scaleWidth) / zoomClearance / 2) - (e.movementX * this.scaleWidth) / zoomClearance;
-                        this.drawTrimmingWidth += 2 * ((e.movementY * this.scaleHeight) / zoomClearance / 2) - (e.movementY * this.scaleHeight) / zoomClearance;
+                        this.drawTrimmingWidth += 2 * ((e.movementX * this.scaleWidth) / 2) - (e.movementX * this.scaleWidth);
+                        this.drawTrimmingWidth += 2 * ((e.movementY * this.scaleHeight) / 2) - (e.movementY * this.scaleHeight);
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
