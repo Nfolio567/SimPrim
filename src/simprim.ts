@@ -34,7 +34,10 @@ class SimPrim {
      */
     init(inputCvs: HTMLCanvasElement, img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath: string = "https://cdn.nfolio.one/trimming.png") {
         console.log(this.animationFrameID);
-        if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
+        if (this.animationFrameID !== undefined) {
+            cancelAnimationFrame(this.animationFrameID);
+            this.animationFrameID = undefined;
+        }
         // Initialize variables
         this.inputCvs = inputCvs;
         this.inputCtx = this.inputCvs.getContext("2d");
@@ -115,7 +118,6 @@ class SimPrim {
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
             if (previewCtx && this.isDragging) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
-            console.log(`${this.scaleHeight},${this.scaleWidth}`);
             if (this.defaultCursor && this.inputCvs) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
             if (this.dx !== undefined) this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
@@ -205,7 +207,6 @@ class SimPrim {
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         if (!this.isAnimatingOK) return;
 
-        //if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         if (!this.isAnimating) {
             this.isAnimating = true;
             this.animationFrameID = requestAnimationFrame(() => {
