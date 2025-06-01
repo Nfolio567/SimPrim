@@ -385,12 +385,12 @@ class SimPrim {
 
     // Ratio of canvas width to client width
     private scaleWidth(): number {
-        if (this.inputCvs) return this.inputCvs.width / this.inputCvs.clientWidth;
+        if (this.inputCvs) return (this.inputCvs.width / this.inputCvs.clientWidth);
         return 1;
     }
     // Ratio of canvas height to client height
     private scaleHeight(): number {
-        if(this.inputCvs) return this.inputCvs.height / this.inputCvs.clientHeight;
+        if(this.inputCvs) return (this.inputCvs.height / this.inputCvs.clientHeight);
         return 1;
     }
 
