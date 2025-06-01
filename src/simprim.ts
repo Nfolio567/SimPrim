@@ -24,6 +24,8 @@ class SimPrim {
     private drawTrimmingWidth = 0; // Width of the trimming area
     private drawTrimmingHeight = 0; // Height of the trimming area
     private animationFrameID: number | undefined;
+    private deltaX: number | undefined;
+    private deltaY: number | undefined;
 
     /**
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
@@ -107,6 +109,8 @@ class SimPrim {
         let beforeProperty = "";
         let beforeWidth = 0; // Width before resizing
         let beforeHeight = 0; // Height before resizing
+        this.deltaX = 0;
+        this.deltaY = 0;
 
         this.previewCvs = previewCvs;
         const previewCtx = previewCvs?.getContext("2d");
@@ -227,18 +231,19 @@ class SimPrim {
 
     private resizeDrag(e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         const zoomClearance = 2;
-        let deltaX: number | undefined;
-        let deltaY: number | undefined;
         beforeProperty = property;
         funcResizing.call(this, e);
 
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
-            if (this.resizing && this.dx !== undefined && this.dy !== undefined && deltaX !== undefined && deltaY !== undefined) {
-                const veloX = e.offsetX - deltaX;
-                const veloY = e.offsetY - deltaY;
-                deltaX = e.offsetX;
-                deltaY = e.offsetY;
+            if (this.resizing && this.dx !== undefined && this.dy !== undefined && this.deltaX !== undefined && this.deltaY !== undefined) {
+                let veloX = e.offsetX - this.deltaX;
+                let veloY = e.offsetY - this.deltaY;
+                if(veloX == e.offsetX) veloX = 0;
+                if(veloY == e.offsetY) veloY = 0;
+                
+                this.deltaX = e.offsetX;
+                this.deltaY = e.offsetY;
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                     this.drawTrimmingHeight = 0;
                     this.drawTrimmingWidth = this.drawTrimmingHeight;
