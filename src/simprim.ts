@@ -241,7 +241,7 @@ class SimPrim {
                 let veloY = e.offsetY - this.deltaY;
                 if(veloX == e.offsetX) veloX = 0;
                 if(veloY == e.offsetY) veloY = 0;
-                
+
                 this.deltaX = e.offsetX;
                 this.deltaY = e.offsetY;
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
@@ -261,8 +261,8 @@ class SimPrim {
                     if (e.movementX !== 0 && e.movementY === 0) this.drawTrimmingWidth += (veloX * this.scaleWidth) / zoomClearance;
                     if (e.movementY !== 0 && e.movementX === 0) this.drawTrimmingWidth += (veloY * this.scaleHeight) / zoomClearance;
                     if (e.movementX !== 0 && e.movementY !== 0) {
-                        this.drawTrimmingWidth += (veloX * this.scaleWidth);
-                        console.log(`${this.drawTrimmingWidth} , ${e.movementX * this.scaleWidth}`);
+                        this.drawTrimmingWidth += (veloX * this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (veloY * this.scaleHeight) / zoomClearance;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
