@@ -33,7 +33,7 @@ class SimPrim {
      */
     init(inputCvs: HTMLCanvasElement, img: HTMLImageElement, inputCvsHeight?: String, inputCvsWidth?: String, trimmingPath: string = "https://cdn.nfolio.one/trimming.png") {
         console.log(this.animationFrameID);
-        if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
+        //if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         this.animationFrameID = 0;
         // Initialize variables
         this.inputCvs = inputCvs;
