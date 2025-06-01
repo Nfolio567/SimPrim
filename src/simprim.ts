@@ -206,13 +206,12 @@ class SimPrim {
 
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         if (!this.isAnimating) return;
+
         if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
-        
-        //if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         this.animationFrameID = requestAnimationFrame(() => {
             if (this.areaMoving) this.moveDrag(e);
-            if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
             if (this.resizable) this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
+            if (this.previewCvs && previewCtx) this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
         });
     }
 
