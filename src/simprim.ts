@@ -114,8 +114,8 @@ class SimPrim {
         });
 
         this.inputCvs?.addEventListener("mousemove", (e) => {
-            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
             if (previewCtx && this.isDragging) this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
+            if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
             console.log(`${this.scaleHeight},${this.scaleWidth}`);
             if (this.defaultCursor && this.inputCvs) this.inputCvs.style.cursor = "default"; // Reset mouse to default
 
@@ -264,7 +264,6 @@ class SimPrim {
                     }
 
                     this.inputCtx?.drawImage(this.img, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
-                    console.log("unkoooooooooooooooo");
                 }
                 if (property == "upR" && this.img && this.inputCvs) {
                     this.beforeDy = this.dy;
