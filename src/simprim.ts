@@ -129,7 +129,7 @@ class SimPrim {
                         this.areaMoving = true;
                         this.isAnimating = true;
                     }
-                } else if (!this.isAnimating) {
+                } else if(!this.isAnimating) {
                     this.defaultCursor = true;
                 }
             }
@@ -147,7 +147,7 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
-                    } else if (!this.isAnimating) {
+                    } else if(!this.isAnimating) {
                         this.defaultCursor = true;
                     }
                     // Bottom left
@@ -159,10 +159,10 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
-                    } else if (!this.isAnimating) {
+                    } else if(!this.isAnimating) {
                         this.defaultCursor = true;
                     }
-                } else if (!this.isAnimating) {
+                } else if(!this.isAnimating) {
                     this.defaultCursor = true;
                 }
 
@@ -177,7 +177,7 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
-                    } else if (!this.isAnimating) {
+                    } else if(!this.isAnimating) {
                         this.defaultCursor = true;
                     }
                     // Bottom right
@@ -189,10 +189,10 @@ class SimPrim {
                             this.resizing = true;
                             this.isAnimating = true;
                         }
-                    } else if (!this.isAnimating) {
+                    } else if(!this.isAnimating) {
                         this.defaultCursor = true;
                     }
-                } else if (!this.isAnimating) {
+                } else if(!this.isAnimating) {
                     this.defaultCursor = true;
                 }
             }
@@ -201,11 +201,13 @@ class SimPrim {
                 this.isAnimating = false;
             }
         });
+
+        
     }
 
     private requestFrame(previewCtx: CanvasRenderingContext2D, e: MouseEvent, property: String, beforeProperty: String, beforeWidth: number, beforeHeight: number) {
         if (!this.isAnimating) return;
-
+        
         //if (this.animationFrameID !== undefined) cancelAnimationFrame(this.animationFrameID);
         this.animationFrameID = requestAnimationFrame(() => {
             if (this.areaMoving) this.moveDrag(e);
@@ -246,8 +248,8 @@ class SimPrim {
                     if (e.movementX !== 0 && e.movementY === 0) this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
                     if (e.movementY !== 0 && e.movementX === 0) this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                     if (e.movementX !== 0 && e.movementY !== 0) {
-                        this.drawTrimmingWidth += 2 * ((e.movementX * this.scaleWidth) / 2) - (e.movementX * this.scaleWidth);
-                        this.drawTrimmingWidth += 2 * ((e.movementY * this.scaleHeight) / 2) - (e.movementY * this.scaleHeight);
+                        this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                        this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
                     }
                     this.drawTrimmingHeight = this.drawTrimmingWidth;
                     // Out-of-bounds check
