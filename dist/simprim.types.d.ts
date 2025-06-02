@@ -17,12 +17,13 @@ declare class SimPrim {
     private isDragging;
     private decisionWH;
     private isAnimating;
+    private isAnimatingOK;
     private defaultCursor;
-    private scaleWidth;
-    private scaleHeight;
     private drawTrimmingWidth;
     private drawTrimmingHeight;
     private animationFrameID;
+    private deltaX;
+    private deltaY;
     /**
      * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
      * @param img - The image to be edited.
@@ -42,6 +43,8 @@ declare class SimPrim {
      */
     sizeChange(): void;
     private resizeDrag;
+    private scaleWidth;
+    private scaleHeight;
     private previewImg;
     private moveDrag;
     /**

@@ -232,6 +232,7 @@ class SimPrim {
         function funcResizing(this: SimPrim, e: MouseEvent) {
             // Trimming area resizing process
             if (this.resizing && this.dx !== undefined && this.dy !== undefined && this.deltaX !== undefined && this.deltaY !== undefined) {
+                // 236~247 is for Safari
                 let veloX = e.clientX - this.deltaX;
                 let veloY = e.clientY - this.deltaY;
                 console.log(`${e.clientX} , ${this.deltaX}`);
@@ -240,7 +241,7 @@ class SimPrim {
                 if (veloX == e.clientX) veloX = 0;
                 if (veloY == e.clientY) veloY = 0;
                 
-                if (veloX == 0 && e.movementX > 0) veloX = 1;
+                if (veloX == 0 && e.movementX > 0) veloX = 1; //To avoid going to 0.
                 if (veloX == 0 && e.movementX < 0) veloX = -1;
                 if (veloY == 0 && e.movementY > 0) veloY = 1;
                 if (veloY == 0 && e.movementY < 0) veloY = -1;
