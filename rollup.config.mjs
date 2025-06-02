@@ -8,7 +8,7 @@ export default {
         name: "SimPrim",
         globals: {},
         sourceMap: true,
-        banner: "/*! SimPrim - Simple Image Trimming Library v1.1.3 | (c) Nfolio | ISC | https://github.com/Nfolio567/SimPrim */",
+        banner: "/*! SimPrim - Simple Image Trimming Library v1.1.4 | (c) Nfolio | ISC | https://github.com/Nfolio567/SimPrim */",
     },
     plugins: [typescript()]
 }

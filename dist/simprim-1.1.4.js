@@ -1,4 +1,4 @@
-/*! SimPrim - Simple Image Trimming Library v1.1.3 | (c) Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
+/*! SimPrim - Simple Image Trimming Library v1.1.4 | (c) Nfolio | ISC | https://github.com/Nfolio567/SimPrim */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
