@@ -239,6 +239,8 @@ class SimPrim {
                 this.deltaY = e.clientY;
                 if (veloX == e.clientX) veloX = 0;
                 if (veloY == e.clientY) veloY = 0;
+                if (veloX == 0) veloX = 1;
+                if (veloY == 0) veloY = 1;
 
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                     this.drawTrimmingHeight = 0;
@@ -386,12 +388,12 @@ class SimPrim {
 
     // Ratio of canvas width to client width
     private scaleWidth(): number {
-        if (this.inputCvs) return (this.inputCvs.width / this.inputCvs.clientWidth);
+        if (this.inputCvs) return this.inputCvs.width / this.inputCvs.clientWidth;
         return 1;
     }
     // Ratio of canvas height to client height
     private scaleHeight(): number {
-        if(this.inputCvs) return (this.inputCvs.height / this.inputCvs.clientHeight);
+        if (this.inputCvs) return this.inputCvs.height / this.inputCvs.clientHeight;
         return 1;
     }
 
