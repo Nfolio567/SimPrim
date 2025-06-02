@@ -239,8 +239,11 @@ class SimPrim {
                 this.deltaY = e.clientY;
                 if (veloX == e.clientX) veloX = 0;
                 if (veloY == e.clientY) veloY = 0;
-                if (veloX == 0) veloX = 1;
-                if (veloY == 0) veloY = 1;
+                
+                if (veloX == 0 && e.movementX > 0) veloX = 1;
+                if (veloX == 0 && e.movementX < 0) veloX = -1;
+                if (veloY == 0 && e.movementY > 0) veloY = 1;
+                if (veloY == 0 && e.movementY < 0) veloY = -1;
 
                 if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                     this.drawTrimmingHeight = 0;
