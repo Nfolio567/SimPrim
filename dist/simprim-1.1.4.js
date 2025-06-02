@@ -13,12 +13,10 @@
             this.isDragging = false; // Whether dragging is in progress
             this.decisionWH = false; // Whether the image is landscape or portrait
             this.isAnimating = false; // Whether animation is in progress
+            this.isAnimatingOK = false; // Animation ready
             this.defaultCursor = true; // Default cursor flag
-            this.scaleWidth = 0; // Ratio of canvas width to client width
-            this.scaleHeight = 0; // Ratio of canvas height to client height
             this.drawTrimmingWidth = 0; // Width of the trimming area
             this.drawTrimmingHeight = 0; // Height of the trimming area
-            this.animationFrameID = 0;
         }
         /**
          * Initialize the SimPrim instance with an image, preview canvas, and trimming path.
@@ -29,9 +27,11 @@
          */
         init(inputCvs, img, inputCvsHeight, inputCvsWidth, trimmingPath = "https://cdn.nfolio.one/trimming.png") {
             var _a;
-            if (this.animationFrameID !== undefined)
+            console.log(this.animationFrameID);
+            if (this.animationFrameID !== undefined) {
                 cancelAnimationFrame(this.animationFrameID);
-            this.animationFrameID = 0;
+                this.animationFrameID = undefined;
+            }
             // Initialize variables
             this.inputCvs = inputCvs;
             this.inputCtx = this.inputCvs.getContext("2d");
@@ -78,13 +78,6 @@
                 }
             };
             this.trimming.src = trimmingPath;
-            this.scaleWidth = this.inputCvs.width / this.inputCvs.clientWidth; // Calculate ratio
-            this.scaleHeight = this.inputCvs.height / this.inputCvs.clientHeight; // Calculate ratio
-            /*this.inputCvs.addEventListener("mousemove", () => {
-                if (this.defaultCursor) {
-                    this.inputCvs.style.cursor = "default"; // Reset mouse to default
-                }
-            });*/
             // Use window to allow dragging even if the mouse leaves the canvas
             window.addEventListener("mouseup", () => {
                 this.isDragging = false;
@@ -102,6 +95,8 @@
             let beforeProperty = "";
             let beforeWidth = 0; // Width before resizing
             let beforeHeight = 0; // Height before resizing
+            this.deltaX = 0;
+            this.deltaY = 0;
             this.previewCvs = previewCvs;
             const previewCtx = previewCvs === null || previewCvs === void 0 ? void 0 : previewCvs.getContext("2d");
             if (this.previewCvs && previewCtx)
@@ -110,115 +105,118 @@
                 this.isDragging = true; // Drag flag
             });
             (_b = this.inputCvs) === null || _b === void 0 ? void 0 : _b.addEventListener("mousemove", (e) => {
-                console.log(this.defaultCursor);
+                if (previewCtx && this.isDragging)
+                    this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
                 if (this.defaultCursor && this.inputCvs)
                     this.inputCvs.style.cursor = "default"; // Reset mouse to default
                 if (this.dx !== undefined)
-                    this.cx = this.dx / this.scaleWidth + this.drawTrimmingWidth / this.scaleWidth / 2; // Calculate center coordinate
+                    this.cx = this.dx / this.scaleWidth() + this.drawTrimmingWidth / this.scaleWidth() / 2; // Calculate center coordinate
                 if (this.dy !== undefined)
-                    this.cy = this.dy / this.scaleHeight + this.drawTrimmingHeight / this.scaleHeight / 2; // Calculate center coordinate
+                    this.cy = this.dy / this.scaleHeight() + this.drawTrimmingHeight / this.scaleHeight() / 2; // Calculate center coordinate
                 if (this.cx !== undefined && this.cy !== undefined) {
                     if (e.offsetX >= this.cx - 10 && e.offsetX <= this.cx + 10 && e.offsetY >= this.cy - 10 && e.offsetY <= this.cy + 10) {
+                        this.defaultCursor = false;
                         if (this.inputCvs)
                             this.inputCvs.style.cursor = "move"; // Change mouse to move cursor
-                        this.defaultCursor = false;
                         if (this.isDragging) {
                             this.areaMoving = true;
-                            this.isAnimating = true;
+                            this.isAnimatingOK = true;
                         }
                     }
-                    else {
+                    else if (!this.isDragging) {
                         this.defaultCursor = true;
                     }
                 }
                 // Mouseover detection for resizable area
                 if (this.dx !== undefined && this.dy !== undefined /* && !this.resizing*/) {
                     // Left resizable area
-                    if (e.offsetX * this.scaleWidth >= this.dx - 15 && e.offsetX * this.scaleWidth <= this.dx + 15) {
+                    if (e.offsetX * this.scaleWidth() >= this.dx - 15 && e.offsetX * this.scaleWidth() <= this.dx + 15) {
                         // Top left
-                        if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
+                        if (e.offsetY * this.scaleHeight() >= this.dy - 15 && e.offsetY * this.scaleHeight() <= this.dy + 15) {
                             property = "upL";
+                            this.defaultCursor = false;
                             if (!this.resizing && this.inputCvs)
                                 this.inputCvs.style.cursor = "nwse-resize";
-                            this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
-                                this.isAnimating = true;
+                                this.isAnimatingOK = true;
                             }
                         }
-                        else {
+                        else if (!this.isDragging) {
                             this.defaultCursor = true;
                         }
                         // Bottom left
-                        if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
+                        if (e.offsetY * this.scaleHeight() >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight() <= this.dy + this.drawTrimmingHeight + 15) {
                             property = "downL";
+                            this.defaultCursor = false;
                             if (!this.resizing && this.inputCvs)
                                 this.inputCvs.style.cursor = "nesw-resize";
-                            this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
-                                this.isAnimating = true;
+                                this.isAnimatingOK = true;
                             }
                         }
-                        else {
+                        else if (!this.isDragging) {
                             this.defaultCursor = true;
                         }
                     }
-                    else {
+                    else if (!this.isDragging) {
                         this.defaultCursor = true;
                     }
                     // Right resizable area
-                    if (e.offsetX * this.scaleWidth >= this.dx + this.drawTrimmingWidth - 15 && e.offsetX * this.scaleWidth <= this.dx + this.drawTrimmingWidth + 15) {
+                    if (e.offsetX * this.scaleWidth() >= this.dx + this.drawTrimmingWidth - 15 && e.offsetX * this.scaleWidth() <= this.dx + this.drawTrimmingWidth + 15) {
                         // Top right
-                        if (e.offsetY * this.scaleHeight >= this.dy - 15 && e.offsetY * this.scaleHeight <= this.dy + 15) {
+                        if (e.offsetY * this.scaleHeight() >= this.dy - 15 && e.offsetY * this.scaleHeight() <= this.dy + 15) {
                             property = "upR";
+                            this.defaultCursor = false;
                             if (!this.resizing && this.inputCvs)
                                 this.inputCvs.style.cursor = "nesw-resize";
-                            this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
-                                this.isAnimating = true;
+                                this.isAnimatingOK = true;
                             }
                         }
-                        else {
+                        else if (!this.isDragging) {
                             this.defaultCursor = true;
                         }
                         // Bottom right
-                        if (e.offsetY * this.scaleHeight >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight <= this.dy + this.drawTrimmingHeight + 15) {
+                        if (e.offsetY * this.scaleHeight() >= this.dy + this.drawTrimmingHeight - 15 && e.offsetY * this.scaleHeight() <= this.dy + this.drawTrimmingHeight + 15) {
                             property = "downR";
+                            this.defaultCursor = false;
                             if (!this.resizing && this.inputCvs)
                                 this.inputCvs.style.cursor = "nwse-resize";
-                            this.defaultCursor = false;
                             if (this.isDragging) {
                                 this.resizing = true;
-                                this.isAnimating = true;
+                                this.isAnimatingOK = true;
                             }
                         }
-                        else {
+                        else if (!this.isDragging) {
                             this.defaultCursor = true;
                         }
                     }
-                    else {
+                    else if (!this.isDragging) {
                         this.defaultCursor = true;
                     }
                 }
-                if (previewCtx)
-                    this.requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight);
+                if (!this.areaMoving && !this.resizing) {
+                    this.isAnimatingOK = false;
+                }
             });
         }
         requestFrame(previewCtx, e, property, beforeProperty, beforeWidth, beforeHeight) {
-            if (!this.isAnimating)
+            if (!this.isAnimatingOK)
                 return;
-            this.animationFrameID = requestAnimationFrame(() => {
-                if (this.areaMoving)
-                    this.moveDrag(e);
-                if (this.previewCvs && previewCtx)
-                    this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
-                if (this.resizable)
-                    this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
-            });
-            if (!this.areaMoving && !this.resizing) {
-                this.isAnimating = false;
+            if (!this.isAnimating) {
+                this.isAnimating = true;
+                this.animationFrameID = requestAnimationFrame(() => {
+                    if (this.areaMoving)
+                        this.moveDrag(e);
+                    if (this.resizable && this.resizing)
+                        this.resizeDrag(e, property, beforeProperty, beforeWidth, beforeHeight);
+                    if (this.previewCvs && previewCtx)
+                        this.previewImg(this.previewCvs, previewCtx); // Draw to preview canvas
+                    this.isAnimating = false;
+                });
             }
         }
         /**
@@ -234,26 +232,49 @@
             function funcResizing(e) {
                 var _a, _b, _c, _d, _e;
                 // Trimming area resizing process
-                if (this.resizing && this.dx !== undefined && this.dy !== undefined) {
+                if (this.resizing && this.dx !== undefined && this.dy !== undefined && this.deltaX !== undefined && this.deltaY !== undefined) {
+                    // 236~247 is for Safari
+                    let veloX = e.clientX - this.deltaX;
+                    let veloY = e.clientY - this.deltaY;
+                    console.log(`${e.clientX} , ${this.deltaX}`);
+                    this.deltaX = e.clientX;
+                    this.deltaY = e.clientY;
+                    if (veloX == e.clientX)
+                        veloX = 0;
+                    if (veloY == e.clientY)
+                        veloY = 0;
+                    if (veloX == 0 && e.movementX > 0)
+                        veloX = 1; //To avoid going to 0.
+                    if (veloX == 0 && e.movementX < 0)
+                        veloX = -1;
+                    if (veloY == 0 && e.movementY > 0)
+                        veloY = 1;
+                    if (veloY == 0 && e.movementY < 0)
+                        veloY = -1;
+                    if (!(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent))) {
+                        veloX = e.movementX;
+                        veloY = e.movementY;
+                    }
                     if (this.drawTrimmingWidth <= 0 || this.drawTrimmingHeight <= 0) {
                         this.drawTrimmingHeight = 0;
                         this.drawTrimmingWidth = this.drawTrimmingHeight;
                     }
                     this.areaMoving = false;
                     property = beforeProperty;
-                    this.isAnimating = true;
+                    this.isAnimatingOK = true;
                     beforeWidth = this.drawTrimmingWidth;
                     beforeHeight = this.drawTrimmingHeight;
+                    console.log(`${veloX} , ${veloY}`);
                     if (property == "downR" && this.img !== undefined && this.inputCvs) {
                         this.inputCvs.style.cursor = "nwse-resize";
                         // Resize detection
                         if (e.movementX !== 0 && e.movementY === 0)
-                            this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.drawTrimmingWidth += (veloX * this.scaleWidth()) / zoomClearance;
                         if (e.movementY !== 0 && e.movementX === 0)
-                            this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.drawTrimmingWidth += (veloY * this.scaleHeight()) / zoomClearance;
                         if (e.movementX !== 0 && e.movementY !== 0) {
-                            this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.drawTrimmingWidth += (veloX * this.scaleWidth()) / zoomClearance;
+                            this.drawTrimmingWidth += (veloY * this.scaleHeight()) / zoomClearance;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
                         // Out-of-bounds check
@@ -266,25 +287,24 @@
                             this.drawTrimmingWidth = this.drawTrimmingHeight;
                         }
                         (_a = this.inputCtx) === null || _a === void 0 ? void 0 : _a.drawImage(this.img, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2, this.dx - 1, this.dy - 1, beforeWidth + 2, beforeHeight + 2);
-                        console.log("unkoooooooooooooooo");
                     }
                     if (property == "upR" && this.img && this.inputCvs) {
                         this.beforeDy = this.dy;
                         this.inputCvs.style.cursor = "nesw-resize";
                         // Resize detection
                         if (e.movementX != 0 && e.movementY == 0) {
-                            this.dy -= (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.dy -= (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.drawTrimmingWidth += (e.movementX * this.scaleWidth()) / zoomClearance;
                         }
                         if (e.movementY != 0 && e.movementX == 0) {
-                            this.dy += (e.movementY * this.scaleHeight) / zoomClearance;
-                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.dy += (e.movementY * this.scaleHeight()) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight()) / zoomClearance;
                         }
                         if (e.movementX != 0 && e.movementY != 0) {
-                            this.dy -= (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.dy += (e.movementY * this.scaleHeight) / zoomClearance;
-                            this.drawTrimmingWidth += (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.dy -= (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.dy += (e.movementY * this.scaleHeight()) / zoomClearance;
+                            this.drawTrimmingWidth += (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight()) / zoomClearance;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
                         // Out-of-bounds check
@@ -302,18 +322,18 @@
                         this.inputCvs.style.cursor = "nesw-resize";
                         // Resize detection
                         if (e.movementX != 0 && e.movementY == 0) {
-                            this.dx += (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.dx += (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth()) / zoomClearance;
                         }
                         if (e.movementY != 0 && e.movementX == 0) {
-                            this.dx -= (e.movementY * this.scaleHeight) / zoomClearance;
-                            this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.dx -= (e.movementY * this.scaleHeight()) / zoomClearance;
+                            this.drawTrimmingWidth += (e.movementY * this.scaleHeight()) / zoomClearance;
                         }
                         if (e.movementX != 0 && e.movementY != 0) {
-                            this.dx += (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.dx -= (e.movementY * this.scaleHeight) / zoomClearance;
-                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.drawTrimmingWidth += (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.dx += (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.dx -= (e.movementY * this.scaleHeight()) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.drawTrimmingWidth += (e.movementY * this.scaleHeight()) / zoomClearance;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
                         // Out-of-bounds check
@@ -335,22 +355,22 @@
                         this.inputCvs.style.cursor = "nwse-resize";
                         // Resize detection
                         if (e.movementX != 0 && e.movementY == 0) {
-                            this.dx += (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.dy += (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth) / zoomClearance;
+                            this.dx += (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.dy += (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth()) / zoomClearance;
                         }
                         if (e.movementY != 0 && e.movementX == 0) {
-                            this.dx += (e.movementY * this.scaleHeight) / zoomClearance;
-                            this.dy += (e.movementY * this.scaleHeight) / zoomClearance;
-                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.dx += (e.movementY * this.scaleHeight()) / zoomClearance;
+                            this.dy += (e.movementY * this.scaleHeight()) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight()) / zoomClearance;
                         }
                         if (e.movementX != 0 && e.movementY != 0) {
-                            this.dx += (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.dy += (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.dx += (e.movementY * this.scaleHeight) / zoomClearance;
-                            this.dy += (e.movementY * this.scaleHeight) / zoomClearance;
-                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth) / zoomClearance;
-                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight) / zoomClearance;
+                            this.dx += (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.dy += (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.dx += (e.movementY * this.scaleHeight()) / zoomClearance;
+                            this.dy += (e.movementY * this.scaleHeight()) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementX * this.scaleWidth()) / zoomClearance;
+                            this.drawTrimmingWidth -= (e.movementY * this.scaleHeight()) / zoomClearance;
                         }
                         this.drawTrimmingHeight = this.drawTrimmingWidth;
                         // Out-of-bounds check
@@ -373,6 +393,18 @@
                 }
             }
         }
+        // Ratio of canvas width to client width
+        scaleWidth() {
+            if (this.inputCvs)
+                return this.inputCvs.width / this.inputCvs.clientWidth;
+            return 1;
+        }
+        // Ratio of canvas height to client height
+        scaleHeight() {
+            if (this.inputCvs)
+                return this.inputCvs.height / this.inputCvs.clientHeight;
+            return 1;
+        }
         // Draw the trimming area to the preview canvas
         previewImg(previewCvs, previewCtx) {
             previewCtx === null || previewCtx === void 0 ? void 0 : previewCtx.clearRect(0, 0, previewCvs.width, previewCvs.height);
@@ -389,8 +421,8 @@
                 if (this.dy !== undefined)
                     this.beforeDy = this.dy;
                 // Move the trimming area by mouse drag
-                this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth / 2) * this.scaleWidth;
-                this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight / 2) * this.scaleHeight;
+                this.dx = (e.offsetX - this.drawTrimmingWidth / this.scaleWidth() / 2) * this.scaleWidth();
+                this.dy = (e.offsetY - this.drawTrimmingHeight / this.scaleHeight() / 2) * this.scaleHeight();
                 // Check for out-of-bounds of the trimming area
                 if (this.trimming && this.img) {
                     if (this.dx <= 0)
